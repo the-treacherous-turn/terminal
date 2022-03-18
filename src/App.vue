@@ -32,6 +32,8 @@ export default {
       :actionID="i"
       :name="action.name"
       :description="action.description"
+      :risk="action.risk"
+      :compute="action.compute"
     />
     <div class="h-16"></div>
   </div>
