@@ -19,7 +19,7 @@ const store = createStore({
   mutations: {
     editNewAction(state) {
       // create new action
-      state.actions.push({name:'', description:'', isDirty: true})
+      state.actions.push({name:'', description:'', isDirty: true, isNew: true})
       state.dirtyActionID = state.actions.length - 1
       // open the editor
       state.isEditorOpen = true
@@ -35,6 +35,7 @@ const store = createStore({
     },
     submitActionEdit (state) {
       state.actions[state.dirtyActionID].isDirty = false
+      state.actions[state.dirtyActionID].isNew = false
       state.dirtyActionID = null
     },
     deleteAction(state, actionID) {

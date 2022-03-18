@@ -97,7 +97,9 @@ export default {
       this.close()
     },
     cancel() {
-      this.$store.commit('deleteAction', this.$store.state.dirtyActionID)
+      if (this.$store.getters.dirtyAction.isNew) {
+        this.$store.commit('deleteAction', this.$store.state.dirtyActionID)
+      }
       this.close()
     },
     cleanFields() {
