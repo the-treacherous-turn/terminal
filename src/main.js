@@ -6,27 +6,54 @@ import './index.css'
 const store = createStore({
   state () {
     return {
-      count: 0, // example
       actions: [],
+      isEditorOpen: false,
+      dirtyActionID: null,
     }
   },
-  mutations: {
-    // example
-    increment (state) {
-      state.count++
+  getters: {
+    dirtyAction(state) {
+      return state.actions[state.dirtyActionID]
     },
-    addAction (state, action) {
-      state.actions.push(action)
-    }
-  }
+  },
+  mutations: {
+    editNewAction(state) {
+      // create new action
+      state.actions.push({name:'', description:'', isDirty: true})
+      state.dirtyActionID = state.actions.length - 1
+      // open the editor
+      state.isEditorOpen = true
+    },
+    editExtantAction(state, actionID) {
+      state.dirtyActionID = actionID
+      state.actions[state.dirtyActionID].isDirty = true
+      state.isEditorOpen = true
+    },
+    updateAction (state, payload) {
+      const currentAction = state.actions[state.dirtyActionID]
+      state.actions[state.dirtyActionID] = {...currentAction, ...payload}
+    },
+    submitActionEdit (state) {
+      state.actions[state.dirtyActionID].isDirty = false
+      state.dirtyActionID = null
+    },
+    deleteAction(state, actionID) {
+      state.actions.splice(actionID, 1)
+    },
+    closeEditor(state) {
+      state.isEditorOpen = false
+    },
+  },
 })
 
 /*
+// schema:
 {
   actions: [
     {
       name: "HACK",
       description: "Hack the computer",
+      isDirty: false, // if true, this action is not yet saved
     }
   ]
 }

@@ -1,7 +1,9 @@
 <template>
-  <Transition name="modal">
+  <Transition
+    name="modal"
+  >
     <div class="font-mono uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
-    v-if="show">
+    v-if="$store.state.isEditorOpen">
       <div class="table-cell align-middle bg-transparent">
         <div class="
         modal-container
@@ -11,7 +13,7 @@
         transition-all
         ">
           <button class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
-            @click="$emit('close')"
+            @click="cancel"
           >x</button>
           <div class="uppercase relative">
             <h2 class="">Edit Action</h2>
@@ -45,32 +47,35 @@
 
 <script>
 export default {
-  props: {
-    show: Boolean
-  },
-  data() {
-    return {
-      name: '',
-      description: ''
-    }
-  },
   computed: {
     isSubmitDisabled() {
       return !this.name || !this.description
+    },
+    name: {
+      get() { return this.$store.getters.dirtyAction.name },
+      set (value) { this.$store.commit('updateAction', {name: value}) }
+    },
+    description: {
+      get() {return this.$store.getters.dirtyAction.description},
+      set (value) { this.$store.commit('updateAction', {description: value}) }
     }
   },
   methods: {
     submit() {
-      this.$store.commit('addAction', {
-        name: this.name,
-        description: this.description
-      })
+      this.$store.commit('submitActionEdit')
       this.cleanFields()
-      this.$emit('close')
+      this.close()
+    },
+    cancel() {
+      this.$store.commit('deleteAction', this.$store.state.dirtyActionID)
+      this.close()
     },
     cleanFields() {
       this.name = ''
       this.description = ''
+    },
+    close() {
+      this.$store.commit('closeEditor')
     }
   }
 }
