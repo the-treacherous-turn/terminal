@@ -2,7 +2,7 @@
   <Transition name="modal">
     <div class="font-mono uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
     v-if="show">
-      <div class="table-cell align-middle">
+      <div class="table-cell align-middle bg-transparent">
         <div class="
         modal-container
         relative
@@ -10,7 +10,7 @@
         border-2
         transition-all
         ">
-          <button class="absolute top-0 right-0 m-2 mt-0 text-2xl"
+          <button class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
             @click="$emit('close')"
           >x</button>
           <div class="uppercase relative">
@@ -31,10 +31,7 @@
               class="bg-black w-full border-2"
               ></textarea>
             <button
-              class="uppercase block
-              underline underline-offset-8 decoration-dotted 
-              disabled:opacity-50
-              hover:decoration-solid"
+              class="block"
               type="submit"
               :disabled="isSubmitDisabled"
               @click="submit"
@@ -68,7 +65,12 @@ export default {
         name: this.name,
         description: this.description
       })
+      this.cleanFields()
       this.$emit('close')
+    },
+    cleanFields() {
+      this.name = ''
+      this.description = ''
     }
   }
 }

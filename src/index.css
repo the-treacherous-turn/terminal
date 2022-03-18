@@ -1,8 +1,13 @@
 @tailwind base;
+
+@layer base {
+  html, body, div, span, applet, object, iframe {
+    @apply text-white bg-black;
+  }
+  button {
+    @apply uppercase underline underline-offset-8 decoration-dotted disabled:opacity-50 hover:decoration-solid;
+  }
+}
+
 @tailwind components;
 @tailwind utilities;
-
-html, body {
-  color: #fff;
-  background-color: black;
-}

@@ -21,7 +21,14 @@ module.exports = {
       '6xl': '3.2rem',
       '7xl': '4rem',
     },
-    extend: {},
+    extend: {
+      borderColor: {
+        DEFAULT: "white",
+      },
+      borderWidth: {
+        DEFAULT: '2px',
+      },
+    },
   },
   plugins: [],
 }

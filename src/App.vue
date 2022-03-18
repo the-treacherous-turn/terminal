@@ -18,21 +18,23 @@ export default {
 </script>
 
 <template>
-<div class="relative p-4 h-full font-mono uppercase border-2 border-white">
+<div class="relative h-full font-mono uppercase border">
   <!-- <HelloWorld msg="TTRPG Event Log" /> -->
-  <h1 class="absolute w-3/4 top-0 left-0 p-4 px-8 border-b-2 border-r-2 text-3xl">TTRPG Event Log</h1>
+  <h1 class="absolute bg-black z-10 w-96 top-0 left-0 p-4 px-8 border-b-2 border-r-2 text-3xl">TTRPG Event Log</h1>
 
-  <div>
+  <div class="absolute h-full w-full overflow-scroll">
+    <div class="h-16"></div>
     <ActionCard
       v-for="(action, i) in $store.state.actions"
       :key="i"
       :name="action.name"
       :description="action.description"
     />
+    <div class="h-16"></div>
   </div>
 
-  <div class="absolute w-full bottom-0 left-0 p-4 pl-8 border-t-2">
-    <button class="uppercase underline underline-offset-8 decoration-dotted hover:decoration-solid"
+  <div class="absolute bg-black w-full bottom-0 left-0 p-4 pl-8 border-t-2">
+    <button class=""
       type="button"
       @click="showActionEditor=true"
     >
