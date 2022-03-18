@@ -32,6 +32,7 @@
                   v-model.number="risk"
                   name="risk" id="risk"
                   type="number"
+                  min="0"
                   class="bg-black border-b w-24 mr-4 px-2"
                 />
               </label>
@@ -41,6 +42,7 @@
                   v-model.number="compute"
                   name="compute" id="compute"
                   type="number"
+                  min="0"
                   class="bg-black border-b w-24 mr-4 px-2"
                 />
               </label>
