@@ -26,34 +26,42 @@
               class="bg-black border w-full mb-2 px-2 py-2"
             ></textarea>
             <div class="mb-2">
-              <label for="risk" class="inline-block mb-2">
-                Risk:
-                <input
-                  v-model.number="risk"
-                  name="risk" id="risk"
-                  type="number"
-                  min="0"
-                  class="bg-black border-b w-12 mr-4 text-center"
-                />
-              </label>
-              <label for="confidence" class="inline-block mb-2">
+              <label for="confidence" class="inline-block mb-2 mr-4">
                 Confidence:
                 <input
                   v-model.number="confidence"
                   name="confidence" id="confidence"
                   type="number"
                   min="0"
-                  class="bg-black border-b w-12 mr-4 text-center"
+                  max="100"
+                  class="bg-black border-b w-12 text-center"
                 />
+                <span>%</span>
               </label>
-              <label for="compute" class="inline-block mb-2">
+              <label for="risk" class="inline-block mb-2 mr-4">
+                Risk:
+                <select
+                  v-model.number="risk"
+                  name="risk" id="risk"
+                  class="bg-black border-b w-12 text-center"
+                >
+                  <option value="2">d2</option>
+                  <option value="4">d4</option>
+                  <option value="6">d6</option>
+                  <option value="8">d8</option>
+                  <option value="10">d10</option>
+                  <option value="12">d12</option>
+                </select>
+              </label>
+
+              <label for="compute" class="inline-block mb-2 mr-4">
                 Compute:
                 <input
                   v-model.number="compute"
                   name="compute" id="compute"
                   type="number"
                   min="0"
-                  class="bg-black border-b w-12 mr-4 text-center"
+                  class="bg-black border-b w-12 text-center"
                 />
               </label>
             </div>
@@ -81,7 +89,7 @@
 export default {
   computed: {
     isSubmitDisabled() {
-      return !this.name || !this.description
+      return !this.name
     },
     name: {
       get() { return this.$store.getters.dirtyAction.name },

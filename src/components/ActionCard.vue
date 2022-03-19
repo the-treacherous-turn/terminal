@@ -5,7 +5,7 @@
   @mouseover="hover=true"
   @mouseleave="hover=false"
   >
-  <div class="p-8">
+  <div class="p-8" :class="{'text-gray-500': isForecast}">
     <h2
       class="text-3xl"
     >
@@ -13,11 +13,11 @@
       <span v-else :class="{'bg-white text-black': isCommitted}">Action: {{name}}</span>
     </h2>
     <p>
-      <span v-if="Number.isFinite(risk)" class="text-lg mr-4">Risk: {{risk}} </span>
-      <span v-if="Number.isFinite(confidence)" class="text-lg mr-4">Confidence: {{confidence}} </span>
+      <span v-if="Number.isFinite(confidence)" class="text-lg mr-4">Confidence: {{confidence}}% </span>
+      <span v-if="Number.isFinite(risk)" class="text-lg mr-4">Risk: d{{risk}} </span>
       <span v-if="Number.isFinite(compute)" class="text-lg mr-4">Compute: {{compute}} </span>
     </p>
-    <p class="mt-4">{{description}}</p>
+    <p class="mt-4" v-if="description">{{description}}</p>
     <div class="pt-4" v-if="!isCommitted && hover">
       <button v-if="!isCommitted" class="mr-4" @click="editCard()">edit</button>
       <button class="mr-4" @click="commitCard()">commit</button>
