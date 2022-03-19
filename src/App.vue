@@ -38,7 +38,7 @@ export default {
       :isCommitted="action.isCommitted"
       :isForecast="action.isForecast"
     />
-    <div class="h-16"></div>
+    <div class="h-24"></div>
   </div>
 
   <div class="absolute bg-black w-full bottom-0 left-0 p-4 pl-8 border-t-2">
