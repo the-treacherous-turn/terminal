@@ -33,6 +33,7 @@ export default {
       :name="action.name"
       :description="action.description"
       :risk="action.risk"
+      :confidence="action.confidence"
       :compute="action.compute"
       :isDirty="action.isDirty"
       :isCommitted="action.isCommitted"

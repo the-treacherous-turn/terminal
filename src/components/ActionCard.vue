@@ -14,6 +14,7 @@
     </h2>
     <p>
       <span v-if="Number.isFinite(risk)" class="text-lg mr-4">Risk: {{risk}} </span>
+      <span v-if="Number.isFinite(confidence)" class="text-lg mr-4">Confidence: {{confidence}} </span>
       <span v-if="Number.isFinite(compute)" class="text-lg mr-4">Compute: {{compute}} </span>
     </p>
     <p class="mt-4">{{description}}</p>
@@ -36,6 +37,7 @@ export default {
     name: String,
     description: String,
     risk: Number,
+    confidence: Number,
     compute: Number,
     actionID: Number,
     isDirty: Boolean,

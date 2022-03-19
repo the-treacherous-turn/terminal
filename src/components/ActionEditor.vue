@@ -25,25 +25,35 @@
               rows="1"
               class="bg-black border w-full mb-2 px-2 py-2"
             ></textarea>
-            <div class="mb-4">
-              <label for="risk">
+            <div class="mb-2">
+              <label for="risk" class="inline-block mb-2">
                 Risk:
                 <input
                   v-model.number="risk"
                   name="risk" id="risk"
                   type="number"
                   min="0"
-                  class="bg-black border-b w-24 mr-4 px-2"
+                  class="bg-black border-b w-12 mr-4 text-center"
                 />
               </label>
-              <label for="compute">
+              <label for="confidence" class="inline-block mb-2">
+                Confidence:
+                <input
+                  v-model.number="confidence"
+                  name="confidence" id="confidence"
+                  type="number"
+                  min="0"
+                  class="bg-black border-b w-12 mr-4 text-center"
+                />
+              </label>
+              <label for="compute" class="inline-block mb-2">
                 Compute:
                 <input
                   v-model.number="compute"
                   name="compute" id="compute"
                   type="number"
                   min="0"
-                  class="bg-black border-b w-24 mr-4 px-2"
+                  class="bg-black border-b w-12 mr-4 text-center"
                 />
               </label>
             </div>
@@ -84,6 +94,10 @@ export default {
     risk: {
       get() {return this.$store.getters.dirtyAction.risk},
       set (value) { this.$store.commit('updateAction', {risk: value}) }
+    },
+    confidence: {
+      get() {return this.$store.getters.dirtyAction.confidence},
+      set (value) { this.$store.commit('updateAction', {confidence: value}) }
     },
     compute: {
       get() {return this.$store.getters.dirtyAction.compute},
