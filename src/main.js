@@ -19,7 +19,15 @@ const store = createStore({
   mutations: {
     editNewAction(state) {
       // create new action
-      state.actions.push({name:'', description:'', isDirty: true, isNew: true})
+      state.actions.push({
+        name:'',
+        description:'',
+        isDirty: true, // if true, this action is not yet saved
+        isNew: true, // is true when it first got created
+        isCommitted: false,
+        isForecast: false,
+
+      })
       state.dirtyActionID = state.actions.length - 1
       // open the editor
       state.isEditorOpen = true
@@ -38,6 +46,12 @@ const store = createStore({
       state.actions[state.dirtyActionID].isNew = false
       state.dirtyActionID = null
     },
+    commitAction (state, actionID) {
+      state.actions[actionID].isCommitted = true
+    },
+    markAsForecast (state, actionID) {
+      state.actions[actionID].isForecast = true
+    },
     deleteAction(state, actionID) {
       state.actions.splice(actionID, 1)
     },
@@ -53,9 +67,10 @@ const store = createStore({
   actions: [
     {
       name: "HACK",
-      description: "Hack the computer",
-      isDirty: false, // if true, this action is not yet saved
-    }
+      description: "Hack the Gibson",
+      ...
+    },
+    ...
   ]
 }
 */

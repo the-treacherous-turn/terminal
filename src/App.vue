@@ -34,6 +34,9 @@ export default {
       :description="action.description"
       :risk="action.risk"
       :compute="action.compute"
+      :isDirty="action.isDirty"
+      :isCommitted="action.isCommitted"
+      :isForecast="action.isForecast"
     />
     <div class="h-16"></div>
   </div>

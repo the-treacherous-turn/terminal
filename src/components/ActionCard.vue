@@ -6,15 +6,23 @@
   @mouseleave="hover=false"
   >
   <div class="p-8">
-    <h2 class="text-3xl">Action: {{name}}</h2>
+    <h2 class="text-3xl">
+      <span v-if="isForecast">Forecast: </span>
+      <span v-else>Action: </span>
+      <span>{{name}}</span>
+    </h2>
     <p>
       <span v-if="Number.isFinite(risk)" class="text-lg mr-4">Risk: {{risk}} </span>
       <span v-if="Number.isFinite(compute)" class="text-lg mr-4">Compute: {{compute}} </span>
     </p>
     <p>{{description}}</p>
-    <div class="pt-4" v-if="hover">
-      <button class="pr-4" @click="editCard()">edit</button>
-      <button class="pr-4">commit</button>
+    <div class="pt-4" v-if="!isCommitted && hover">
+      <button v-if="!isCommitted" class="pr-4" @click="editCard()">edit</button>
+      <button class="pr-4" @click="commitCard()">commit</button>
+    </div>
+    <div class="pt-4" v-if="isCommitted && !isForecast">
+      <span class="pr-4" v-if="!isForecast">committed</span>
+      <button v-if="isCommitted && hover" class="pr-4" @click="markAsForecast()">mark as forecast</button>
     </div>
   </div>
 </div>
@@ -28,6 +36,9 @@ export default {
     risk: Number,
     compute: Number,
     actionID: Number,
+    isDirty: Boolean,
+    isCommitted: Boolean,
+    isForecast: Boolean,
   },
   data(){
     return {
@@ -45,6 +56,13 @@ export default {
       // open the action editor
       // and let vuex know we are editing this card.
       this.$store.commit('editExtantAction', this.actionID)
+    },
+    commitCard() {
+      // commit the action
+      this.$store.commit('commitAction', this.actionID)
+    },
+    markAsForecast() {
+      this.$store.commit('markAsForecast', this.actionID)
     },
   },
 }
