@@ -16,13 +16,14 @@
       <span v-if="Number.isFinite(risk)" class="text-lg mr-4">Risk: {{risk}} </span>
       <span v-if="Number.isFinite(compute)" class="text-lg mr-4">Compute: {{compute}} </span>
     </p>
-    <p>{{description}}</p>
+    <p class="mt-4">{{description}}</p>
     <div class="pt-4" v-if="!isCommitted && hover">
       <button v-if="!isCommitted" class="mr-4" @click="editCard()">edit</button>
       <button class="mr-4" @click="commitCard()">commit</button>
     </div>
     <div class="pt-4" v-if="isCommitted && !isForecast">
       <span class="mr-4 bg-white text-black" v-if="!isForecast">committed</span>
+      <button v-if="hover" class="mr-4" @click="editCard()">edit</button>
       <button v-if="isCommitted && hover" class="mr-4" @click="markAsForecast()">mark as forecast</button>
     </div>
   </div>
