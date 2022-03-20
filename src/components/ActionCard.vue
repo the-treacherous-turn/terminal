@@ -39,7 +39,7 @@ export default {
     risk: Number,
     confidence: Number,
     compute: Number,
-    actionID: Number,
+    actionID: String,
     isDirty: Boolean,
     isCommitted: Boolean,
     isForecast: Boolean,
@@ -59,14 +59,14 @@ export default {
     editCard() {
       // open the action editor
       // and let vuex know we are editing this card.
-      this.$store.commit('editExtantAction', this.actionID)
+      this.$store.dispatch('editExtantAction', this.actionID)
     },
     commitCard() {
       // commit the action
-      this.$store.commit('commitAction', this.actionID)
+      this.$store.dispatch('commitAction', this.actionID)
     },
     markAsForecast() {
-      this.$store.commit('markAsForecast', this.actionID)
+      this.$store.dispatch('markAsForecast', this.actionID)
     },
   },
 }

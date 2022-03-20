@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     editNewAction() {
-      this.$store.commit('editNewAction')
+      this.$store.dispatch('editNewAction')
     }
   }
 }
@@ -27,9 +27,9 @@ export default {
   <div class="absolute h-full w-full overflow-scroll">
     <div class="h-16"></div>
     <ActionCard
-      v-for="(action, i) in $store.state.actions"
-      :key="i"
-      :actionID="i"
+      v-for="(action, key) in $store.state.actions"
+      :key="key"
+      :actionID="key"
       :name="action.name"
       :description="action.description"
       :risk="action.risk"

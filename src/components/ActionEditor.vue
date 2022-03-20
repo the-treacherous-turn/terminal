@@ -114,15 +114,19 @@ export default {
   },
   methods: {
     submit() {
-      this.$store.commit('submitActionEdit')
+      this.$store.dispatch('submitActionEdit')
       this.cleanFields()
       this.close()
     },
     cancel() {
       if (this.$store.getters.dirtyAction.isNew) {
-        this.$store.commit('deleteAction', this.$store.state.dirtyActionID)
+        this.$store.dispatch('deleteAction', this.$store.state.dirtyActionID)
+        this.close()
+      } else {
+        // HACK prevent dirty state from persisting.
+        // TODO wire this up properly, so that cancel reverts changes to the card
+        this.submit()
       }
-      this.close()
     },
     cleanFields() {
       this.name = ''
