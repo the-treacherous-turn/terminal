@@ -2,7 +2,6 @@ import { createStore } from 'vuex'
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 import { getAnalytics } from "firebase/analytics";
@@ -125,21 +124,7 @@ const store = createStore({
       await set(ref(db, `actions/${actionID}`), state.actions[actionID])
     },
 
-    // // bind to firebase
-    // async initFirebase({commit}) {
-    //   // get actions from firebase
-    //   const actions = await db.ref('actions').once('value')
-    //   commit('setActions', actions.val())
-    // },
-    // // firebase actions
-    // async saveAction({commit, state}, actionID) {
-    //   const action = state.actions[actionID]
-    //   const actionRef = db.ref('actions/' + actionID)
-    //   await actionRef.set(action)
-    //   commit('commitAction', actionID)
-    // },
-
-    // bind to changes in firebase
+    // bind to firebase
     async initFirebaseListeners({commit}) {
       const actionsRef = ref(db, 'actions')
       
