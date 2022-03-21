@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "surge": "surge dist taboo-plants.surge.sh"
+    "surge": "surge dist dev-aittrpg.surge.sh"
   },
   "dependencies": {
     "firebase": "^9.6.8",
