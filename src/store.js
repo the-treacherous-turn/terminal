@@ -21,11 +21,20 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const analytics = getAnalytics(fbApp);
 const db = getDatabase(fbApp);
-const actionListRef = ref(db, 'actions')
+// HACK: use location hash to differentiate between different sessions.
+const sessionID = window.location.hash.substring(1)
+document.title = `${document.title}: ${sessionID}`
+// HACK: always reload the page when the hash changes
+// to ensure that the event log reloads and displays new sessions' content
+window.onhashchange = () => {
+  window.location.reload()
+}
+const actionsRef = ref(db, `${sessionID}/actions`)
 
 const store = createStore({
   state () {
     return {
+      sessionID: sessionID,
       actions: {},
       isEditorOpen: false,
       dirtyActionID: null,
@@ -94,39 +103,38 @@ const store = createStore({
         isForecast: false,
       }
       // push a new action into the database
-      const actionID = await push(actionListRef, actionObj).key
+      const actionID = await push(actionsRef, actionObj).key
       commit('editNewAction', {actionID, actionObj})
     },
 
     async editExtantAction({commit, state}, actionID) {
       commit('editExtantAction', actionID)
-      await set(ref(db, `actions/${actionID}`), state.actions[actionID])
+      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
     },
 
     async submitActionEdit({commit, state}) {
       const actionID = state.dirtyActionID
       commit('submitActionEdit')
-      await set(ref(db, `actions/${actionID}`), state.actions[actionID])
+      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
     },
 
     async deleteAction({commit}, actionID) {
       commit('deleteAction', actionID)
-      await set(ref(db, `actions/${actionID}`), null)
+      await set(ref(db, `${sessionID}/actions/${actionID}`), null)
     },
 
     async commitAction({commit, state}, actionID) {
       commit('commitAction', actionID)
-      await set(ref(db, `actions/${actionID}`), state.actions[actionID])
+      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
     },
 
     async markAsForecast({commit, state}, actionID) {
       commit('markAsForecast', actionID)
-      await set(ref(db, `actions/${actionID}`), state.actions[actionID])
+      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
     },
 
     // bind to firebase
     async initFirebaseListeners({commit}) {
-      const actionsRef = ref(db, 'actions')
       
       onChildAdded(actionsRef, (data) => {
         commit('setActionWithID', {actionID: data.key, actionObj: data.val()})

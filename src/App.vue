@@ -22,7 +22,11 @@ export default {
 
 <template>
 <div class="relative h-full font-mono uppercase border">
-  <h1 class="absolute bg-black z-10 w-96 top-0 left-0 p-4 px-8 border-b-2 border-r-2 text-3xl">TTRPG Event Log <span class="text-base">v0.1.0</span></h1>
+  <h1 class="absolute bg-black z-10 w-96 top-0 left-0 p-4 px-8 border-b-2 border-r-2 text-3xl">
+    TTRPG Event Log <span class="text-base">v0.1.0</span>
+    <!-- <h3 class="text-lg mt-2">Session: <span class="bg-white text-black">{{$store.state.sessionID}}</span></h3> -->
+  </h1>
+  <h3 class="absolute bg-black z-10 top-0 right-0 p-4 text-2xl">User ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></h3>
 
   <div class="absolute h-full w-full overflow-scroll">
     <div class="h-16"></div>
