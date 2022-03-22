@@ -17,7 +17,7 @@
       <span v-if="Number.isFinite(risk)" class="text-lg mr-4">Risk: d{{risk}} </span>
       <span v-if="Number.isFinite(compute)" class="text-lg mr-4">Compute: {{compute}} </span>
     </p>
-    <pre class="mt-4" v-if="description">{{description}}</pre>
+    <pre class="mt-4 whitespace-pre-wrap" v-if="description">{{description}}</pre>
     <div class="pt-4" v-if="!isCommitted && hover">
       <button v-if="!isCommitted" class="mr-4" @click="editCard()">edit</button>
       <button class="mr-4" @click="commitCard()">commit</button>
