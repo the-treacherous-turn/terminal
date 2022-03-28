@@ -28,7 +28,7 @@
       <button v-if="isCommitted && hover" class="mr-4" @click="markAsForecast()">mark as forecast</button>
     </div>
   </div>
-  <button class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
+  <button v-if="hover" class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
     @click="deleteCard"
   >x</button>
 </div>
