@@ -5,7 +5,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      mono: ['Menlo', 'monospace']
+      mono: ['Menlo', 'Roboto Mono', 'Consolas', 'monospace']
     },
     fontSize: {
       xs: ['0.4rem', { lineHeight: '0.8rem' }],
