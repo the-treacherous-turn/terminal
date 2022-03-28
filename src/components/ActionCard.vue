@@ -1,7 +1,7 @@
 <!-- TODO finish this component so it's not a disgrace -->
 <template>
 <div
-  class="font-mono uppercase border-y transition-all"
+  class="font-mono uppercase border-y relative transition-all"
   @mouseover="hover=true"
   @mouseleave="hover=false"
   >
@@ -28,6 +28,9 @@
       <button v-if="isCommitted && hover" class="mr-4" @click="markAsForecast()">mark as forecast</button>
     </div>
   </div>
+  <button class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
+    @click="deleteCard"
+  >x</button>
 </div>
 </template>
 
@@ -67,6 +70,9 @@ export default {
     },
     markAsForecast() {
       this.$store.dispatch('markAsForecast', this.actionID)
+    },
+    deleteCard() {
+      this.$store.dispatch('deleteAction', this.actionID)
     },
   },
 }

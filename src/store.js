@@ -134,7 +134,7 @@ const store = createStore({
     },
 
     // bind to firebase
-    async initFirebaseListeners({commit}) {
+    async initFirebaseListeners({commit, state}) {
       
       onChildAdded(actionsRef, (data) => {
         commit('setActionWithID', {actionID: data.key, actionObj: data.val()})
@@ -143,6 +143,7 @@ const store = createStore({
         commit('setActionWithID', {actionID: data.key, actionObj: data.val()})
       });
       onChildRemoved(actionsRef, (data) => {
+        if (!state.actions[data.key]) return // safeguard against unnecessary deletion
         commit('deleteAction', data.key)
       });
       // NOTE do we need to handle 'child_moved'?
