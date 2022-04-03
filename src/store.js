@@ -7,6 +7,8 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getDatabase, ref, push, set, onChildAdded, onChildChanged, onChildRemoved } from "firebase/database";
 
+import { DateTime } from 'luxon';
+
 const firebaseConfig = {
   apiKey: "AIzaSyCpQgKh8tRvW7IsWqy37jVCOAdFEGaP03w",
   authDomain: "aittrpg.firebaseapp.com",
@@ -38,11 +40,18 @@ const store = createStore({
       actions: {},
       isEditorOpen: false,
       dirtyActionID: null,
+      // Clock
+      cycle: 10,
+      cycleLength: 6, // in hours
+      originTime: DateTime.fromISO('2033-01-30T19:03'),
     }
   },
   getters: {
     dirtyAction(state) {
       return state.actions[state.dirtyActionID]
+    },
+    nowTime(state) {
+      return state.originTime.plus({ hours: state.cycle * state.cycleLength })
     },
   },
   mutations: {
@@ -92,6 +101,11 @@ const store = createStore({
     },
     closeEditor(state) {
       state.isEditorOpen = false
+    },
+
+    // clock
+    advanceCycle(state) {
+      state.cycle++
     },
   },
   
@@ -148,6 +162,13 @@ const store = createStore({
       commit('undoForecastAction', actionID)
       await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
     },
+
+    // clock
+    advanceCycle({commit, state}) {
+      commit('advanceCycle')
+      // TODO update firebase
+    },
+    
 
     // bind to firebase
     async initFirebaseListeners({commit, state}) {

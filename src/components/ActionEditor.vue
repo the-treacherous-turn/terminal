@@ -2,7 +2,7 @@
   <Transition
     name="modal"
   >
-    <div class="font-mono uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
+    <div class="font-mono uppercase fixed z-50 top-0 left-0 w-full h-full bg-gray-900/50 table transition-opacity"
     v-if="$store.state.isEditorOpen">
       <div class="table-cell align-middle bg-transparent">
         <div class="
@@ -23,7 +23,7 @@
               name="name" id="name"
               placeholder="Name"
               rows="1"
-              class="bg-black border w-full mb-2 px-2 py-2"
+              class="bg-gray-900 border w-full mb-2 px-2 py-2"
             ></textarea>
             <div class="mb-2">
               <label for="confidence" class="inline-block mb-2 mr-4">
@@ -34,7 +34,7 @@
                   type="number"
                   min="0"
                   max="100"
-                  class="bg-black border-b w-12 text-center"
+                  class="bg-gray-900 border-b w-12 text-center"
                 />
                 <span>%</span>
               </label>
@@ -43,7 +43,7 @@
                 <select
                   v-model.number="risk"
                   name="risk" id="risk"
-                  class="bg-black border-b w-12 text-center"
+                  class="bg-gray-900 border-b w-12 text-center"
                 >
                   <option value="2">d2</option>
                   <option value="4">d4</option>
@@ -61,7 +61,7 @@
                   name="compute" id="compute"
                   type="number"
                   min="0"
-                  class="bg-black border-b w-12 text-center"
+                  class="bg-gray-900 border-b w-12 text-center"
                 />
               </label>
             </div>
@@ -70,7 +70,7 @@
               name="description" id="description"
               placeholder="Description"
               rows="5"
-              class="bg-black w-full border mb-4 px-2 py-2"
+              class="bg-gray-900 w-full border mb-4 px-2 py-2"
             ></textarea>
             <button
               class="block"

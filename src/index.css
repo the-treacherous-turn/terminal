@@ -2,7 +2,7 @@
 
 @layer base {
   html, body, div, applet, object, iframe {
-    @apply text-white bg-black;
+    @apply text-white bg-gray-900;
   }
   button {
     @apply uppercase underline underline-offset-8 decoration-dotted disabled:opacity-50 hover:decoration-solid;

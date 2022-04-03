@@ -1,4 +1,3 @@
-<!-- TODO finish this component so it's not a disgrace -->
 <template>
 <div
   class="font-mono uppercase border-y relative transition-all"
