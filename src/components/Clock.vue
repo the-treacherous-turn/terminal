@@ -19,7 +19,7 @@
   <label class="modal-box relative" for="">
     <h3 class="text-lg font-bold">Confirm advancing cycle</h3>
     <p class="py-4">Your remaining compute points will be lost.</p>
-    <div class="btn-group">
+    <div class="btn-group float-right">
       <label for="modal-cycle-confirm" class="btn btn-active" @click="advanceCycle">Confirm</label>
       <label for="modal-cycle-confirm" class="btn">Cancel</label>
     </div>
