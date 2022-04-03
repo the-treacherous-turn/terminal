@@ -1,5 +1,5 @@
-# AISC2022TTRPG EL
+# AISC2022TTRPG Companion Web App
 
-AI Safety Camp 2022 Tabletop Role-Playing Game's Event Log.
+AI Safety Camp 2022 Tabletop Role-Playing Game's companion web app.
 
 Made using Vue, TailwindCSS, and Firebase.
