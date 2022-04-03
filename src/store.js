@@ -74,8 +74,14 @@ const store = createStore({
     commitAction (state, actionID) {
       state.actions[actionID].isCommitted = true
     },
+    undoCommitAction (state, actionID) {
+      state.actions[actionID].isCommitted = false
+    },
     markAsForecast (state, actionID) {
       state.actions[actionID].isForecast = true
+    },
+    undoForecastAction (state, actionID) {
+      state.actions[actionID].isForecast = false
     },
     deleteAction(state, actionID) {
       if (!state.actions[actionID]) throw new Error(`Cannot delete action ${actionID}: action does not exist`)
@@ -128,8 +134,18 @@ const store = createStore({
       await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
     },
 
+    async undoCommitAction({commit, state}, actionID) {
+      commit('undoCommitAction', actionID)
+      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
+    },
+
     async markAsForecast({commit, state}, actionID) {
       commit('markAsForecast', actionID)
+      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
+    },
+
+    async undoForecastAction({commit, state}, actionID) {
+      commit('undoForecastAction', actionID)
       await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
     },
 

@@ -19,13 +19,24 @@
     </p>
     <pre class="mt-4 whitespace-pre-wrap" v-if="description">{{description}}</pre>
     <div class="pt-4" v-if="!isCommitted && hover">
-      <button v-if="!isCommitted" class="mr-4" @click="editCard()">edit</button>
       <button class="mr-4" @click="commitCard()">commit</button>
+      <button v-if="!isCommitted" class="mr-4" @click="editCard()">edit</button>
     </div>
     <div class="pt-4" v-if="isCommitted && !isForecast">
-      <span class="mr-4 bg-white text-black" v-if="!isForecast">committed</span>
+      <span
+        class="mr-4 bg-white text-black"
+        @mouseover="hoverCommit=true"
+        @mouseleave="hoverCommit=false"
+        >
+        <span v-if="!hoverCommit">committed</span>
+        <button v-if="hoverCommit" class="decoration-white" @click="undoCommit()">Undo commit?</button>
+      </span>
       <button v-if="hover" class="mr-4" @click="editCard()">edit</button>
       <button v-if="isCommitted && hover" class="mr-4" @click="markAsForecast()">mark as forecast</button>
+    </div>
+    <div class="pt-4" v-if="isForecast && hover">
+      <button class="mr-4" @click="editCard()">edit</button>
+      <button class="decoration-white" @click="undoForecast()">Undo forecast?</button>
     </div>
   </div>
   <button v-if="hover" class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
@@ -50,6 +61,8 @@ export default {
   data(){
     return {
       hover: false,
+      hoverCommit: false,
+      hoverForecast: false,
     }
   },
   mounted() {
@@ -67,6 +80,14 @@ export default {
     commitCard() {
       // commit the action
       this.$store.dispatch('commitAction', this.actionID)
+    },
+    undoCommit() {
+      // undo the commit
+      this.$store.dispatch('undoCommitAction', this.actionID)
+    },
+    undoForecast() {
+      // undo the forecast
+      this.$store.dispatch('undoForecastAction', this.actionID)
     },
     markAsForecast() {
       this.$store.dispatch('markAsForecast', this.actionID)
