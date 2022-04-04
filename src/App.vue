@@ -2,12 +2,14 @@
 import ActionEditor from './components/ActionEditor.vue'
 import ActionCard from './components/ActionCard.vue'
 import Clock from './components/Clock.vue'
+import ComputeTracker from './components/ComputeTracker.vue'
 
 export default {
   components: {
     ActionEditor,
     ActionCard,
     Clock,
+    ComputeTracker,
   },
   data () {
     return {
@@ -23,7 +25,7 @@ export default {
 </script>
 
 <template>
-<div class="relative w-full h-full columns-2">
+<div class="relative w-full h-full grid grid-cols-2 gap-4">
   <div class="relative h-full font-mono uppercase border">
     <h1 class="absolute bg-black z-10 w-96 top-0 left-0 p-4 px-8 border-b-2 border-r-2 text-3xl">
       TTRPG Event Log <span class="text-base">v0.1.0</span>
@@ -59,6 +61,7 @@ export default {
     </div>
   </div>
   <div class="relative h-full font-mono uppercase border">
+    <ComputeTracker />
     <Clock />
   </div>
 </div>

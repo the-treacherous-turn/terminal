@@ -44,6 +44,10 @@ const store = createStore({
       cycle: 10,
       cycleLength: 6, // in hours
       originTime: DateTime.fromISO('2033-01-30T19:03'),
+      // Compute
+      computeTotal: 60,
+      baseComputeCost: 5,
+      computeSpent: 0,
     }
   },
   getters: {
@@ -52,6 +56,9 @@ const store = createStore({
     },
     nowTime(state) {
       return state.originTime.plus({ hours: state.cycle * state.cycleLength })
+    },
+    computeAvailable(state) {
+      return state.computeTotal - state.baseComputeCost - state.computeSpent
     },
   },
   mutations: {
@@ -107,6 +114,14 @@ const store = createStore({
     advanceCycle(state) {
       state.cycle++
     },
+    // compute
+    refillCompute(state) {
+      state.computeSpent = 0
+    },
+    setComputeAttributes(state, {computeTotal, baseComputeCost}) {
+      state.computeTotal = computeTotal
+      state.baseComputeCost = baseComputeCost
+    }
   },
   
   // vuex actions
@@ -165,10 +180,16 @@ const store = createStore({
 
     // clock
     advanceCycle({commit, state}) {
+      commit('refillCompute')
       commit('advanceCycle')
       // TODO update firebase
     },
-    
+    // compute
+    setComputeAttributes({commit, state}, payload) {
+      commit('setComputeAttributes', payload)
+      // TODO update firebase
+    },
+
 
     // bind to firebase
     async initFirebaseListeners({commit, state}) {
