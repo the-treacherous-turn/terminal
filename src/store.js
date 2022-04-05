@@ -43,6 +43,7 @@ const store = createStore({
       // Clock
       cycle: 10,
       cycleLength: 6, // in hours
+      hoursPassed: 0,
       originTime: DateTime.fromISO('2033-01-30T19:03'),
       // Compute
       computeTotal: 60,
@@ -55,7 +56,8 @@ const store = createStore({
       return state.actions[state.dirtyActionID]
     },
     nowTime(state) {
-      return state.originTime.plus({ hours: state.cycle * state.cycleLength })
+      return state.originTime.plus({hours: state.hoursPassed})
+      // return state.originTime.plus({ hours: state.cycle * state.cycleLength })
     },
     computeAvailable(state) {
       return state.computeTotal - state.baseComputeCost - state.computeSpent
@@ -112,7 +114,16 @@ const store = createStore({
 
     // clock
     advanceCycle(state) {
+      state.hoursPassed += state.cycleLength
       state.cycle++
+    },
+    setClockAttributes(state, {cycle, cycleLength, originTime}) {
+      if (state.cycle !== cycle) {
+        state.hoursPassed = cycle * cycleLength
+        state.cycle = cycle
+      }
+      state.cycleLength = cycleLength
+      state.originTime = originTime
     },
     // compute
     refillCompute(state) {
@@ -182,6 +193,10 @@ const store = createStore({
     advanceCycle({commit, state}) {
       commit('refillCompute')
       commit('advanceCycle')
+      // TODO update firebase
+    },
+    setClockAttributes({commit, state}, {cycle, cycleLength, originTime}) {
+      commit('setClockAttributes', {cycle, cycleLength, originTime})
       // TODO update firebase
     },
     // compute

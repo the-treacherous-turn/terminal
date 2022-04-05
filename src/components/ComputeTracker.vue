@@ -39,7 +39,7 @@
             for="modal-compute-tracker-setting"
             class="btn btn-active"
             @click="updateCompute">
-            >Confirm</label>
+            Confirm</label>
           <label for="modal-compute-tracker-setting" class="btn">Cancel</label>
         </div>
       </label>

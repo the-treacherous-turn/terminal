@@ -1,6 +1,13 @@
 <template>
 <div>
   <div class="stats float-right">
+    <div class="indicator absolute right-0 -translate-x-3 translate-y-6">
+      <label for="modal-clock-setting">
+        <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
+          <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
+        </span>
+      </label>
+    </div>
     <div class="stat">
       <div class="stat-title text-lg">{{nowDate}}</div>
       <div class="stat-value text-4xl">{{nowHour}}:{{nowMin}}</div>
@@ -26,6 +33,47 @@
   </label>
 </label>
 
+<input type="checkbox" id="modal-clock-setting" class="modal-toggle" />
+<label for="modal-clock-setting" class="modal cursor-pointer">
+      <label class="modal-box relative" for>
+        <h3 class="text-lg font-bold">Configure Clock</h3>
+        <p>
+          <label for="clock-tracker-cycle-length">Cycle Length </label>
+          <input 
+            v-model.number="tempCycleLength"
+            id="clock-tracker-cycle-length" type="number" min="0"
+            class="input input-bordered w-20">
+        </p>
+        <p>
+          <label for="clock-tracker-origin-time">Origin Time </label>
+          <input
+            v-model="tempOriginTime"
+            type="datetime-local"
+            id="clock-tracker-origin-time"
+            class="input input-bordered text-black bg-white">
+        </p>
+
+        <p>
+          <label for="clock-tracker-cycle" class="pr-2">Set Cycle </label>
+          <div class="tooltip tooltip-right tooltip-warning" data-tip="Warning: This may break your chronology.">
+            <input
+              v-model.number="tempCycle"
+              type="number" min="0"
+              id="clock-tracker-cycle"
+              class="input input-bordered w-20">
+          </div>
+        </p>
+
+        <div class="btn-group float-right">
+          <label
+            for="modal-clock-setting"
+            class="btn btn-active"
+            @click="updateClock">
+            Confirm</label>
+          <label for="modal-clock-setting" class="btn">Cancel</label>
+        </div>
+      </label>
+    </label>
 
 </div>
 </template>
@@ -36,11 +84,19 @@ import { DateTime } from 'luxon'
 export default {
   data() {
     return {
-
+      tempCycleLength: this.$store.state.cycleLength,
+      tempOriginTime: this.$store.state.originTime.toISO({includeOffset:false}),
+      tempCycle: this.$store.state.cycle,
     }
+  },
+  watch: {
+    '$store.state.cycleLength': function(newVal, oldVal) {
+      this.tempCycleLength = newVal
+    },
   },
   computed: {
     originTime () {
+      this.tempOriginTime = this.$store.state.originTime.toISO({includeOffset:false})
       return this.$store.state.originTime.toLocaleString({
         ...DateTime.DATETIME_MED,
         hourCycle: 'h23'
@@ -55,9 +111,19 @@ export default {
     nowMin() {
       return this.$store.getters.nowTime.toFormat('mm')
     },
-    cycle () { return this.$store.state.cycle }
+    cycle () {
+      this.tempCycle = this.$store.state.cycle // update the cycle displayed whenever store gets updated too
+      return this.$store.state.cycle
+    }
   },
   methods: {
+    updateClock() {
+      this.$store.dispatch('setClockAttributes', {
+        cycle: this.tempCycle,
+        cycleLength: this.tempCycleLength,
+        originTime: DateTime.fromISO(this.tempOriginTime),
+      })
+    },
     advanceCycle() {
       this.$store.dispatch('advanceCycle')
     }
