@@ -3,6 +3,7 @@ import ActionEditor from './components/ActionEditor.vue'
 import ActionCard from './components/ActionCard.vue'
 import Clock from './components/Clock.vue'
 import ComputeTracker from './components/ComputeTracker.vue'
+import ComputeActionManager from './components/ComputeActionManager.vue'
 
 export default {
   components: {
@@ -10,6 +11,7 @@ export default {
     ActionCard,
     Clock,
     ComputeTracker,
+    ComputeActionManager,
   },
   data () {
     return {
@@ -26,10 +28,9 @@ export default {
 
 <template>
 <div class="relative w-full h-full grid grid-cols-2 gap-4">
-  <div class="relative h-full font-mono uppercase border">
+  <div class="relative font-mono uppercase border">
     <h1 class="absolute bg-black z-10 w-96 top-0 left-0 p-4 px-8 border-b-2 border-r-2 text-3xl">
       TTRPG Event Log <span class="text-base">v0.1.0</span>
-      <!-- <h3 class="text-lg mt-2">Session: <span class="bg-white text-black">{{$store.state.sessionID}}</span></h3> -->
     </h1>
     <h3 class="absolute bg-black z-10 top-0 right-0 p-4 text-2xl">User ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></h3>
   
@@ -60,9 +61,14 @@ export default {
       </button>
     </div>
   </div>
-  <div class="relative h-full font-mono uppercase border">
-    <ComputeTracker />
-    <Clock />
+  <div class="relative font-mono uppercase border flex flex-col overflow-hidden">
+    <div>
+      <ComputeTracker />
+      <Clock />
+    </div>
+    <div class="flex flex-col overflow-hidden">
+      <ComputeActionManager />
+    </div>  
   </div>
 </div>
 <Teleport to="body">
