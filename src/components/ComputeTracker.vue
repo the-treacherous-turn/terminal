@@ -10,8 +10,9 @@
       </div>
       <div class="stat">
         <div class="stat-title text-lg">Compute Available</div>
-
-        <div class="stat-value text-4xl">{{ available }}/{{ total }}</div>
+        <div class="stat-value text-4xl">
+          {{ available }}<span v-if="toSpend !== 0">(-{{toSpend}})</span>/{{ total }}
+        </div>
       </div>
     </div>
 
@@ -59,6 +60,9 @@ export default {
   computed: {
     available() {
       return this.$store.getters.computeAvailable
+    },
+    toSpend() {
+      return this.$store.state.computeToSpend
     },
     total: {
       get () {

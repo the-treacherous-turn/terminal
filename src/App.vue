@@ -66,7 +66,7 @@ export default {
       <ComputeTracker />
       <Clock />
     </div>
-    <div class="flex flex-col overflow-hidden">
+    <div class="flex flex-col overflow-hidden p-8">
       <ComputeActionManager />
     </div>  
   </div>
