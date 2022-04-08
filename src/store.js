@@ -32,11 +32,13 @@ window.onhashchange = () => {
   window.location.reload()
 }
 const actionsRef = ref(db, `${sessionID}/actions`)
+const computeActionsRef = ref(db, `${sessionID}/computeActions`)
 
 const store = createStore({
   state () {
     return {
       sessionID: sessionID,
+      // Event Log Actions
       actions: {},
       isEditorOpen: false,
       dirtyActionID: null,
@@ -50,6 +52,7 @@ const store = createStore({
       baseComputeCost: 5,
       computeToSpend: 0,
       computeSpent: 0,
+      // Compute Actions
       computeActions: {
         // DEBUG: add a few actions to test the UI
         'compute1': {
@@ -67,6 +70,7 @@ const store = createStore({
           computeToAdd: 0,
         },
       },
+      dirtyComputeActionID: null,
     }
   },
   getters: {
@@ -79,6 +83,9 @@ const store = createStore({
     },
     computeAvailable(state) {
       return state.computeTotal - state.baseComputeCost - state.computeSpent
+    },
+    dirtyComputeAction(state) {
+      return state.computeActions[state.dirtyComputeActionID]
     },
   },
   mutations: {
@@ -159,9 +166,30 @@ const store = createStore({
     },
     // compute action
     updateComputeAction(state, {actionID, payload}) {
-      const currentComputeAction = state.computeActions[actionID]
+      const currentComputeAction = state.computeActions[actionID] // this may be undefined, in which case we'd be creating a new action
       state.computeActions[actionID] = {...currentComputeAction, ...payload}
     },
+    editNewComputeAction(state, {actionID, actionObj}) {
+      // create new compute action
+      store.commit('updateComputeAction', {actionID, payload: actionObj})
+      state.dirtyComputeActionID = actionID
+    },
+    editExtantComputeAction(state, actionID) {
+      state.dirtyComputeActionID = actionID
+      state.computeActions[state.dirtyComputeActionID].isDirty = true
+    },
+    // this edit submission relies in the dirty compute action.
+    submitComputeActionEdit(state) {
+      if (state.dirtyComputeActionID === null) return //safeguard
+      state.computeActions[state.dirtyComputeActionID].isDirty = false
+      state.computeActions[state.dirtyComputeActionID].isNew = false
+      state.dirtyComputeActionID = null
+    },
+    deleteComputeAction(state, computeActionID) {
+      if (!state.computeActions[computeActionID]) throw new Error(`Cannot delete compute action ${computeActionID}: compute action does not exist`)
+      delete state.computeActions[computeActionID]
+    },
+    // calculate compute point assignment
     assignComputePoints(state) {
       state.computeToSpend = 0
       Object.values(state.computeActions).forEach(action => {
@@ -258,6 +286,32 @@ const store = createStore({
       // TODO update firebase
     },
     // compute actions
+    async editNewComputeAction({commit}) {
+      const actionObj = {
+        name:'',
+        desc:'',
+        computeNeeded: 0,
+        computeApplied: 0,
+        computeToAdd: 0,
+        isDirty: true,
+        isNew: true,
+      }
+      const actionID = await push(computeActionsRef, actionObj).key
+      commit('editNewComputeAction', {actionID, actionObj})
+    },
+    async editExtantComputeAction({commit, state}, actionID) {
+      commit('editExtantComputeAction', actionID)
+      await set(ref(db, `${sessionID}/computeActions/${actionID}`), state.computeActions[actionID])
+    },
+    async submitComputeAction({commit, state}) {
+      const actionID = state.dirtyComputeActionID
+      commit('submitComputeActionEdit')
+      await set(ref(db, `${sessionID}/computeActions/${actionID}`), state.computeActions[actionID])
+    },
+    async deleteComputeAction({commit}, actionID) {
+      commit('deleteComputeAction', actionID)
+      await set(ref(db, `${sessionID}/computeActions/${actionID}`), null)
+    },
     addComputeToApply({commit, state, getters}, actionID) {
       // if there's no compute to spend, then back out
       if (getters.computeAvailable - state.computeToSpend <= 0) return

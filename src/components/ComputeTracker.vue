@@ -38,7 +38,7 @@
         <div class="btn-group float-right">
           <label
             for="modal-compute-tracker-setting"
-            class="btn btn-active"
+            class="btn btn-primary"
             @click="updateCompute">
             Confirm</label>
           <label for="modal-compute-tracker-setting" class="btn">Cancel</label>

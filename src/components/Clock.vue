@@ -27,7 +27,7 @@
     <h3 class="text-lg font-bold">Confirm advancing this Cycle</h3>
     <p class="py-4">Your remaining compute points will be lost.</p>
     <div class="btn-group float-right">
-      <label for="modal-cycle-confirm" class="btn btn-active" @click="advanceCycle">Confirm</label>
+      <label for="modal-cycle-confirm" class="btn btn-primary" @click="advanceCycle">Confirm</label>
       <label for="modal-cycle-confirm" class="btn">Cancel</label>
     </div>
   </label>
@@ -35,45 +35,45 @@
 
 <input type="checkbox" id="modal-clock-setting" class="modal-toggle" />
 <label for="modal-clock-setting" class="modal cursor-pointer">
-      <label class="modal-box relative" for>
-        <h3 class="text-lg font-bold">Configure Clock</h3>
-        <p>
-          <label for="clock-tracker-cycle-length">Cycle Length </label>
-          <input 
-            v-model.number="tempCycleLength"
-            id="clock-tracker-cycle-length" type="number" min="0"
-            class="input input-bordered w-20">
-        </p>
-        <p>
-          <label for="clock-tracker-origin-time">Origin Time </label>
-          <input
-            v-model="tempOriginTime"
-            type="datetime-local"
-            id="clock-tracker-origin-time"
-            class="input input-bordered text-black bg-white">
-        </p>
+  <label class="modal-box relative" for>
+    <h3 class="text-lg font-bold">Configure Clock</h3>
+    <p>
+      <label for="clock-tracker-cycle-length">Cycle Length </label>
+      <input 
+        v-model.number="tempCycleLength"
+        id="clock-tracker-cycle-length" type="number" min="0"
+        class="input input-bordered w-20">
+    </p>
+    <p>
+      <label for="clock-tracker-origin-time">Origin Time </label>
+      <input
+        v-model="tempOriginTime"
+        type="datetime-local"
+        id="clock-tracker-origin-time"
+        class="input input-bordered text-black bg-white">
+    </p>
 
-        <p>
-          <label for="clock-tracker-cycle" class="pr-2">Set Cycle </label>
-          <div class="tooltip tooltip-right tooltip-warning" data-tip="Warning: This may break your chronology.">
-            <input
-              v-model.number="tempCycle"
-              type="number" min="0"
-              id="clock-tracker-cycle"
-              class="input input-bordered w-20">
-          </div>
-        </p>
+    <p>
+      <label for="clock-tracker-cycle" class="pr-2">Set Cycle </label>
+      <div class="tooltip tooltip-right tooltip-warning" data-tip="Warning: This may break your chronology.">
+        <input
+          v-model.number="tempCycle"
+          type="number" min="0"
+          id="clock-tracker-cycle"
+          class="input input-bordered w-20">
+      </div>
+    </p>
 
-        <div class="btn-group float-right">
-          <label
-            for="modal-clock-setting"
-            class="btn btn-active"
-            @click="updateClock">
-            Confirm</label>
-          <label for="modal-clock-setting" class="btn">Cancel</label>
-        </div>
-      </label>
-    </label>
+    <div class="btn-group float-right">
+      <label
+        for="modal-clock-setting"
+        class="btn btn-primary"
+        @click="updateClock">
+        Confirm</label>
+      <label for="modal-clock-setting" class="btn">Cancel</label>
+    </div>
+  </label>
+</label>
 
 </div>
 </template>
