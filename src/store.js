@@ -5,7 +5,7 @@ import { initializeApp } from "firebase/app";
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, push, set, onChildAdded, onChildChanged, onChildRemoved } from "firebase/database";
+import { getDatabase, ref, update, push, onChildAdded, onChildChanged, onChildRemoved } from "firebase/database";
 
 import { DateTime } from 'luxon';
 
@@ -219,38 +219,38 @@ const store = createStore({
 
     async editExtantAction({commit, state}, actionID) {
       commit('editExtantAction', actionID)
-      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
+      await update(actionsRef, {[actionID]: state.actions[actionID]})
     },
 
     async submitActionEdit({commit, state}) {
       const actionID = state.dirtyActionID
       commit('submitActionEdit')
-      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
+      await update(actionsRef, {[actionID]: state.actions[actionID]})
     },
 
     async deleteAction({commit}, actionID) {
       commit('deleteAction', actionID)
-      await set(ref(db, `${sessionID}/actions/${actionID}`), null)
+      await update(actionsRef, {[actionID]: null})
     },
 
     async commitAction({commit, state}, actionID) {
       commit('commitAction', actionID)
-      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
+      await update(actionsRef, {[actionID]: state.actions[actionID]})
     },
 
     async undoCommitAction({commit, state}, actionID) {
       commit('undoCommitAction', actionID)
-      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
+      await update(actionsRef, {[actionID]: state.actions[actionID]})
     },
 
     async markAsForecast({commit, state}, actionID) {
       commit('markAsForecast', actionID)
-      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
+      await update(actionsRef, {[actionID]: state.actions[actionID]})
     },
 
     async undoForecastAction({commit, state}, actionID) {
       commit('undoForecastAction', actionID)
-      await set(ref(db, `${sessionID}/actions/${actionID}`), state.actions[actionID])
+      await update(actionsRef, {[actionID]: state.actions[actionID]})
     },
 
     // clock
@@ -285,16 +285,16 @@ const store = createStore({
     },
     async editExtantComputeAction({commit, state}, actionID) {
       commit('editExtantComputeAction', actionID)
-      await set(ref(db, `${sessionID}/computeActions/${actionID}`), state.computeActions[actionID])
+      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
     },
     async submitComputeAction({commit, state}) {
       const actionID = state.dirtyComputeActionID
       commit('submitComputeActionEdit')
-      await set(ref(db, `${sessionID}/computeActions/${actionID}`), state.computeActions[actionID])
+      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
     },
     async deleteComputeAction({commit}, actionID) {
       commit('deleteComputeAction', actionID)
-      await set(ref(db, `${sessionID}/computeActions/${actionID}`), null)
+      await update(computeActionsRef, {[actionID]: null})
     },
     addComputeToApply({commit, state, getters}, actionID) {
       // if there's no compute to spend, then back out
@@ -329,7 +329,7 @@ const store = createStore({
     },
     // bind to firebase
     async initFirebaseListeners({commit, state}) {
-      
+      // actions
       onChildAdded(actionsRef, (data) => {
         commit('setActionWithID', {actionID: data.key, actionObj: data.val()})
       });
