@@ -341,6 +341,17 @@ const store = createStore({
         commit('deleteAction', data.key)
       });
       // NOTE do we need to handle 'child_moved'?
+      // computeActions
+      onChildAdded(computeActionsRef, (data) => {
+        commit('updateComputeAction', {actionID: data.key, payload: data.val()})
+      });
+      onChildChanged(computeActionsRef, (data) => {
+        commit('updateComputeAction', {actionID: data.key, payload: data.val()})
+      });
+      onChildRemoved(computeActionsRef, (data) => {
+        if (!state.computeActions[data.key]) return // safeguard against unnecessary deletion
+        commit('deleteComputeAction', data.key)
+      });
     }
   },
 })
