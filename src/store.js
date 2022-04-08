@@ -53,23 +53,7 @@ const store = createStore({
       computeToSpend: 0,
       computeSpent: 0,
       // Compute Actions
-      computeActions: {
-        // DEBUG: add a few actions to test the UI
-        'compute1': {
-          name: 'Reverse Engineering',
-          desc: "You have a general intuition regarding human technology. With sufficient data, you may attempt to analyze a specific technological device with a short Computational Action concluding in a knowledge roll. This analysis allows you to learn the device's function, strengths, and weaknesses, and the same for each of the device's components.",
-          computeNeeded: 40,
-          computeApplied: 19,
-          computeToAdd: 0,
-        },
-        'compute2': {
-          name: 'Truth Assessment',
-          desc: "Any time you make a knowledge roll, the size of the Risk Die is reduced by one step.",
-          computeNeeded: 60,
-          computeApplied: 0,
-          computeToAdd: 0,
-        },
-      },
+      computeActions: {},
       dirtyComputeActionID: null,
     }
   },
