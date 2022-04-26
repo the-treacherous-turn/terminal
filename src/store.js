@@ -5,7 +5,7 @@ import { initializeApp } from "firebase/app";
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, update, push, onChildAdded, onChildChanged, onChildRemoved } from "firebase/database";
+import { getDatabase, ref, update, push, onChildAdded, onChildChanged, onChildRemoved, onValue } from "firebase/database";
 
 import { DateTime } from 'luxon';
 
@@ -33,6 +33,8 @@ window.onhashchange = () => {
 }
 const actionsRef = ref(db, `${sessionID}/actions`)
 const computeActionsRef = ref(db, `${sessionID}/computeActions`)
+const computeTrackerRef = ref(db, `${sessionID}/computeTracker`)
+const clockRef = ref(db, `${sessionID}/clock`)
 
 const store = createStore({
   state () {
@@ -144,6 +146,14 @@ const store = createStore({
     updateComputeToSpend(state, change) {
       state.computeToSpend += change
     },
+    updateComputeTrackerFromFirebase(state, {computeTotal, baseComputeCost, computeSpent, computeToSpend}) {
+      // state = {...state, ...payload} // NOTE : this doesn't work due to JS reactivity issues
+      // if the variables are not undefined, then assign them to state
+      if (computeTotal !== undefined) state.computeTotal = computeTotal
+      if (baseComputeCost !== undefined) state.baseComputeCost = baseComputeCost
+      if (computeSpent !== undefined) state.computeSpent = computeSpent
+      if (computeToSpend !== undefined) state.computeToSpend = computeToSpend
+    },
     setComputeAttributes(state, {computeTotal, baseComputeCost}) {
       state.computeTotal = computeTotal
       state.baseComputeCost = baseComputeCost
@@ -172,30 +182,6 @@ const store = createStore({
     deleteComputeAction(state, computeActionID) {
       if (!state.computeActions[computeActionID]) throw new Error(`Cannot delete compute action ${computeActionID}: compute action does not exist`)
       delete state.computeActions[computeActionID]
-    },
-    // calculate compute point assignment
-    assignComputePoints(state) {
-      state.computeToSpend = 0
-      Object.values(state.computeActions).forEach(action => {
-        // HACK vuex doesn't let us access getters within a mutation
-        const computeAvailable = state.computeTotal - state.baseComputeCost - state.computeSpent
-        // if there isn't enough compute available, then add however much is left
-        if (action.computeToAdd > computeAvailable) {
-          state.computeSpent += computeAvailable
-          action.computeApplied += computeAvailable
-        } else {
-          state.computeSpent += action.computeToAdd
-          action.computeApplied += action.computeToAdd
-        }
-
-        // calculate the computes to add for next assign, and new total compute to spend
-        const remainingComputeNeeded = action.computeNeeded - action.computeApplied
-        // if the bar is almost filled, then set compute to add to the remaining amount
-        if (remainingComputeNeeded < action.computeToAdd){
-          action.computeToAdd = remainingComputeNeeded
-        }
-        state.computeToSpend += action.computeToAdd
-      })
     },
   },
   
@@ -265,9 +251,9 @@ const store = createStore({
     },
 
     // compute
-    setComputeAttributes({commit, state}, payload) {
+    async setComputeAttributes({commit, state}, payload) {
       commit('setComputeAttributes', payload)
-      // TODO update firebase
+      await update(computeTrackerRef, payload)
     },
     // compute actions
     async editNewComputeAction({commit}) {
@@ -296,7 +282,7 @@ const store = createStore({
       commit('deleteComputeAction', actionID)
       await update(computeActionsRef, {[actionID]: null})
     },
-    addComputeToApply({commit, state, getters}, actionID) {
+    async addComputeToApply({commit, state, getters}, actionID) {
       // if there's no compute to spend, then back out
       if (getters.computeAvailable - state.computeToSpend <= 0) return
       const ca = state.computeActions[actionID]
@@ -308,10 +294,12 @@ const store = createStore({
           computeToAdd: ca.computeToAdd + 1,
         }
       })
+      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
       commit('updateComputeToSpend', 1)
-      // TODO update firebase
+      // NOTE this is where splitting store to modules would be helpful
+      await update(computeTrackerRef, {computeToSpend: state.computeToSpend})
     },
-    subtractComputeToApply({commit, state}, actionID) {
+    async subtractComputeToApply({commit, state}, actionID) {
       const ca = state.computeActions[actionID]
       if (ca.computeToAdd === 0) return
       commit('updateComputeAction', {
@@ -320,37 +308,66 @@ const store = createStore({
           computeToAdd: ca.computeToAdd - 1,
         }
       })
+      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
       commit('updateComputeToSpend', -1)
-      // TODO update firebase
+      await update(computeTrackerRef, {computeToSpend: state.computeToSpend})
     },
-    assignComputePoints({commit, state}) {
-      commit('assignComputePoints');
-      // TODO update firebase
+    // calculate compute point assignment
+    async assignComputePoints({state, getters}) {
+      state.computeToSpend = 0
+      Object.values(state.computeActions).forEach(ca => {
+        const computeAvailable = getters.computeAvailable
+        // if there isn't enough compute available, then add however much is left
+        if (ca.computeToAdd > computeAvailable) {
+          state.computeSpent += computeAvailable
+          ca.computeApplied += computeAvailable
+        } else {
+          state.computeSpent += ca.computeToAdd
+          ca.computeApplied += ca.computeToAdd
+        }
+
+        // calculate the computes to add for next assign, and new total compute to spend
+        const remainingComputeNeeded = ca.computeNeeded - ca.computeApplied
+        // if the bar is almost filled, then set compute to add to the remaining amount
+        if (remainingComputeNeeded < ca.computeToAdd){
+          ca.computeToAdd = remainingComputeNeeded
+        }
+        state.computeToSpend += ca.computeToAdd
+      })
+      await update(computeActionsRef, state.computeActions)
+      await update(computeTrackerRef, {
+        computeToSpend: state.computeToSpend,
+        computeSpent: state.computeSpent,
+      })
     },
     // bind to firebase
     async initFirebaseListeners({commit, state}) {
-      // actions
-      onChildAdded(actionsRef, (data) => {
-        commit('setActionWithID', {actionID: data.key, actionObj: data.val()})
-      });
-      onChildChanged(actionsRef, (data) => {
-        commit('setActionWithID', {actionID: data.key, actionObj: data.val()})
-      });
-      onChildRemoved(actionsRef, (data) => {
-        if (!state.actions[data.key]) return // safeguard against unnecessary deletion
-        commit('deleteAction', data.key)
-      });
       // NOTE do we need to handle 'child_moved'?
+      // actions
+      onChildAdded(actionsRef, (snapshot) => {
+        commit('setActionWithID', {actionID: snapshot.key, actionObj: snapshot.val()})
+      });
+      onChildChanged(actionsRef, (snapshot) => {
+        commit('setActionWithID', {actionID: snapshot.key, actionObj: snapshot.val()})
+      });
+      onChildRemoved(actionsRef, (snapshot) => {
+        if (!state.actions[snapshot.key]) return // safeguard against unnecessary deletion
+        commit('deleteAction', snapshot.key)
+      });
       // computeActions
-      onChildAdded(computeActionsRef, (data) => {
-        commit('updateComputeAction', {actionID: data.key, payload: data.val()})
+      onChildAdded(computeActionsRef, (snapshot) => {
+        commit('updateComputeAction', {actionID: snapshot.key, payload: snapshot.val()})
       });
-      onChildChanged(computeActionsRef, (data) => {
-        commit('updateComputeAction', {actionID: data.key, payload: data.val()})
+      onChildChanged(computeActionsRef, (snapshot) => {
+        commit('updateComputeAction', {actionID: snapshot.key, payload: snapshot.val()})
       });
-      onChildRemoved(computeActionsRef, (data) => {
-        if (!state.computeActions[data.key]) return // safeguard against unnecessary deletion
-        commit('deleteComputeAction', data.key)
+      onChildRemoved(computeActionsRef, (snapshot) => {
+        if (!state.computeActions[snapshot.key]) return // safeguard against unnecessary deletion
+        commit('deleteComputeAction', snapshot.key)
+      });
+      // computeTracker
+      onValue(computeTrackerRef, (snapshot) => {
+        commit('updateComputeTrackerFromFirebase', snapshot.val())
       });
     }
   },
