@@ -47,7 +47,7 @@
     <p>
       <label for="clock-tracker-origin-time">Origin Time </label>
       <input
-        v-model="tempOriginTime"
+        v-model="tempOriginTimeISO"
         type="datetime-local"
         id="clock-tracker-origin-time"
         class="input input-bordered text-black bg-white">
@@ -85,7 +85,7 @@ export default {
   data() {
     return {
       tempCycleLength: this.$store.state.cycleLength,
-      tempOriginTime: this.$store.state.originTime.toISO({includeOffset:false}),
+      tempOriginTimeISO: this.$store.getters.originTime.toISO({includeOffset:false}), // NOTE ignore timezone to avoid weirdness
       tempCycle: this.$store.state.cycle,
     }
   },
@@ -95,13 +95,6 @@ export default {
     },
   },
   computed: {
-    originTime () {
-      this.tempOriginTime = this.$store.state.originTime.toISO({includeOffset:false})
-      return this.$store.state.originTime.toLocaleString({
-        ...DateTime.DATETIME_MED,
-        hourCycle: 'h23'
-      })
-    },
     nowDate() {
       return this.$store.getters.nowTime.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
     },
@@ -121,7 +114,7 @@ export default {
       this.$store.dispatch('setClockAttributes', {
         cycle: this.tempCycle,
         cycleLength: this.tempCycleLength,
-        originTime: DateTime.fromISO(this.tempOriginTime),
+        originTimeISO: this.tempOriginTimeISO,
       })
     },
     advanceCycle() {

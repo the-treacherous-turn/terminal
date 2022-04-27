@@ -45,10 +45,10 @@ const store = createStore({
       isEditorOpen: false,
       dirtyActionID: null,
       // Clock
-      cycle: 10,
+      cycle: 0,
       cycleLength: 6, // in hours
       hoursPassed: 0,
-      originTime: DateTime.fromISO('2033-01-30T19:03'),
+      originTimeISO: '2033-01-30T19:03',
       // Compute
       computeTotal: 60,
       baseComputeCost: 5,
@@ -63,9 +63,11 @@ const store = createStore({
     dirtyAction(state) {
       return state.actions[state.dirtyActionID]
     },
-    nowTime(state) {
-      return state.originTime.plus({hours: state.hoursPassed})
-      // return state.originTime.plus({ hours: state.cycle * state.cycleLength })
+    originTime(state) {
+      return DateTime.fromISO(state.originTimeISO)
+    },
+    nowTime(state, getters) {
+      return getters.originTime.plus({hours: state.hoursPassed})
     },
     computeAvailable(state) {
       return state.computeTotal - state.baseComputeCost - state.computeSpent
@@ -128,13 +130,20 @@ const store = createStore({
       state.hoursPassed += state.cycleLength
       state.cycle++
     },
-    setClockAttributes(state, {cycle, cycleLength, originTime}) {
+    setClockAttributes(state, {cycle, cycleLength, originTimeISO}) {
       if (state.cycle !== cycle) {
         state.hoursPassed = cycle * cycleLength
         state.cycle = cycle
       }
       state.cycleLength = cycleLength
-      state.originTime = originTime
+      state.originTimeISO = originTimeISO
+    },
+    updateClockFromFirebase(state, {cycle, cycleLength, hoursPassed, originTimeISO}) {
+      // state = {...state, ...payload} // NOTE : this doesn't work due to JS reactivity issues
+      if (cycle !== undefined) state.cycle = cycle
+      if (cycleLength !== undefined) state.cycleLength = cycleLength
+      if (hoursPassed !== undefined) state.hoursPassed = hoursPassed
+      if (originTimeISO !== undefined) state.originTimeISO = originTimeISO
     },
     // compute
     refillCompute(state) {
@@ -147,8 +156,6 @@ const store = createStore({
       state.computeToSpend += change
     },
     updateComputeTrackerFromFirebase(state, {computeTotal, baseComputeCost, computeSpent, computeToSpend}) {
-      // state = {...state, ...payload} // NOTE : this doesn't work due to JS reactivity issues
-      // if the variables are not undefined, then assign them to state
       if (computeTotal !== undefined) state.computeTotal = computeTotal
       if (baseComputeCost !== undefined) state.baseComputeCost = baseComputeCost
       if (computeSpent !== undefined) state.computeSpent = computeSpent
@@ -240,14 +247,18 @@ const store = createStore({
     },
 
     // clock
-    advanceCycle({commit, state}) {
+    async advanceCycle({commit, state}) {
       commit('refillCompute')
       commit('advanceCycle')
-      // TODO update firebase
+      await update(computeTrackerRef, {computeSpent: state.computeSpent})
+      await update(clockRef, {
+        hoursPassed: state.hoursPassed,
+        cycle: state.cycle,
+      })
     },
-    setClockAttributes({commit, state}, {cycle, cycleLength, originTime}) {
-      commit('setClockAttributes', {cycle, cycleLength, originTime})
-      // TODO update firebase
+    async setClockAttributes({commit, state}, {cycle, cycleLength, originTimeISO}) {
+      commit('setClockAttributes', {cycle, cycleLength, originTimeISO})
+      await update(clockRef, {cycle, cycleLength, originTimeISO})
     },
 
     // compute
@@ -368,6 +379,10 @@ const store = createStore({
       // computeTracker
       onValue(computeTrackerRef, (snapshot) => {
         commit('updateComputeTrackerFromFirebase', snapshot.val())
+      });
+      // clock
+      onValue(clockRef, (snapshot) => {
+        commit('updateClockFromFirebase', snapshot.val())
       });
     }
   },
