@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "surge": "surge dist dev-aittrpg.surge.sh"
+    "surge:dev": "surge dist dev-aittrpg.surge.sh",
+    "surge:staging": "surge dist staging-aittrpg.surge.sh"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
