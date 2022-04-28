@@ -12,6 +12,16 @@ export default {
     computeApplied: Number,
     computeToAdd: Number,
   },
+  data() {
+    return {
+      expanded: false,
+    }
+  },
+  computed: {
+    isComplete() {
+      return this.computeApplied >= this.computeNeeded
+    },
+  },
   methods: {
     addComputeToApply() {
       this.$store.dispatch('addComputeToApply', this.actionID)
@@ -25,9 +35,9 @@ export default {
 
 <template>
 
-<div class="bg-green-800 relative">
+<div class="relative my-4 py-4 border-2">
 
-  <div class="dropdown dropdown-end absolute right-0">
+  <div class="dropdown dropdown-end absolute right-0 top-0">
     <span tabindex="0" class="badge badge-secondary">
       <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
     </span>
@@ -43,27 +53,42 @@ export default {
     </ul>
   </div>
 
-  <h3 class="text-3xl font-bold">
-    {{ name }}
-  </h3>
+  <div class="pl-28">
+    <span class="text-3xl flex items-center cursor-pointer" @click="expanded = !expanded">
+      <font-awesome-icon icon="caret-right" class="text-2xl pr-2 origin-[25%_50%] transition-transform" :class="expanded?'rotate-90':''" />
+      {{ name }}
+    </span>
+  </div>
+
 
   <div class="flex">
-    <div class="bg-red-800 p-4">
-      <div class="m-2 btn btn-square" @click="subtractComputeToApply">
-        <font-awesome-icon icon="caret-left" class="text-6xl" />
+
+    <div v-if="isComplete" class="p-2 w-28 text-center">
+      <div class="badge badge-success gap-2">
+        Complete
       </div>
-      <div class="m-2 btn btn-square" @click="addComputeToApply">
-        <font-awesome-icon icon="caret-right" class="text-6xl" />
-      </div>
-      <span>+ {{ computeToAdd }}</span>
     </div>
-    <div class="bg-cyan-800 grow flex items-center">
+    <div v-else class="p-2 flex items-center w-28">
+      <div class="m-0.5 btn btn-xs btn-square btn-ghost" @click="subtractComputeToApply">
+        <font-awesome-icon icon="chevron-down" class="text-2xl" />
+      </div>
+      <span class="text-lg w-9 text-center inline-block">+ {{ computeToAdd }}</span>
+      <div class="m-0.5 btn btn-xs btn-square btn-ghost" @click="addComputeToApply">
+        <font-awesome-icon icon="chevron-up" class="text-2xl" />
+      </div>
+    </div>
+    <div class="flex grow items-center">
       <ProgressBar :value="computeApplied" :addition="computeToAdd" :max="computeNeeded" />
     </div>
     <div
-      class="bg-amber-800 flex items-center text-3xl"
+      class="flex items-center text-xl px-4"
     >{{ `${computeApplied}/${computeNeeded}` }}</div>
   </div>
+
+  <div class="pl-28 normal-case text-lg overflow-hidden transition-max-h ease-in-out duration-300" :class="expanded?'max-h-screen':'max-h-0'">
+    {{desc}}
+  </div>
+
 </div>
 
 </template>

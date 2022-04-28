@@ -83,8 +83,8 @@ export default {
 </script>
 
 <template>
-<h1 class="text-3xl font-bold">Compute Action Manager</h1>
-<div id="compute-action-list" class="overflow-scroll border-t-2">
+<h1 class="text-xl font-bold">Compute Action Manager</h1>
+<div id="compute-action-list" class="overflow-scroll">
   <ComputeActionCard
     v-for="(action, key) in $store.state.computeActions"
     v-bind="action"

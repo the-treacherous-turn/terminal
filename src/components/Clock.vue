@@ -1,19 +1,19 @@
 <template>
 <div>
   <div class="stats float-right">
-    <div class="indicator absolute right-0 -translate-x-3 translate-y-6">
+    <div class="indicator absolute right-0 -translate-x-2 translate-y-6">
       <label for="modal-clock-setting">
         <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
           <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
         </span>
       </label>
     </div>
-    <div class="stat">
-      <div class="stat-title text-lg">{{nowDate}}</div>
+    <div class="stat px-4">
+      <div class="stat-title text-base">{{nowDate}}</div>
       <div class="stat-value text-4xl">{{nowHour}}:{{nowMin}}</div>
     </div>
-    <div class="stat">
-      <div class="stat-title text-lg">Cycle</div>
+    <div class="stat px-4">
+      <div class="stat-title text-base">Cycle</div>
       <div class="stat-value text-4xl">{{cycle}}</div>
       <div class="stat-figure">
         <label for="modal-cycle-confirm" class="btn modal-button uppercase">End Cycle</label>

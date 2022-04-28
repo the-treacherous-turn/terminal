@@ -27,7 +27,7 @@ export default {
 </script>
 
 <template>
-<div class="relative w-full h-full grid grid-cols-2 gap-4">
+<div class="relative w-full min-w-[1024px] h-full grid grid-cols-2 gap-4">
   <div class="relative font-mono uppercase border">
     <h1 class="absolute bg-black z-10 w-96 top-0 left-0 p-4 px-8 border-b-2 border-r-2 text-3xl">
       TTRPG Event Log <span class="text-base">v0.1.0</span>

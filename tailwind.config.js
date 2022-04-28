@@ -29,6 +29,10 @@ module.exports = {
       borderWidth: {
         DEFAULT: '2px',
       },
+      transitionProperty: {
+        // allow transitioning max height
+        'max-h': 'max-height',
+      },
     },
   },
   plugins: [require("daisyui")],
