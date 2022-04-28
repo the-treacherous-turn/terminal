@@ -54,7 +54,7 @@ export default {
   </div>
 
   <div class="pl-28">
-    <span class="text-3xl flex items-center cursor-pointer" @click="expanded = !expanded">
+    <span class="text-2xl flex items-center cursor-pointer" @click="expanded = !expanded">
       <font-awesome-icon icon="caret-right" class="text-2xl pr-2 origin-[25%_50%] transition-transform" :class="expanded?'rotate-90':''" />
       {{ name }}
     </span>
