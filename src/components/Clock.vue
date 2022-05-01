@@ -16,7 +16,8 @@
       <div class="stat-title text-base">Cycle</div>
       <div class="stat-value text-4xl">{{cycle}}</div>
       <div class="stat-figure">
-        <label for="modal-cycle-confirm" class="btn modal-button uppercase">End Cycle</label>
+        <label v-if="isComputeUsedUp" class="btn uppercase" @click="advanceCycle">End Cycle</label>
+        <label v-else for="modal-cycle-confirm" class="btn modal-button uppercase">End Cycle</label>
       </div>
     </div>
   </div>
@@ -107,7 +108,10 @@ export default {
     cycle () {
       this.tempCycle = this.$store.state.cycle // update the cycle displayed whenever store gets updated too
       return this.$store.state.cycle
-    }
+    },
+    isComputeUsedUp () {
+      return this.$store.getters.computeAvailable === 0
+    },
   },
   methods: {
     updateClock() {
