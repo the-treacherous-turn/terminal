@@ -72,6 +72,9 @@ const store = createStore({
     computeAvailable(state) {
       return state.computeTotal - state.baseComputeCost - state.computeSpent
     },
+    hasComputeBudget(state, getters) {
+      return getters.computeAvailable - state.computeToSpend > 0
+    },
     dirtyComputeAction(state) {
       return state.computeActions[state.dirtyComputeActionID]
     },
@@ -295,7 +298,7 @@ const store = createStore({
     },
     async addComputeToApply({commit, state, getters}, actionID) {
       // if there's no compute to spend, then back out
-      if (getters.computeAvailable - state.computeToSpend <= 0) return
+      if (!getters.hasComputeBudget) return
       const ca = state.computeActions[actionID]
       // if the compute action is maxed out, then back out
       if (ca.computeNeeded <= ca.computeApplied + ca.computeToAdd) return
@@ -305,8 +308,8 @@ const store = createStore({
           computeToAdd: ca.computeToAdd + 1,
         }
       })
-      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
       commit('updateComputeToSpend', 1)
+      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
       // NOTE this is where splitting store to modules would be helpful
       await update(computeTrackerRef, {computeToSpend: state.computeToSpend})
     },
@@ -319,8 +322,8 @@ const store = createStore({
           computeToAdd: ca.computeToAdd - 1,
         }
       })
-      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
       commit('updateComputeToSpend', -1)
+      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
       await update(computeTrackerRef, {computeToSpend: state.computeToSpend})
     },
     // calculate compute point assignment
