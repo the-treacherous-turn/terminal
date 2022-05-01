@@ -21,6 +21,12 @@ export default {
     isComplete() {
       return this.computeApplied >= this.computeNeeded
     },
+    canAdd() {
+      return this.$store.getters.hasComputeBudget
+    },
+    canSubtract() {
+      return this.computeToAdd > 0
+    },
   },
   methods: {
     addComputeToApply() {
@@ -69,11 +75,11 @@ export default {
       </div>
     </div>
     <div v-else class="p-2 flex items-center w-28">
-      <div class="m-0.5 btn btn-xs btn-square btn-ghost" @click="subtractComputeToApply">
+      <div class="m-0.5 btn btn-xs btn-square btn-ghost" :class="canSubtract?'':'btn-disabled'" @click="subtractComputeToApply">
         <font-awesome-icon icon="chevron-down" class="text-2xl" />
       </div>
       <span class="text-lg w-9 text-center inline-block">+ {{ computeToAdd }}</span>
-      <div class="m-0.5 btn btn-xs btn-square btn-ghost" @click="addComputeToApply">
+      <div class="m-0.5 btn btn-xs btn-square btn-ghost" :class="canAdd?'':'btn-disabled'" @click="addComputeToApply">
         <font-awesome-icon icon="chevron-up" class="text-2xl" />
       </div>
     </div>
