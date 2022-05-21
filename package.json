@@ -16,6 +16,8 @@
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "firebase": "^9.6.8",
     "luxon": "^2.3.1",
+    "simplebar": "^5.3.6",
+    "simplebar-vue3": "^0.1.6",
     "vue": "^3.2.31",
     "vuex": "^4.0.2"
   },

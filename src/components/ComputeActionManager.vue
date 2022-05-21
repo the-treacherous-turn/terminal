@@ -1,7 +1,9 @@
 <script>
+import { SimpleBar } from 'simplebar-vue3';
 import ComputeActionCard from './ComputeActionCard.vue'
 export default {
   components: {
+    SimpleBar,
     ComputeActionCard,
   },
   data() {
@@ -84,7 +86,7 @@ export default {
 
 <template>
 <h1 class="text-xl font-bold">Compute Action Manager</h1>
-<div id="compute-action-list" class="overflow-scroll">
+<SimpleBar id="compute-action-list" class="overflow-scroll">
   <ComputeActionCard
     v-for="(action, key) in $store.state.computeActions"
     v-bind="action"
@@ -101,7 +103,7 @@ export default {
       <font-awesome-icon icon="plus" class="text-6xl" />
     </label>
   </div>
-</div>
+</SimpleBar>
 <div class="flex justify-center m-4">
   <button
     :disabled="!canAssignCompute"

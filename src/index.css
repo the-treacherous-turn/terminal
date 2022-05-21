@@ -11,3 +11,10 @@
 
 @tailwind components;
 @tailwind utilities;
+
+.simplebar-track {
+  @apply bg-transparent;
+}
+.simplebar-scrollbar {
+  @apply bg-inherit;
+}
