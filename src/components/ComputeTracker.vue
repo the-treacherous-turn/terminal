@@ -21,30 +21,38 @@
       <label class="modal-box relative" for>
         <h3 class="text-lg font-bold">Configure Compute</h3>
         <p>
-          <label for="compute-tracker-total">Total Compute </label>
-          <input
-            v-model.number="tempTotal"
-            id="compute-tracker-total" type="number" min="0" 
-            class="input input-bordered w-20">
+          <label for="compute-tracker-total">Total Compute: {{ total }}</label>
         </p>
         <table class="table table-compact w-full">
           <thead>
             <tr>
-              <th class="pl-5">Source</th>
+              <th class="pl-5 w-3/5">Source</th>
               <th class="pl-5">Compute</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th><input type="text" placeholder="Name" value="Server Rack" class="input input-sm input-bordered w-full max-w-xs" /></th>
-              <td><input type="number" placeholder="Amount" value="50" class="input input-sm input-bordered w-full max-w-xs" /></td>
+            <tr
+              v-for="(source, key) in computeSources"
+              :key="key"
+            >
+              <th><input type="text" placeholder="Name" v-model="source.name" class="input input-sm input-bordered w-full max-w-xs" /></th>
+              <td><input type="number" placeholder="Amount" v-model="source.val" class="input input-sm input-bordered w-full max-w-xs" /></td>
+              <td class="text-right">
+                <label
+                  @click="removeComputeSource(key)"
+                  class="btn btn-sm btn-danger"
+                >
+                  <font-awesome-icon icon="trash" class="text-base" />
+                </label>
+              </td>
             </tr>
             
           </tbody>
         </table>
         <div class="flex justify-center m-4 mt-2">
           <label class="btn btn-circle btn-xs"
-            @click="onClickPlus"
+            @click="addComputeSource"
           >
             <font-awesome-icon icon="plus" class="text-2xl" />
           </label>
@@ -72,11 +80,11 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 
 export default {
   data() {
     return {
-      tempTotal: this.$store.state.compute.computeTotal,
       tempBase: this.$store.state.compute.baseComputeCost
     }
   },
@@ -87,14 +95,8 @@ export default {
     toSpend() {
       return this.$store.state.compute.computeToSpend
     },
-    total: {
-      get () {
-        return this.$store.state.compute.computeTotal
-      },
-      set (val) {
-        // wait for the confirm button
-        // this.$store.commit('setComputeTotal', val)
-      }
+    total() {
+      return this.$store.getters.computeTotal
     },
     base: {
       get () {
@@ -104,13 +106,22 @@ export default {
         // wait for the confirm button
       }
     },
+    ...mapState({
+      computeSources: state => state.compute.computeSources,
+    },)
   },
   methods: {
+    addComputeSource() {
+      this.$store.dispatch('addComputeSource')
+    },
+    removeComputeSource(key) {
+      this.$store.dispatch('removeComputeSource', key)
+    },
     updateCompute() {
       this.$store.dispatch('setComputeAttributes', {
-        computeTotal: this.tempTotal,
         baseComputeCost: this.tempBase,
       })
+      this.$store.dispatch('syncComputeSources')
     },
   },
 }
