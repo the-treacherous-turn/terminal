@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     canAssignCompute() {
-      return this.$store.getters.computeAvailable > 0 && this.$store.state.computeToSpend > 0
+      return this.$store.getters.computeAvailable > 0 && this.$store.state.compute.computeToSpend > 0
     },
     // editor
     isSubmitDisabled() {
@@ -26,7 +26,7 @@ export default {
       get() { return this.dirtyComputeAction ? this.dirtyComputeAction.name : '' },
       set (value) {
         this.$store.commit('updateComputeAction', {
-          actionID: this.$store.state.dirtyComputeActionID,
+          actionID: this.$store.state.computeAction.dirtyComputeActionID,
           payload: {
             name: value
           }
@@ -37,7 +37,7 @@ export default {
       get() {return this.dirtyComputeAction ? this.dirtyComputeAction.desc : ''},
       set (value) {
         this.$store.commit('updateComputeAction', {
-          actionID: this.$store.state.dirtyComputeActionID,
+          actionID: this.$store.state.computeAction.dirtyComputeActionID,
           payload: {
             desc: value
           }
@@ -48,7 +48,7 @@ export default {
       get() {return this.dirtyComputeAction ? this.dirtyComputeAction.computeNeeded : ''},
       set (value) {
         this.$store.commit('updateComputeAction', {
-          actionID: this.$store.state.dirtyComputeActionID,
+          actionID: this.$store.state.computeAction.dirtyComputeActionID,
           payload: {
             computeNeeded: value
           }
@@ -63,7 +63,7 @@ export default {
     cancel() {
       this.isEditorOpen = false
       if (this.dirtyComputeAction.isNew) {
-        this.$store.dispatch('deleteComputeAction', this.$store.state.dirtyComputeActionID)
+        this.$store.dispatch('deleteComputeAction', this.$store.state.computeAction.dirtyComputeActionID)
       }
     },
     onClickPlus() {
@@ -88,7 +88,7 @@ export default {
 <h1 class="text-xl font-bold">Compute Action Manager</h1>
 <SimpleBar id="compute-action-list" class="overflow-scroll">
   <ComputeActionCard
-    v-for="(action, key) in $store.state.computeActions"
+    v-for="(action, key) in $store.state.computeAction.computeActions"
     v-bind="action"
     :key="key"
     :actionID="key"
@@ -148,8 +148,8 @@ export default {
         <textarea
           v-model="description"
           placeholder=""
-          class="textarea textarea-bordered h-24"></textarea>
-
+          class="textarea textarea-bordered h-24">
+        </textarea>
       </div>
     </p>
     <div class="btn-group float-right mt-4">
