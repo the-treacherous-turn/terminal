@@ -26,16 +26,12 @@ window.onhashchange = () => {
   window.location.reload()
 }
 
-const actionsRef = ref(db, `${sessionID}/actions`)
-const computeActionsRef = ref(db, `${sessionID}/computeActions`)
-const computeTrackerRef = ref(db, `${sessionID}/computeTracker`)
-const clockRef = ref(db, `${sessionID}/clock`)
-
 const refs = {
-  actions: actionsRef,
-  computeActions: computeActionsRef,
-  computeTracker: computeTrackerRef,
-  clock: clockRef,
+  actions: ref(db, `${sessionID}/actions`),
+  computeActions: ref(db, `${sessionID}/computeActions`),
+  computeTracker: ref(db, `${sessionID}/computeTracker`),
+  computeSources: ref(db, `${sessionID}/computeTracker/computeSources`),
+  clock: ref(db, `${sessionID}/clock`),
 }
 
 export default refs
