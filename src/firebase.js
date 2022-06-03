@@ -1,0 +1,41 @@
+// module for making it easier to update with firebase
+// Import the functions you need from the SDKs you need
+// Follow this pattern to import other Firebase services
+// import { } from 'firebase/<service>';
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, update, push, onChildAdded, onChildChanged, onChildRemoved, onValue } from "firebase/database";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCpQgKh8tRvW7IsWqy37jVCOAdFEGaP03w",
+  authDomain: "aittrpg.firebaseapp.com",
+  databaseURL: "https://aittrpg-default-rtdb.firebaseio.com/",
+  projectId: "aittrpg",
+  storageBucket: "aittrpg.appspot.com",
+  messagingSenderId: "1094303719793",
+  appId: "1:1094303719793:web:c89eb399670cb624d816d0",
+};
+// Initialize Firebase
+const fbApp = initializeApp(firebaseConfig);
+const db = getDatabase(fbApp);
+// HACK: use location hash to differentiate between different sessions.
+const sessionID = window.location.hash.substring(1)
+document.title = `${document.title}: ${sessionID}`
+// HACK: always reload the page when the hash changes
+// to ensure that the event log reloads and displays new sessions' content
+window.onhashchange = () => {
+  window.location.reload()
+}
+
+const actionsRef = ref(db, `${sessionID}/actions`)
+const computeActionsRef = ref(db, `${sessionID}/computeActions`)
+const computeTrackerRef = ref(db, `${sessionID}/computeTracker`)
+const clockRef = ref(db, `${sessionID}/clock`)
+
+const refs = {
+  actions: actionsRef,
+  computeActions: computeActionsRef,
+  computeTracker: computeTrackerRef,
+  clock: clockRef,
+}
+
+export default refs

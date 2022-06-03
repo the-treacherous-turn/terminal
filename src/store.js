@@ -1,42 +1,22 @@
 import { createStore } from 'vuex'
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// Follow this pattern to import other Firebase services
-// import { } from 'firebase/<service>';
-import { getAnalytics } from "firebase/analytics";
-import { getDatabase, ref, update, push, onChildAdded, onChildChanged, onChildRemoved, onValue } from "firebase/database";
-
 import { DateTime } from 'luxon';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCpQgKh8tRvW7IsWqy37jVCOAdFEGaP03w",
-  authDomain: "aittrpg.firebaseapp.com",
-  databaseURL: "https://aittrpg-default-rtdb.firebaseio.com/",
-  projectId: "aittrpg",
-  storageBucket: "aittrpg.appspot.com",
-  messagingSenderId: "1094303719793",
-  appId: "1:1094303719793:web:c89eb399670cb624d816d0",
-};
+import { update, push, onChildAdded, onChildChanged, onChildRemoved, onValue } from "firebase/database";
 
-// Initialize Firebase
-const fbApp = initializeApp(firebaseConfig);
-const analytics = getAnalytics(fbApp);
-const db = getDatabase(fbApp);
+import refs from './firebase'
+
+// import store modules
+import computeStore from './stores/computeStore'
+
 // HACK: use location hash to differentiate between different sessions.
+// HACK: duplicated code getting the sessionID between here and firebase.js
 const sessionID = window.location.hash.substring(1)
-document.title = `${document.title}: ${sessionID}`
-// HACK: always reload the page when the hash changes
-// to ensure that the event log reloads and displays new sessions' content
-window.onhashchange = () => {
-  window.location.reload()
-}
-const actionsRef = ref(db, `${sessionID}/actions`)
-const computeActionsRef = ref(db, `${sessionID}/computeActions`)
-const computeTrackerRef = ref(db, `${sessionID}/computeTracker`)
-const clockRef = ref(db, `${sessionID}/clock`)
 
 const store = createStore({
+  modules: {
+    compute: computeStore,
+  },
   state () {
     return {
       sessionID: sessionID,
@@ -49,11 +29,6 @@ const store = createStore({
       cycleLength: 6, // in hours
       hoursPassed: 0,
       originTimeISO: '2033-01-30T19:03',
-      // Compute
-      computeTotal: 60,
-      baseComputeCost: 5,
-      computeToSpend: 0,
-      computeSpent: 0,
       // Compute Actions
       computeActions: {},
       dirtyComputeActionID: null,
@@ -68,12 +43,6 @@ const store = createStore({
     },
     nowTime(state, getters) {
       return getters.originTime.plus({hours: state.hoursPassed})
-    },
-    computeAvailable(state) {
-      return state.computeTotal - state.baseComputeCost - state.computeSpent
-    },
-    hasComputeBudget(state, getters) {
-      return getters.computeAvailable - state.computeToSpend > 0
     },
     dirtyComputeAction(state) {
       return state.computeActions[state.dirtyComputeActionID]
@@ -148,26 +117,6 @@ const store = createStore({
       if (hoursPassed !== undefined) state.hoursPassed = hoursPassed
       if (originTimeISO !== undefined) state.originTimeISO = originTimeISO
     },
-    // compute
-    refillCompute(state) {
-      state.computeSpent = 0
-    },
-    updateComputeSpent(state, change) {
-      state.computeSpent += change
-    },
-    updateComputeToSpend(state, change) {
-      state.computeToSpend += change
-    },
-    updateComputeTrackerFromFirebase(state, {computeTotal, baseComputeCost, computeSpent, computeToSpend}) {
-      if (computeTotal !== undefined) state.computeTotal = computeTotal
-      if (baseComputeCost !== undefined) state.baseComputeCost = baseComputeCost
-      if (computeSpent !== undefined) state.computeSpent = computeSpent
-      if (computeToSpend !== undefined) state.computeToSpend = computeToSpend
-    },
-    setComputeAttributes(state, {computeTotal, baseComputeCost}) {
-      state.computeTotal = computeTotal
-      state.baseComputeCost = baseComputeCost
-    },
     // compute action
     updateComputeAction(state, {actionID, payload}) {
       const currentComputeAction = state.computeActions[actionID] // this may be undefined, in which case we'd be creating a new action
@@ -209,66 +158,61 @@ const store = createStore({
         isForecast: false,
       }
       // push a new action into the database
-      const actionID = await push(actionsRef, actionObj).key
+      const actionID = await push(refs.actions, actionObj).key
       commit('editNewAction', {actionID, actionObj})
     },
 
     async editExtantAction({commit, state}, actionID) {
       commit('editExtantAction', actionID)
-      await update(actionsRef, {[actionID]: state.actions[actionID]})
+      await update(refs.actions, {[actionID]: state.actions[actionID]})
     },
 
     async submitActionEdit({commit, state}) {
       const actionID = state.dirtyActionID
       commit('submitActionEdit')
-      await update(actionsRef, {[actionID]: state.actions[actionID]})
+      await update(refs.actions, {[actionID]: state.actions[actionID]})
     },
 
     async deleteAction({commit}, actionID) {
       commit('deleteAction', actionID)
-      await update(actionsRef, {[actionID]: null})
+      await update(refs.actions, {[actionID]: null})
     },
 
     async commitAction({commit, state}, actionID) {
       commit('commitAction', actionID)
-      await update(actionsRef, {[actionID]: state.actions[actionID]})
+      await update(refs.actions, {[actionID]: state.actions[actionID]})
     },
 
     async undoCommitAction({commit, state}, actionID) {
       commit('undoCommitAction', actionID)
-      await update(actionsRef, {[actionID]: state.actions[actionID]})
+      await update(refs.actions, {[actionID]: state.actions[actionID]})
     },
 
     async markAsForecast({commit, state}, actionID) {
       commit('markAsForecast', actionID)
-      await update(actionsRef, {[actionID]: state.actions[actionID]})
+      await update(refs.actions, {[actionID]: state.actions[actionID]})
     },
 
     async undoForecastAction({commit, state}, actionID) {
       commit('undoForecastAction', actionID)
-      await update(actionsRef, {[actionID]: state.actions[actionID]})
+      await update(refs.actions, {[actionID]: state.actions[actionID]})
     },
 
     // clock
     async advanceCycle({commit, state}) {
       commit('refillCompute')
       commit('advanceCycle')
-      await update(computeTrackerRef, {computeSpent: state.computeSpent})
-      await update(clockRef, {
+      await update(refs.computeTracker, {computeSpent: state.computeSpent})
+      await update(refs.clock, {
         hoursPassed: state.hoursPassed,
         cycle: state.cycle,
       })
     },
     async setClockAttributes({commit, state}, {cycle, cycleLength, originTimeISO}) {
       commit('setClockAttributes', {cycle, cycleLength, originTimeISO})
-      await update(clockRef, {cycle, cycleLength, originTimeISO})
+      await update(refs.clock, {cycle, cycleLength, originTimeISO})
     },
 
-    // compute
-    async setComputeAttributes({commit, state}, payload) {
-      commit('setComputeAttributes', payload)
-      await update(computeTrackerRef, payload)
-    },
     // compute actions
     async editNewComputeAction({commit}) {
       const actionObj = {
@@ -280,21 +224,21 @@ const store = createStore({
         isDirty: true,
         isNew: true,
       }
-      const actionID = await push(computeActionsRef, actionObj).key
+      const actionID = await push(refs.computeActions, actionObj).key
       commit('editNewComputeAction', {actionID, actionObj})
     },
     async editExtantComputeAction({commit, state}, actionID) {
       commit('editExtantComputeAction', actionID)
-      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
+      await update(refs.computeActions, {[actionID]: state.computeActions[actionID]})
     },
     async submitComputeAction({commit, state}) {
       const actionID = state.dirtyComputeActionID
       commit('submitComputeActionEdit')
-      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
+      await update(refs.computeActions, {[actionID]: state.computeActions[actionID]})
     },
     async deleteComputeAction({commit}, actionID) {
       commit('deleteComputeAction', actionID)
-      await update(computeActionsRef, {[actionID]: null})
+      await update(refs.computeActions, {[actionID]: null})
     },
     async addComputeToApply({commit, state, getters}, actionID) {
       // if there's no compute to spend, then back out
@@ -309,9 +253,9 @@ const store = createStore({
         }
       })
       commit('updateComputeToSpend', 1)
-      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
+      await update(refs.computeActions, {[actionID]: state.computeActions[actionID]})
       // NOTE this is where splitting store to modules would be helpful
-      await update(computeTrackerRef, {computeToSpend: state.computeToSpend})
+      await update(refs.computeTracker, {computeToSpend: state.computeToSpend})
     },
     async subtractComputeToApply({commit, state}, actionID) {
       const ca = state.computeActions[actionID]
@@ -323,8 +267,8 @@ const store = createStore({
         }
       })
       commit('updateComputeToSpend', -1)
-      await update(computeActionsRef, {[actionID]: state.computeActions[actionID]})
-      await update(computeTrackerRef, {computeToSpend: state.computeToSpend})
+      await update(refs.computeActions, {[actionID]: state.computeActions[actionID]})
+      await update(refs.computeTracker, {computeToSpend: state.computeToSpend})
     },
     // calculate compute point assignment
     async assignComputePoints({state, getters}) {
@@ -348,8 +292,8 @@ const store = createStore({
         }
         state.computeToSpend += ca.computeToAdd
       })
-      await update(computeActionsRef, state.computeActions)
-      await update(computeTrackerRef, {
+      await update(refs.computeActions, state.computeActions)
+      await update(refs.computeTracker, {
         computeToSpend: state.computeToSpend,
         computeSpent: state.computeSpent,
       })
@@ -358,33 +302,29 @@ const store = createStore({
     async initFirebaseListeners({commit, state}) {
       // NOTE do we need to handle 'child_moved'?
       // actions
-      onChildAdded(actionsRef, (snapshot) => {
+      onChildAdded(refs.actions, (snapshot) => {
         commit('setActionWithID', {actionID: snapshot.key, actionObj: snapshot.val()})
       });
-      onChildChanged(actionsRef, (snapshot) => {
+      onChildChanged(refs.actions, (snapshot) => {
         commit('setActionWithID', {actionID: snapshot.key, actionObj: snapshot.val()})
       });
-      onChildRemoved(actionsRef, (snapshot) => {
+      onChildRemoved(refs.actions, (snapshot) => {
         if (!state.actions[snapshot.key]) return // safeguard against unnecessary deletion
         commit('deleteAction', snapshot.key)
       });
       // computeActions
-      onChildAdded(computeActionsRef, (snapshot) => {
+      onChildAdded(refs.computeActions, (snapshot) => {
         commit('updateComputeAction', {actionID: snapshot.key, payload: snapshot.val()})
       });
-      onChildChanged(computeActionsRef, (snapshot) => {
+      onChildChanged(refs.computeActions, (snapshot) => {
         commit('updateComputeAction', {actionID: snapshot.key, payload: snapshot.val()})
       });
-      onChildRemoved(computeActionsRef, (snapshot) => {
+      onChildRemoved(refs.computeActions, (snapshot) => {
         if (!state.computeActions[snapshot.key]) return // safeguard against unnecessary deletion
         commit('deleteComputeAction', snapshot.key)
       });
-      // computeTracker
-      onValue(computeTrackerRef, (snapshot) => {
-        commit('updateComputeTrackerFromFirebase', snapshot.val())
-      });
       // clock
-      onValue(clockRef, (snapshot) => {
+      onValue(refs.clock, (snapshot) => {
         commit('updateClockFromFirebase', snapshot.val())
       });
     }
@@ -392,5 +332,7 @@ const store = createStore({
 })
 
 store.dispatch('initFirebaseListeners')
+store.dispatch('listenToFBComputeTracker')
+// TODO: remember to dispatch actions for each module to listen to FB changes
 
 export default store

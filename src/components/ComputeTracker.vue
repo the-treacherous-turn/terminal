@@ -27,6 +27,29 @@
             id="compute-tracker-total" type="number" min="0" 
             class="input input-bordered w-20">
         </p>
+        <table class="table table-compact w-full">
+          <thead>
+            <tr>
+              <th class="pl-5">Source</th>
+              <th class="pl-5">Compute</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th><input type="text" placeholder="Name" value="Server Rack" class="input input-sm input-bordered w-full max-w-xs" /></th>
+              <td><input type="number" placeholder="Amount" value="50" class="input input-sm input-bordered w-full max-w-xs" /></td>
+            </tr>
+            
+          </tbody>
+        </table>
+        <div class="flex justify-center m-4 mt-2">
+          <label class="btn btn-circle btn-xs"
+            @click="onClickPlus"
+          >
+            <font-awesome-icon icon="plus" class="text-2xl" />
+          </label>
+        </div>
+        
         <p>
           <label for="compute-tracker-base">Base Compute Cost </label>
           <input
@@ -53,8 +76,8 @@
 export default {
   data() {
     return {
-      tempTotal: this.$store.state.computeTotal,
-      tempBase: this.$store.state.baseComputeCost
+      tempTotal: this.$store.state.compute.computeTotal,
+      tempBase: this.$store.state.compute.baseComputeCost
     }
   },
   computed: {
@@ -62,11 +85,11 @@ export default {
       return this.$store.getters.computeAvailable
     },
     toSpend() {
-      return this.$store.state.computeToSpend
+      return this.$store.state.compute.computeToSpend
     },
     total: {
       get () {
-        return this.$store.state.computeTotal
+        return this.$store.state.compute.computeTotal
       },
       set (val) {
         // wait for the confirm button
@@ -75,7 +98,7 @@ export default {
     },
     base: {
       get () {
-        return this.$store.state.baseComputeCost
+        return this.$store.state.compute.baseComputeCost
       },
       set (val) {
         // wait for the confirm button
