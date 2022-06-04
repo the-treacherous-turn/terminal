@@ -16,13 +16,15 @@
       </div>
     </div>
 
-    <input type="checkbox" id="modal-compute-tracker-setting" class="modal-toggle" />
+    <input type="checkbox" id="modal-compute-tracker-setting" class="modal-toggle"
+    v-model="isSettingOpen" @change="checkCheckbox"
+    />
     <label for="modal-compute-tracker-setting" class="modal cursor-pointer">
       <label class="modal-box relative" for>
         <h3 class="text-lg font-bold">Configure Compute</h3>
-        <p>
-          <label for="compute-tracker-total">Total Compute: {{ total }}</label>
-        </p>
+        <h4>
+          <label for="compute-tracker-total" class="text-3xl">Total Compute: <span class="font-bold">{{total}}</span></label>
+        </h4>
         <table class="table table-compact w-full">
           <thead>
             <tr>
@@ -41,7 +43,7 @@
               <td class="text-right">
                 <label
                   @click="removeComputeSource(key)"
-                  class="btn btn-sm btn-danger"
+                  class="btn btn-sm hover:btn-error"
                 >
                   <font-awesome-icon icon="trash" class="text-base" />
                 </label>
@@ -57,22 +59,55 @@
             <font-awesome-icon icon="plus" class="text-2xl" />
           </label>
         </div>
-        
-        <p>
-          <label for="compute-tracker-base">Base Compute Cost </label>
-          <input
-            v-model.number="tempBase"
-            id="compute-tracker-base" type="number" min="0" 
-            class="input input-bordered w-20">
-        </p>
 
+        <h4>
+          <label class="text-3xl">Recurring Costs: <span class="font-bold">{{recurringSum}}</span></label>
+        </h4>
+        <table class="table table-compact w-full">
+          <thead>
+            <tr>
+              <th class="pl-5 w-3/5">Item</th>
+              <th class="pl-5">Cost</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th><span class="input input-sm input-bordered w-full max-w-xs">Base Compute Cost</span></th>
+              <td><input type="number" min="0" placeholder="Amount" v-model.number="baseComputeCost" class="input input-sm input-bordered w-full max-w-xs" /></td>
+            </tr>
+            <tr
+              v-for="(source, key) in recurringCosts"
+              :key="key"
+            >
+              <th><input type="text" placeholder="Name" v-model="source.name" class="input input-sm input-bordered w-full max-w-xs" /></th>
+              <td><input type="number" placeholder="Amount" v-model="source.val" class="input input-sm input-bordered w-full max-w-xs" /></td>
+              <td class="text-right">
+                <label
+                  @click="removeRecurringCost(key)"
+                  class="btn btn-sm hover:btn-error"
+                >
+                  <font-awesome-icon icon="trash" class="text-base" />
+                </label>
+              </td>
+            </tr>
+            
+          </tbody>
+        </table>
+        <div class="flex justify-center m-4 mt-2">
+          <label class="btn btn-circle btn-xs"
+            @click="addRecurringCost"
+          >
+            <font-awesome-icon icon="plus" class="text-2xl" />
+          </label>
+        </div>
+        
         <div class="btn-group float-right">
           <label
             for="modal-compute-tracker-setting"
-            class="btn btn-primary"
-            @click="updateCompute">
-            Confirm</label>
-          <label for="modal-compute-tracker-setting" class="btn">Cancel</label>
+            class="btn btn-primary">
+            Close</label>
+          <!-- <label for="modal-compute-tracker-setting" class="btn">Cancel</label> -->
         </div>
       </label>
     </label>
@@ -85,7 +120,7 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      tempBase: this.$store.state.compute.baseComputeCost
+      isSettingOpen: false,
     }
   },
   computed: {
@@ -98,16 +133,21 @@ export default {
     total() {
       return this.$store.getters.computeTotal
     },
-    base: {
+    recurringSum() {
+      return this.$store.getters.recurringSum
+    },
+    baseComputeCost: {
       get () {
         return this.$store.state.compute.baseComputeCost
       },
-      set (val) {
-        // wait for the confirm button
+      set (value) {
+        this.$store.commit('setBaseComputeCost', value)
       }
     },
+
     ...mapState({
       computeSources: state => state.compute.computeSources,
+      recurringCosts: state => state.compute.recurringCosts,
     },)
   },
   methods: {
@@ -117,12 +157,19 @@ export default {
     removeComputeSource(key) {
       this.$store.dispatch('removeComputeSource', key)
     },
-    updateCompute() {
-      this.$store.dispatch('setComputeAttributes', {
-        baseComputeCost: this.tempBase,
-      })
-      this.$store.dispatch('syncComputeSources')
+    addRecurringCost() {
+      this.$store.dispatch('addRecurringCost')
     },
+    removeRecurringCost(key) {
+      this.$store.dispatch('removeRecurringCost', key)
+    },
+    checkCheckbox() {
+      // if the setting page's getting closed,
+      // sync the compute tracker
+      if (!this.isSettingOpen) {
+        this.$store.dispatch('syncComputeTracker')
+      }
+    }
   },
 }
 

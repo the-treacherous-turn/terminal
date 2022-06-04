@@ -31,6 +31,7 @@ const refs = {
   computeActions: ref(db, `${sessionID}/computeActions`),
   computeTracker: ref(db, `${sessionID}/computeTracker`),
   computeSources: ref(db, `${sessionID}/computeTracker/computeSources`),
+  recurringCosts: ref(db, `${sessionID}/computeTracker/recurringCosts`),
   clock: ref(db, `${sessionID}/clock`),
 }
 
