@@ -65,33 +65,18 @@ const computeActionStore = {
       commit('deleteComputeAction', actionID)
       await update(refs.computeActions, {[actionID]: null})
     },
-    async addComputeToApply({commit, state, rootState, getters}, actionID) {
-      // if there's no compute to spend, then back out
-      if (!getters.hasComputeBudget) return
+    async modifyComputeToApply({commit, state, rootState}, {actionID, delta}) {
       const ca = state.computeActions[actionID]
       // if the compute action is maxed out, then back out
-      if (ca.computeNeeded <= ca.computeApplied + ca.computeToAdd) return
+      if (ca.computeNeeded < ca.computeApplied + ca.computeToAdd + delta) return
+      if (ca.computeToAdd + delta < 0) return
       commit('updateComputeAction', {
         actionID,
         payload: {
-          computeToAdd: ca.computeToAdd + 1,
+          computeToAdd: ca.computeToAdd + delta,
         }
       })
-      commit('updateComputeToSpend', 1)
-      await update(refs.computeActions, {[actionID]: state.computeActions[actionID]})
-      // NOTE this is where splitting store to modules would be helpful
-      await update(refs.computeTracker, {computeToSpend: rootState.compute.computeToSpend})
-    },
-    async subtractComputeToApply({commit, state, rootState}, actionID) {
-      const ca = state.computeActions[actionID]
-      if (ca.computeToAdd === 0) return
-      commit('updateComputeAction', {
-        actionID,
-        payload: {
-          computeToAdd: ca.computeToAdd - 1,
-        }
-      })
-      commit('updateComputeToSpend', -1)
+      commit('updateComputeToSpend', delta)
       await update(refs.computeActions, {[actionID]: state.computeActions[actionID]})
       await update(refs.computeTracker, {computeToSpend: rootState.compute.computeToSpend})
     },

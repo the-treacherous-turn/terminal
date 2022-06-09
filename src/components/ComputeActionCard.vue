@@ -27,13 +27,36 @@ export default {
     canSubtract() {
       return this.computeToAdd > 0
     },
+    computeRemaining() {
+      // NOTE this is the remaining compute needed to complete an action.
+      // It's used as the max value for input box,
+      // however, it's not the real max value we can put in, as that's limited by compute budget.
+      // The real max value would be the min of the two.
+      // We are not calculating that here yet, because it's too cumbersome to iterate through all other actions
+      // to get how much compute can be budgeted for this one task.
+      const computeRemainingForAction = this.computeNeeded - this.computeApplied
+      return computeRemainingForAction
+    },
+    computeToAddInForm: {
+      get () {
+        return this.computeToAdd
+      },
+      set (value) {
+        if (value === "") return // user just cleared the input. disregard.
+        const newValue = parseInt(value)
+        this.$store.dispatch('modifyComputeToApply', {
+          actionID: this.actionID,
+          delta: newValue - this.computeToAdd
+        })
+      }
+    }
   },
   methods: {
     addComputeToApply() {
-      this.$store.dispatch('addComputeToApply', this.actionID)
+      this.$store.dispatch('modifyComputeToApply', {actionID:this.actionID, delta:1})
     },
     subtractComputeToApply() {
-      this.$store.dispatch('subtractComputeToApply', this.actionID)
+      this.$store.dispatch('modifyComputeToApply', {actionID:this.actionID, delta:-1})
     },
   },
 }
@@ -59,7 +82,7 @@ export default {
     </ul>
   </div>
 
-  <div class="pl-28">
+  <div class="pl-32">
     <span class="text-2xl flex items-center cursor-pointer" @click="expanded = !expanded">
       <font-awesome-icon icon="caret-right" class="text-2xl pr-2 origin-[25%_50%] transition-transform" :class="expanded?'rotate-90':''" />
       {{ name }}
@@ -69,16 +92,21 @@ export default {
 
   <div class="flex">
 
-    <div v-if="isComplete" class="p-2 w-28 text-center">
+    <div v-if="isComplete" class="p-2 w-32 text-center">
       <div class="badge badge-success gap-2">
         Complete
       </div>
     </div>
-    <div v-else class="p-2 flex items-center w-28">
+    <div v-else class="p-2 flex items-center w-32">
       <div class="m-0.5 btn btn-xs btn-square btn-ghost" :class="canSubtract?'':'btn-disabled'" @click="subtractComputeToApply">
         <font-awesome-icon icon="chevron-down" class="text-2xl" />
       </div>
-      <span class="text-lg w-9 text-center inline-block">+ {{ computeToAdd }}</span>
+      <span class="text-lg w-12 text-center inline-block">+ 
+        <input type="number" min="0" :max="computeRemaining"
+          v-model.number="computeToAddInForm"
+          class="inline input text-center input-bordered input-xs px-1 w-8"
+        >
+      </span>
       <div class="m-0.5 btn btn-xs btn-square btn-ghost" :class="canAdd?'':'btn-disabled'" @click="addComputeToApply">
         <font-awesome-icon icon="chevron-up" class="text-2xl" />
       </div>
@@ -91,7 +119,7 @@ export default {
     >{{ `${computeApplied}/${computeNeeded}` }}</div>
   </div>
 
-  <div class="pl-28 normal-case text-lg overflow-hidden transition-max-h ease-in-out duration-300" :class="expanded?'max-h-screen':'max-h-0'">
+  <div class="pl-32 normal-case text-lg overflow-hidden transition-max-h ease-in-out duration-300" :class="expanded?'max-h-screen':'max-h-0'">
     {{desc}}
   </div>
 
