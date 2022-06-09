@@ -55,6 +55,22 @@ export default {
         })
       }
     },
+    computeApplied: {
+      get() {return this.dirtyComputeAction ? this.dirtyComputeAction.computeApplied : ''},
+      set (value) {
+        this.$store.commit('updateComputeAction', {
+          actionID: this.$store.state.computeAction.dirtyComputeActionID,
+          payload: {
+            computeApplied: value
+          }
+        })
+      }
+    },
+    isMakingNewCompute() {
+      if (!this.dirtyComputeAction) return true
+      if (this.dirtyComputeAction.isNew) return true
+      return false
+    },
   },
   methods: {
     submit() {
@@ -142,6 +158,14 @@ export default {
           v-model="computeNeeded"
           type="number" placeholder="" min="1" 
           class="input input-bordered w-40">
+        <label class="label" v-if="!isMakingNewCompute">
+          <span class="label-text">Override Compute Applied</span>
+        </label>
+        <label class="input-group" v-if="!isMakingNewCompute">
+          <span>Compute</span>
+          <input type="number" v-model.number="computeApplied" class="input input-bordered">
+        </label>
+        
         <label class="label">
           <span class="label-text">Description</span>
         </label> 
