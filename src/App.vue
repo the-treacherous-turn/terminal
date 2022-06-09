@@ -32,7 +32,7 @@ export default {
 <div class="relative w-full min-w-[1024px] h-full grid grid-cols-2 gap-4">
   <div class="relative font-mono uppercase border">
     <h1 class="absolute bg-black z-10 w-96 top-0 left-0 p-4 px-8 border-b-2 border-r-2 text-3xl">
-      The Treacherous Turn <span class="text-base">v0.2.3</span>
+      The Treacherous Turn <span class="text-base">v0.2.4</span>
     </h1>
     <h3 class="absolute bg-black z-10 top-0 right-0 p-4 text-2xl">User ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></h3>
   
