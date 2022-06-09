@@ -159,7 +159,7 @@ export default {
           type="number" placeholder="" min="1" 
           class="input input-bordered w-40">
         <label class="label" v-if="!isMakingNewCompute">
-          <span class="label-text">Override Compute Applied</span>
+          <span class="label-text">Override Compute Progress</span>
         </label>
         <label class="input-group" v-if="!isMakingNewCompute">
           <span>Compute</span>
