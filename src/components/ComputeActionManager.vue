@@ -135,7 +135,7 @@ export default {
           type="text" placeholder="" 
           class="input input-bordered w-full">
         <label class="label">
-          <span class="label-text">Progress Bar Size</span>
+          <span class="label-text">Required Compute</span>
         </label>
         <!-- <input type="range" min="0" max="100" value="40" class="range"> -->
         <input

@@ -73,7 +73,7 @@
           </thead>
           <tbody>
             <tr>
-              <th><span class="input input-sm input-bordered w-full max-w-xs">Base Compute Cost</span></th>
+              <th><span class="input input-sm w-full max-w-xs">Basic Cognition Cost</span></th>
               <td><input type="number" min="0" placeholder="Amount" v-model.number="baseComputeCost" class="input input-sm input-bordered w-full max-w-xs" /></td>
             </tr>
             <tr
