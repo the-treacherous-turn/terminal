@@ -162,8 +162,8 @@ export default {
           <span class="label-text">Override Compute Progress</span>
         </label>
         <label class="input-group" v-if="!isMakingNewCompute">
-          <span>Compute</span>
-          <input type="number" v-model.number="computeApplied" class="input input-bordered">
+          <input type="number" v-model.number="computeApplied" class="input input-bordered w-20">
+          <span>/{{computeNeeded}}</span>
         </label>
         
         <label class="label">
