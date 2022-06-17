@@ -43,7 +43,7 @@
       <input 
         v-model.number="tempCycleLength"
         id="clock-tracker-cycle-length" type="number" min="0"
-        class="input input-sm input-bordered w-20">
+        class="input input-sm input-bordered w-20"> hours
     </p>
     <p class="my-4">
       <label for="clock-tracker-origin-time">Origin Time </label>

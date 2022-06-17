@@ -101,7 +101,7 @@ export default {
 </script>
 
 <template>
-<h1 class="text-xl font-bold">Compute Action Manager</h1>
+<h1 class="text-xl font-bold">Computational Action Manager</h1>
 <SimpleBar id="compute-action-list" class="overflow-y-clip">
   <ComputeActionCard
     v-for="(action, key) in $store.state.computeAction.computeActions"
@@ -159,7 +159,7 @@ export default {
           type="number" placeholder="" min="1" 
           class="input input-bordered w-40">
         <label class="label" v-if="!isMakingNewCompute">
-          <span class="label-text">Override Compute Progress</span>
+          <span class="label-text">Override Completion</span>
         </label>
         <label class="input-group" v-if="!isMakingNewCompute">
           <input type="number" v-model.number="computeApplied" class="input input-bordered w-20">
