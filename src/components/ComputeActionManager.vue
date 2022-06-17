@@ -102,7 +102,7 @@ export default {
 
 <template>
 <h1 class="text-xl font-bold">Compute Action Manager</h1>
-<SimpleBar id="compute-action-list" class="overflow-scroll">
+<SimpleBar id="compute-action-list" class="overflow-y-clip">
   <ComputeActionCard
     v-for="(action, key) in $store.state.computeAction.computeActions"
     v-bind="action"

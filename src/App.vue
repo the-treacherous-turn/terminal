@@ -36,8 +36,8 @@ export default {
     </h1>
     <h3 class="absolute bg-black z-10 top-0 right-0 p-4 text-2xl">User ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></h3>
   
-    <!-- <div class="absolute h-full w-full overflow-scroll"> -->
-      <SimpleBar class="absolute h-full w-full overflow-scroll">
+    <!-- <div class="absolute h-full w-full"> -->
+      <SimpleBar class="absolute h-full w-full">
         <div class="h-16"></div>
         <ActionCard
           v-for="(action, key) in $store.state.actions"
@@ -70,7 +70,7 @@ export default {
       <ComputeTracker />
       <Clock />
     </div>
-    <div class="flex flex-col overflow-hidden p-8">
+    <div class="flex flex-col p-8 overflow-hidden">
       <ComputeActionManager />
     </div>  
   </div>
