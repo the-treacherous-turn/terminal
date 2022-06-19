@@ -86,7 +86,7 @@ export default {
   data() {
     return {
       tempCycleLength: this.$store.state.cycleLength,
-      tempOriginTimeISO: this.$store.getters.originTime.toISO({includeOffset:false}), // NOTE ignore timezone to avoid weirdness
+      tempOriginTimeISO: this.$store.state.originTimeISO,
       tempCycle: this.$store.state.cycle,
     }
   },
