@@ -73,6 +73,11 @@ const computeStore = {
     },
   },
   actions: {
+    async listenToFBComputeTracker({commit, state}) {
+      onValue(refs.computeTracker, (snapshot) => {
+        commit('updateComputeTrackerFromFirebase', snapshot.val())
+      })
+    },
     async addComputeSource(){
       const computeSource = {
         name: '',
@@ -100,11 +105,6 @@ const computeStore = {
         computeSources: state.computeSources,
         recurringCosts: state.recurringCosts,
         baseComputeCost: state.baseComputeCost,
-      })
-    },
-    async listenToFBComputeTracker({commit, state}) {
-      onValue(refs.computeTracker, (snapshot) => {
-        commit('updateComputeTrackerFromFirebase', snapshot.val())
       })
     },
     async removeComputeSource({commit, state}, computeSourceID) {

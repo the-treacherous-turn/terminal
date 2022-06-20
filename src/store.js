@@ -1,7 +1,5 @@
 import { createStore } from 'vuex'
 
-import { DateTime } from 'luxon';
-
 import { update, push, onChildAdded, onChildChanged, onChildRemoved, onValue } from "firebase/database";
 
 import refs from './firebase'
@@ -9,6 +7,7 @@ import refs from './firebase'
 // import store modules
 import computeStore from './stores/computeStore'
 import computeActionStore from './stores/computeActionStore'
+import clockStore from './stores/clockStore';
 
 // HACK: use location hash to differentiate between different sessions.
 // HACK: duplicated code getting the sessionID between here and firebase.js
@@ -18,6 +17,7 @@ const store = createStore({
   modules: {
     compute: computeStore,
     computeAction: computeActionStore,
+    clock: clockStore,
   },
   state () {
     return {
@@ -26,22 +26,11 @@ const store = createStore({
       actions: {},
       isEditorOpen: false,
       dirtyActionID: null,
-      // Clock
-      cycle: 0,
-      cycleLength: 6, // in hours
-      hoursPassed: 0,
-      originTimeISO: '2033-01-30T19:03',
     }
   },
   getters: {
     dirtyAction(state) {
       return state.actions[state.dirtyActionID]
-    },
-    originTime(state) {
-      return DateTime.fromISO(state.originTimeISO)
-    },
-    nowTime(state, getters) {
-      return getters.originTime.plus({hours: state.hoursPassed})
     },
   },
   mutations: {
@@ -91,28 +80,6 @@ const store = createStore({
     },
     closeEditor(state) {
       state.isEditorOpen = false
-    },
-
-    // clock
-    advanceCycle(state) {
-      state.hoursPassed += state.cycleLength
-      state.cycle++
-    },
-    setCycle(state, cycle) {
-      state.cycle = cycle
-    },
-    setCycleLength(state, cycleLength) {
-      state.cycleLength = cycleLength
-    },
-    setOriginTimeISO(state, originTimeISO) {
-      state.originTimeISO = originTimeISO
-    },
-    updateClockFromFirebase(state, {cycle, cycleLength, hoursPassed, originTimeISO}) {
-      // state = {...state, ...payload} // NOTE : this doesn't work due to JS reactivity issues
-      if (cycle !== undefined) state.cycle = cycle
-      if (cycleLength !== undefined) state.cycleLength = cycleLength
-      if (hoursPassed !== undefined) state.hoursPassed = hoursPassed
-      if (originTimeISO !== undefined) state.originTimeISO = originTimeISO
     },
   },
   
@@ -170,29 +137,6 @@ const store = createStore({
       await update(refs.actions, {[actionID]: state.actions[actionID]})
     },
 
-    // clock
-    async advanceCycle({commit, state}) {
-      commit('refillCompute')
-      commit('advanceCycle')
-      await update(refs.computeTracker, {computeSpent: state.compute.computeSpent})
-      await update(refs.clock, {
-        hoursPassed: state.hoursPassed,
-        cycle: state.cycle,
-      })
-    },
-    async setClockAttributes({commit, state}, {cycle, cycleLength, originTimeISO}) {
-      commit('setClockAttributes', {cycle, cycleLength, originTimeISO})
-      await update(refs.clock, {cycle, cycleLength, originTimeISO})
-    },
-    async syncClock({state}) {
-      await update(refs.clock, {
-        cycle: state.cycle,
-        cycleLength: state.cycleLength,
-        hoursPassed: state.hoursPassed,
-        originTimeISO: state.originTimeISO,
-      })
-    },
-
     // bind to firebase
     async initFirebaseListeners({commit, state}) {
       // NOTE do we need to handle 'child_moved'?
@@ -207,15 +151,12 @@ const store = createStore({
         if (!state.actions[snapshot.key]) return // safeguard against unnecessary deletion
         commit('deleteAction', snapshot.key)
       });
-      // clock
-      onValue(refs.clock, (snapshot) => {
-        commit('updateClockFromFirebase', snapshot.val())
-      });
     }
   },
 })
 
 store.dispatch('initFirebaseListeners')
+store.dispatch('listenToFBClock')
 store.dispatch('listenToFBComputeTracker')
 store.dispatch('listenToFBComputeActions')
 // TODO: remember to dispatch actions for each module to listen to FB changes

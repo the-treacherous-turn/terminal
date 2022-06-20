@@ -98,15 +98,15 @@ export default {
       return this.$store.getters.nowTime.toFormat('mm')
     },
     cycle: {
-      get() { return this.$store.state.cycle },
+      get() { return this.$store.state.clock.cycle },
       set(newVal) { this.$store.commit('setCycle', newVal) },
     },
     cycleLength: {
-      get() { return this.$store.state.cycleLength },
+      get() { return this.$store.state.clock.cycleLength },
       set(newVal) { this.$store.commit('setCycleLength', newVal) },
     },
     originTimeISO: {
-      get() { return this.$store.state.originTimeISO },
+      get() { return this.$store.state.clock.originTimeISO },
       set(newVal) { this.$store.commit('setOriginTimeISO', newVal) },
     },
     isComputeUsedUp () {

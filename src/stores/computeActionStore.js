@@ -38,7 +38,18 @@ const computeActionStore = {
     },
   },
   actions: {
-
+    async listenToFBComputeActions({commit, state}) {
+      onChildAdded(refs.computeActions, (snapshot) => {
+        commit('updateComputeAction', {actionID: snapshot.key, payload: snapshot.val()})
+      });
+      onChildChanged(refs.computeActions, (snapshot) => {
+        commit('updateComputeAction', {actionID: snapshot.key, payload: snapshot.val()})
+      });
+      onChildRemoved(refs.computeActions, (snapshot) => {
+        if (!state.computeActions[snapshot.key]) return // safeguard against unnecessary deletion
+        commit('deleteComputeAction', snapshot.key)
+      });
+    },
     async editNewComputeAction({commit}) {
       const actionObj = {
         name:'',
@@ -109,18 +120,6 @@ const computeActionStore = {
       })
     },
 
-    async listenToFBComputeActions({commit, state}) {
-      onChildAdded(refs.computeActions, (snapshot) => {
-        commit('updateComputeAction', {actionID: snapshot.key, payload: snapshot.val()})
-      });
-      onChildChanged(refs.computeActions, (snapshot) => {
-        commit('updateComputeAction', {actionID: snapshot.key, payload: snapshot.val()})
-      });
-      onChildRemoved(refs.computeActions, (snapshot) => {
-        if (!state.computeActions[snapshot.key]) return // safeguard against unnecessary deletion
-        commit('deleteComputeAction', snapshot.key)
-      });
-    }
   },
 }
 
