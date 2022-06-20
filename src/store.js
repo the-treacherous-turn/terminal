@@ -98,12 +98,13 @@ const store = createStore({
       state.hoursPassed += state.cycleLength
       state.cycle++
     },
-    setClockAttributes(state, {cycle, cycleLength, originTimeISO}) {
-      if (state.cycle !== cycle) {
-        state.hoursPassed = cycle * cycleLength
-        state.cycle = cycle
-      }
+    setCycle(state, cycle) {
+      state.cycle = cycle
+    },
+    setCycleLength(state, cycleLength) {
       state.cycleLength = cycleLength
+    },
+    setOriginTimeISO(state, originTimeISO) {
       state.originTimeISO = originTimeISO
     },
     updateClockFromFirebase(state, {cycle, cycleLength, hoursPassed, originTimeISO}) {
@@ -182,6 +183,14 @@ const store = createStore({
     async setClockAttributes({commit, state}, {cycle, cycleLength, originTimeISO}) {
       commit('setClockAttributes', {cycle, cycleLength, originTimeISO})
       await update(refs.clock, {cycle, cycleLength, originTimeISO})
+    },
+    async syncClock({state}) {
+      await update(refs.clock, {
+        cycle: state.cycle,
+        cycleLength: state.cycleLength,
+        hoursPassed: state.hoursPassed,
+        originTimeISO: state.originTimeISO,
+      })
     },
 
     // bind to firebase

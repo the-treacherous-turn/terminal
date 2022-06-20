@@ -17,7 +17,7 @@
     </div>
 
     <input type="checkbox" id="modal-compute-tracker-setting" class="modal-toggle"
-    v-model="isSettingOpen" @change="checkCheckbox"
+    v-model="isSettingOpen" @change="onModalToggle"
     />
     <label for="modal-compute-tracker-setting" class="modal cursor-pointer">
       <label class="modal-box relative" for>
@@ -107,7 +107,6 @@
             for="modal-compute-tracker-setting"
             class="btn btn-primary">
             Close</label>
-          <!-- <label for="modal-compute-tracker-setting" class="btn">Cancel</label> -->
         </div>
       </label>
     </label>
@@ -163,7 +162,7 @@ export default {
     removeRecurringCost(key) {
       this.$store.dispatch('removeRecurringCost', key)
     },
-    checkCheckbox() {
+    onModalToggle() {
       // if the setting page's getting closed,
       // sync the compute tracker
       if (!this.isSettingOpen) {

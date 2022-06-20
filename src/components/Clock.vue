@@ -34,21 +34,22 @@
   </label>
 </label>
 
-<input type="checkbox" id="modal-clock-setting" class="modal-toggle" />
+<input type="checkbox" id="modal-clock-setting" class="modal-toggle"
+v-model="isSettingOpen" @change="onModalToggle" />
 <label for="modal-clock-setting" class="modal cursor-pointer">
   <label class="modal-box relative" for>
     <h3 class="text-lg font-bold">Configure Clock</h3>
     <p class="my-4">
       <label for="clock-tracker-cycle-length">Turn Length </label>
       <input 
-        v-model.number="tempCycleLength"
+        v-model.number="cycleLength"
         id="clock-tracker-cycle-length" type="number" min="0"
         class="input input-sm input-bordered w-20"> hours
     </p>
     <p class="my-4">
       <label for="clock-tracker-origin-time">Origin Time </label>
       <input
-        v-model="tempOriginTimeISO"
+        v-model="originTimeISO"
         type="datetime-local"
         id="clock-tracker-origin-time"
         class="input input-sm input-bordered text-black bg-white">
@@ -58,7 +59,7 @@
       <label for="clock-tracker-cycle" class="pr-2">Set Turn </label>
       <div class="tooltip tooltip-right tooltip-warning" data-tip="Warning: This may break your chronology.">
         <input
-          v-model.number="tempCycle"
+          v-model.number="cycle"
           type="number" min="0"
           id="clock-tracker-cycle"
           class="input input-sm input-bordered w-20">
@@ -68,10 +69,8 @@
     <div class="btn-group float-right">
       <label
         for="modal-clock-setting"
-        class="btn btn-primary"
-        @click="updateClock">
-        Confirm</label>
-      <label for="modal-clock-setting" class="btn">Cancel</label>
+        class="btn btn-primary">
+        Close</label>
     </div>
   </label>
 </label>
@@ -85,15 +84,8 @@ import { DateTime } from 'luxon'
 export default {
   data() {
     return {
-      tempCycleLength: this.$store.state.cycleLength,
-      tempOriginTimeISO: this.$store.state.originTimeISO,
-      tempCycle: this.$store.state.cycle,
+      isSettingOpen: false,
     }
-  },
-  watch: {
-    '$store.state.cycleLength': function(newVal, oldVal) {
-      this.tempCycleLength = newVal
-    },
   },
   computed: {
     nowDate() {
@@ -105,24 +97,32 @@ export default {
     nowMin() {
       return this.$store.getters.nowTime.toFormat('mm')
     },
-    cycle () {
-      this.tempCycle = this.$store.state.cycle // update the cycle displayed whenever store gets updated too
-      return this.$store.state.cycle
+    cycle: {
+      get() { return this.$store.state.cycle },
+      set(newVal) { this.$store.commit('setCycle', newVal) },
+    },
+    cycleLength: {
+      get() { return this.$store.state.cycleLength },
+      set(newVal) { this.$store.commit('setCycleLength', newVal) },
+    },
+    originTimeISO: {
+      get() { return this.$store.state.originTimeISO },
+      set(newVal) { this.$store.commit('setOriginTimeISO', newVal) },
     },
     isComputeUsedUp () {
       return this.$store.getters.computeAvailable === 0
     },
   },
   methods: {
-    updateClock() {
-      this.$store.dispatch('setClockAttributes', {
-        cycle: this.tempCycle,
-        cycleLength: this.tempCycleLength,
-        originTimeISO: this.tempOriginTimeISO,
-      })
-    },
     advanceCycle() {
       this.$store.dispatch('advanceCycle')
+    },
+    onModalToggle() {
+      // if clock's modal is closed,
+      // sync the clock
+      if (!this.isSettingOpen) {
+        this.$store.dispatch('syncClock')
+      }
     }
   }
 }
