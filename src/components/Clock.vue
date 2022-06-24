@@ -38,14 +38,8 @@
 v-model="isSettingOpen" @change="onModalToggle" />
 <label for="modal-clock-setting" class="modal cursor-pointer">
   <label class="modal-box relative" for>
-    <h3 class="text-lg font-bold">Configure Clock</h3>
-    <p class="my-4">
-      <label for="clock-tracker-cycle-length">Turn Length </label>
-      <input 
-        v-model.number="cycleLength"
-        id="clock-tracker-cycle-length" type="number" min="0"
-        class="input input-sm input-bordered w-20"> hours
-    </p>
+    <h3 class="text-lg font-bold">Time</h3>
+    
     <p class="my-4">
       <label for="clock-tracker-origin-time">Origin Time </label>
       <input
@@ -53,6 +47,16 @@ v-model="isSettingOpen" @change="onModalToggle" />
         type="datetime-local"
         id="clock-tracker-origin-time"
         class="input input-sm input-bordered text-black bg-white">
+    </p>
+
+    <h3 class="text-lg font-bold">Turns</h3>
+
+    <p class="my-4">
+      <label for="clock-tracker-cycle-length">Turn Length </label>
+      <input 
+        v-model.number="cycleLength"
+        id="clock-tracker-cycle-length" type="number" min="0"
+        class="input input-sm input-bordered w-20"> hours
     </p>
 
     <p class="my-4">
