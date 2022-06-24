@@ -41,7 +41,16 @@ v-model="isSettingOpen" @change="onModalToggle" />
     <h3 class="text-lg font-bold">Time</h3>
     
     <p class="my-4">
-      <label for="clock-tracker-origin-time">Origin Time </label>
+      <label class="inline-block w-20" for="clock-tracker-now-time">Now: </label>
+      <input
+        v-model="nowTimeISO"
+        type="datetime-local"
+        id="clock-tracker-now-time"
+        class="input input-sm input-bordered text-black bg-white">
+    </p>
+
+    <p class="my-4">
+      <label class="inline-block w-20" for="clock-tracker-origin-time">Origin: </label>
       <input
         v-model="originTimeISO"
         type="datetime-local"
@@ -52,7 +61,7 @@ v-model="isSettingOpen" @change="onModalToggle" />
     <h3 class="text-lg font-bold">Turns</h3>
 
     <p class="my-4">
-      <label for="clock-tracker-cycle-length">Turn Length </label>
+      <label for="clock-tracker-cycle-length">Turn Length: </label>
       <input 
         v-model.number="cycleLength"
         id="clock-tracker-cycle-length" type="number" min="0"
@@ -60,14 +69,12 @@ v-model="isSettingOpen" @change="onModalToggle" />
     </p>
 
     <p class="my-4">
-      <label for="clock-tracker-cycle" class="pr-2">Set Turn </label>
-      <div class="tooltip tooltip-right tooltip-warning" data-tip="Warning: This may break your chronology.">
-        <input
-          v-model.number="cycle"
-          type="number" min="0"
-          id="clock-tracker-cycle"
-          class="input input-sm input-bordered w-20">
-      </div>
+      <label for="clock-tracker-cycle" class="pr-2">Set Turn: </label>
+      <input
+        v-model.number="cycle"
+        type="number" min="0"
+        id="clock-tracker-cycle"
+        class="input input-sm input-bordered w-20">
     </p>
 
     <div class="btn-group float-right">
@@ -112,6 +119,10 @@ export default {
     originTimeISO: {
       get() { return this.$store.state.clock.originTimeISO },
       set(newVal) { this.$store.commit('setOriginTimeISO', newVal) },
+    },
+    nowTimeISO: {
+      get() { return this.$store.state.clock.nowTimeISO },
+      set(newVal) { this.$store.commit('setNowTimeISO', newVal) },
     },
     isComputeUsedUp () {
       return this.$store.getters.computeAvailable === 0
