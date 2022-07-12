@@ -3,7 +3,7 @@
     name="modal"
   >
     <div class="font-mono uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
-    v-if="$store.state.isEditorOpen">
+    v-if="$store.state.eventLog.isEditorOpen">
       <div class="table-cell align-middle bg-transparent">
         <div class="
         modal-container
@@ -120,7 +120,7 @@ export default {
     },
     cancel() {
       if (this.$store.getters.dirtyAction.isNew) {
-        this.$store.dispatch('deleteAction', this.$store.state.dirtyActionID)
+        this.$store.dispatch('deleteAction', this.$store.state.eventLog.dirtyActionID)
         this.close()
       } else {
         // HACK prevent dirty state from persisting.

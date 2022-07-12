@@ -40,7 +40,7 @@ export default {
       <SimpleBar class="absolute h-full w-full">
         <div class="h-16"></div>
         <ActionCard
-          v-for="(action, key) in $store.state.actions"
+          v-for="(action, key) in $store.state.eventLog.actions"
           :key="key"
           :actionID="key"
           :name="action.name"
