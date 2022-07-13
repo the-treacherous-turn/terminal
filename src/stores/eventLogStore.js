@@ -16,9 +16,8 @@ const eventLogStore = {
     setActionWithID(state, {actionID, actionObj}) {
       state.actions[actionID] = actionObj
     },
-    editNewAction(state, {actionID, actionObj}) {
+    editNewAction(state, {actionID}) {
       // create new action
-      store.commit('setActionWithID', {actionID, actionObj})
       state.dirtyActionID = actionID
       // open the editor
       state.isEditorOpen = true
@@ -86,7 +85,8 @@ const eventLogStore = {
       }
       // push a new action into the database
       const actionID = await push(refs.actions, actionObj).key
-      commit('editNewAction', {actionID, actionObj})
+      commit('setActionWithID', {actionID, actionObj})
+      commit('editNewAction', {actionID})
     },
 
     async editExtantAction({commit, state}, actionID) {
