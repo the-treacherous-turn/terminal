@@ -25,13 +25,6 @@ const clockStore = {
       state.nowTimeISO = nowTime.toISO({includeOffset:false,suppressSeconds:true})
       state.hoursPassed += hours
     },
-    advanceCycle(state) {
-      let nowTime = DateTime.fromISO(state.nowTimeISO)
-      nowTime = nowTime.plus({hours: state.cycleLength})
-      state.nowTimeISO = nowTime.toISO({includeOffset:false,suppressSeconds:true})
-      state.hoursPassed += state.cycleLength
-      state.cycle++
-    },
     setCycle(state, cycle) {
       state.cycle = cycle
     },
@@ -61,6 +54,7 @@ const clockStore = {
     async advanceCycle({commit, state, rootState, getters}) {
       const remainingCycleTime = state.cycleLength * (1 - (rootState.compute.computeSpent / (getters.computeTotal - getters.recurringSum)))
       commit('advanceTime', remainingCycleTime)
+      state.cycle++
       commit('refillCompute')
       await update(refs.computeTracker, {computeSpent: rootState.compute.computeSpent})
       await update(refs.clock, {
