@@ -1,23 +1,30 @@
 <template>
 <div>
   <div class="stats float-right">
-    <div class="indicator absolute right-0 -translate-x-2 translate-y-6">
-      <label for="modal-clock-setting">
-        <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
-          <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
-        </span>
-      </label>
-    </div>
-    <div class="stat px-4">
+    <div class="stat px-4 relative">
       <div class="stat-title text-base">{{nowDate}}</div>
       <div class="stat-value text-4xl">{{nowHour}}:{{nowMin}}</div>
+      <div class="indicator absolute right-0 -translate-x-2 translate-y-6">
+        <label for="modal-time-setting">
+          <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
+            <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
+          </span>
+        </label>
+      </div>
     </div>
-    <div class="stat px-4">
+    <div class="stat px-4 relative">
       <div class="stat-title text-base">Turn</div>
       <div class="stat-value text-4xl">{{cycle}}</div>
       <div class="stat-figure">
         <label v-if="isComputeUsedUp" class="btn uppercase" @click="advanceCycle">End Turn</label>
         <label v-else for="modal-cycle-confirm" class="btn modal-button uppercase">End Turn</label>
+      </div>
+      <div class="indicator absolute right-0 -translate-x-2 translate-y-6">
+        <label for="modal-turn-setting">
+          <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
+            <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
+          </span>
+        </label>
       </div>
     </div>
   </div>
@@ -34,9 +41,9 @@
   </label>
 </label>
 
-<input type="checkbox" id="modal-clock-setting" class="modal-toggle"
-v-model="isSettingOpen" @change="onModalToggle" />
-<label for="modal-clock-setting" class="modal cursor-pointer">
+<input type="checkbox" id="modal-time-setting" class="modal-toggle"
+v-model="isTimeSettingOpen" @change="onTimeModalToggle" />
+<label for="modal-time-setting" class="modal cursor-pointer">
   <label class="modal-box relative" for>
     <h3 class="text-lg font-bold">Time</h3>
     
@@ -57,6 +64,21 @@ v-model="isSettingOpen" @change="onModalToggle" />
         id="clock-tracker-origin-time"
         class="input input-sm input-bordered text-black bg-white">
     </p>
+
+    <div class="btn-group float-right">
+      <label
+        for="modal-time-setting"
+        class="btn btn-primary">
+        Close</label>
+    </div>
+  </label>
+</label>
+
+
+<input type="checkbox" id="modal-turn-setting" class="modal-toggle"
+v-model="isTurnSettingOpen" @change="onTurnModalToggle" />
+<label for="modal-turn-setting" class="modal cursor-pointer">
+  <label class="modal-box relative" for>
 
     <h3 class="text-lg font-bold">Turns</h3>
 
@@ -79,7 +101,7 @@ v-model="isSettingOpen" @change="onModalToggle" />
 
     <div class="btn-group float-right">
       <label
-        for="modal-clock-setting"
+        for="modal-turn-setting"
         class="btn btn-primary">
         Close</label>
     </div>
@@ -95,7 +117,8 @@ import { DateTime } from 'luxon'
 export default {
   data() {
     return {
-      isSettingOpen: false,
+      isTimeSettingOpen: false,
+      isTurnSettingOpen: false,
     }
   },
   computed: {
@@ -132,13 +155,16 @@ export default {
     advanceCycle() {
       this.$store.dispatch('advanceCycle')
     },
-    onModalToggle() {
-      // if clock's modal is closed,
-      // sync the clock
-      if (!this.isSettingOpen) {
+    onTimeModalToggle() {
+      if (!this.isTimeSettingOpen) {
         this.$store.dispatch('syncClock')
       }
-    }
+    },
+    onTurnModalToggle() {
+      if (!this.isTurnSettingOpen) {
+        this.$store.dispatch('syncClock')
+      }
+    },
   }
 }
 </script>
