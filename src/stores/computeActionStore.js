@@ -92,18 +92,26 @@ const computeActionStore = {
       await update(refs.computeTracker, {computeToSpend: rootState.compute.computeToSpend})
     },
     // calculate compute point assignment
-    async assignComputePoints({state, rootState, getters}) {
-      rootState.compute.computeToSpend = 0
+    // NOTE this is a bit of a hack. we need to figure out a better way to do this
+    // basically, it's very easy to create bugs
+    // when any firebase sync happens before all calculations are resolved. 
+    // Therefore we only commit during the loops,
+    // and sync at the very end.
+    async assignComputePoints({state, rootState, getters, commit, dispatch}) {
+      rootState.compute.computeToSpend = 0 // to get new computeAvailable
       Object.values(state.computeActions).forEach(ca => {
         const computeAvailable = getters.computeAvailable
         // if there isn't enough compute available, then add however much is left
+        let change = 0
         if (ca.computeToAdd > computeAvailable) {
-          rootState.compute.computeSpent += computeAvailable
-          ca.computeApplied += computeAvailable
+          change = computeAvailable
         } else {
-          rootState.compute.computeSpent += ca.computeToAdd
-          ca.computeApplied += ca.computeToAdd
+          change = ca.computeToAdd
         }
+        commit('updateComputeSpent', change)
+        ca.computeApplied += change
+        const computeToHours = rootState.clock.cycleLength * (change / (getters.computeTotal - getters.recurringSum))
+        commit('advanceTime', computeToHours)
 
         // calculate the computes to add for next assign, and new total compute to spend
         const remainingComputeNeeded = ca.computeNeeded - ca.computeApplied
@@ -111,8 +119,9 @@ const computeActionStore = {
         if (remainingComputeNeeded < ca.computeToAdd){
           ca.computeToAdd = remainingComputeNeeded
         }
-        rootState.compute.computeToSpend += ca.computeToAdd
+        commit('updateComputeToSpend', ca.computeToAdd)
       })
+      await dispatch('syncClock')
       await update(refs.computeActions, state.computeActions)
       await update(refs.computeTracker, {
         computeToSpend: rootState.compute.computeToSpend,

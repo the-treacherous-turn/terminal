@@ -19,6 +19,12 @@ const clockStore = {
     }
   },
   mutations: {
+    advanceTime(state, hours) {
+      let nowTime = DateTime.fromISO(state.nowTimeISO)
+      nowTime = nowTime.plus({hours})
+      state.nowTimeISO = nowTime.toISO({includeOffset:false,suppressSeconds:true})
+      state.hoursPassed += hours
+    },
     advanceCycle(state) {
       let nowTime = DateTime.fromISO(state.nowTimeISO)
       nowTime = nowTime.plus({hours: state.cycleLength})
@@ -52,13 +58,20 @@ const clockStore = {
         commit('updateClockFromFirebase', snapshot.val())
       })
     },
-    async advanceCycle({commit, state, rootState}) {
+    async advanceCycle({commit, state, rootState, getters}) {
+      const remainingCycleTime = state.cycleLength * (1 - (rootState.compute.computeSpent / (getters.computeTotal - getters.recurringSum)))
+      commit('advanceTime', remainingCycleTime)
       commit('refillCompute')
-      commit('advanceCycle')
       await update(refs.computeTracker, {computeSpent: rootState.compute.computeSpent})
       await update(refs.clock, {
         nowTimeISO: state.nowTimeISO,
         cycle: state.cycle,
+      })
+    },
+    async advanceTime({commit, state}, hours) {
+      commit('advanceTime', hours)
+      await update(refs.clock, {
+        nowTimeISO: state.nowTimeISO,
       })
     },
     async syncClock({state}) {

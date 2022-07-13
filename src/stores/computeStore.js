@@ -73,7 +73,7 @@ const computeStore = {
     },
   },
   actions: {
-    async listenToFBComputeTracker({commit, state}) {
+    async listenToFBComputeTracker({commit}) {
       onValue(refs.computeTracker, (snapshot) => {
         commit('updateComputeTrackerFromFirebase', snapshot.val())
       })
