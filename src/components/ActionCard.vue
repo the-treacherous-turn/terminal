@@ -13,7 +13,7 @@
       </li>
     </ul>
   </div>
-  <span class="text-2xl" :class="{'bg-white text-black': isCommitted && !isForecast}">{{name}}</span>
+  <span class="text-2xl" :class="{'badge badge-success': isCommitted && !isForecast}">{{name}}</span>
   <p>
     <span v-if="Number.isFinite(confidence)" class="badge badge-ghost text-lg mr-1">Confidence: {{confidence}}% </span>
     <span v-if="Number.isFinite(risk)" class="badge badge-ghost text-lg mr-1">Risk: d{{risk}} </span>
@@ -25,7 +25,7 @@
       <button class="btn btn-xs uppercase float-right" @click="commitCard()">finalize</button>
     </div>
     <div v-if="isCommitted">
-      <div class="badge badge-success gap-2">finalized</div>
+      <!-- <div class="badge badge-success gap-2">finalized</div> -->
       <button class="btn btn-xs uppercase float-right" @click="markAsForecast">use forecast</button>
     </div>
   </div>
