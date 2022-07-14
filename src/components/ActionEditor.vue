@@ -72,8 +72,19 @@
               rows="5"
               class="bg-black w-full border mb-4 px-2 py-2"
             ></textarea>
+            <div class="mb-4">
+
+              <label class="label cursor-pointer inline-flex">
+                <input v-model="isCommitted" type="checkbox" checked="checked" class="checkbox" />
+                <span class="label-text mx-4">finalized</span> 
+              </label>
+              <label class="label cursor-pointer inline-flex">
+                <input v-model="isForecast" type="checkbox" checked="checked" class="checkbox" />
+                <span class="label-text mx-4">marked as forecast</span> 
+              </label>
+            </div>
             <button
-              class="block"
+              class="btn uppercase"
               type="submit"
               :disabled="isSubmitDisabled"
               @click="submit"
@@ -110,6 +121,14 @@ export default {
     compute: {
       get() {return this.$store.getters.dirtyAction.compute},
       set (value) { this.$store.commit('updateAction', {compute: value}) }
+    },
+    isCommitted: {
+      get() {return this.$store.getters.dirtyAction.isCommitted},
+      set (value) { this.$store.commit('updateAction', {isCommitted: value}) }
+    },
+    isForecast: {
+      get() {return this.$store.getters.dirtyAction.isForecast},
+      set (value) { this.$store.commit('updateAction', {isForecast: value}) }
     },
   },
   methods: {

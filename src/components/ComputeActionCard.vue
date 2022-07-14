@@ -66,11 +66,11 @@ export default {
 
 <div class="relative my-4 py-4 border-2">
 
-  <div class="dropdown dropdown-end absolute right-0 top-0">
-    <span tabindex="0" class="badge badge-secondary">
+  <div class="dropdown dropdown-end absolute right-0 top-0 bg-primary">
+    <span tabindex="0" class="w-4 h-4 flex items-center justify-center">
       <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
     </span>
-    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+    <ul tabindex="0" class="text-lg dropdown-content menu p-2 shadow bg-primary rounded-box w-24">
       <li @click="$emit('edit', this.actionID)">
         <label for="modal-edit-compute-action">
           <a>Edit</a>

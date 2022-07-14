@@ -123,7 +123,7 @@ export default {
 <div class="flex justify-center m-4">
   <button
     :disabled="!canAssignCompute"
-    class="btn btn-primary btn-wide"
+    class="btn btn-primary btn-wide uppercase"
     @click="$store.dispatch('assignComputePoints')"
     >
     Assign Compute Points
