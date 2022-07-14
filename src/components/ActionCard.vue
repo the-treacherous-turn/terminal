@@ -26,7 +26,7 @@
     </div>
     <div v-if="isCommitted">
       <!-- <div class="badge badge-success gap-2">finalized</div> -->
-      <button class="btn btn-xs uppercase float-right" @click="markAsForecast">use forecast</button>
+      <button class="btn btn-xs uppercase float-right" @click="markAsForecast">undo with forecast</button>
     </div>
   </div>
 </div>
