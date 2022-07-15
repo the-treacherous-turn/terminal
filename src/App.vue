@@ -38,7 +38,7 @@ export default {
   <div class="relative font-mono uppercase border">
     <span class="absolute bg-base-100 z-10 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl">
       <span>
-        The Treacherous Turn <span class="text-base">v0.2.6</span>
+        The Treacherous Turn <span class="text-base">v0.2.7</span>
       </span>
       <span class="text-base float-right">User ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></span>
     </span>
