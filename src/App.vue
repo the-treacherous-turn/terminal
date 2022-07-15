@@ -7,6 +7,8 @@ import Clock from './components/Clock.vue'
 import ComputeTracker from './components/ComputeTracker.vue'
 import ComputeActionManager from './components/ComputeActionManager.vue'
 
+import Footer from './Footer.vue'
+
 export default {
   components: {
     SimpleBar,
@@ -16,6 +18,7 @@ export default {
     Clock,
     ComputeTracker,
     ComputeActionManager,
+    Footer,
   },
   data () {
     return {
@@ -31,12 +34,14 @@ export default {
 </script>
 
 <template>
-<div class="relative w-full min-w-[1024px] h-full grid grid-cols-2 gap-4">
+<div class="relative w-full min-w-[1024px] h-9/10 grid grid-cols-2 gap-4">
   <div class="relative font-mono uppercase border">
-    <h1 class="absolute bg-black z-10 w-96 top-0 left-0 p-4 px-8 border-b-2 border-r-2 text-3xl">
-      The Treacherous Turn <span class="text-base">v0.2.6</span>
-    </h1>
-    <h3 class="absolute bg-black z-10 top-0 right-0 p-4 text-2xl">User ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></h3>
+    <span class="absolute bg-base-100 z-10 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl">
+      <span>
+        The Treacherous Turn <span class="text-base">v0.2.6</span>
+      </span>
+      <span class="text-base float-right">User ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></span>
+    </span>
   
     <!-- <div class="absolute h-full w-full"> -->
       <SimpleBar class="absolute h-full w-full">
@@ -58,7 +63,7 @@ export default {
       </SimpleBar>
     <!-- </div> -->
   
-    <div class="absolute bg-black w-full bottom-0 left-0 p-4 pl-8 border-t-2">
+    <div class="absolute bg-base-100 w-full bottom-0 left-0 p-4 pl-8 border-t-2">
       <button class=""
         type="button"
         @click="editNewAction"
@@ -77,6 +82,7 @@ export default {
     </div>  
   </div>
 </div>
+<Footer />
 <Teleport to="body">
   <ActionEditor />
 </Teleport>

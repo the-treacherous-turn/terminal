@@ -29,6 +29,10 @@ module.exports = {
       borderWidth: {
         DEFAULT: '2px',
       },
+      spacing: {
+        '1/10': '10%',
+        '9/10': '90%',
+      },
       transitionProperty: {
         // allow transitioning max height
         'max-h': 'max-height',
@@ -37,6 +41,13 @@ module.exports = {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: ["black"]
+    themes: [
+      {
+        black: {
+          ...require("daisyui/src/colors/themes")["[data-theme=black]"],
+          "base-100": "#121b1e",
+        }
+      }
+    ],
   }
 }
