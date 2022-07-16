@@ -2,7 +2,6 @@
 import { SimpleBar } from 'simplebar-vue3';
 import ActionEditor from './components/ActionEditor.vue'
 import ActionCard from './components/ActionCard.vue'
-import ActionCardSimple from './components/ActionCardSimple.vue'
 import Clock from './components/Clock.vue'
 import ComputeTracker from './components/ComputeTracker.vue'
 import ComputeActionManager from './components/ComputeActionManager.vue'
@@ -14,7 +13,6 @@ export default {
     SimpleBar,
     ActionEditor,
     ActionCard,
-    ActionCardSimple,
     Clock,
     ComputeTracker,
     ComputeActionManager,
@@ -46,7 +44,7 @@ export default {
     <!-- <div class="absolute h-full w-full"> -->
       <SimpleBar class="absolute h-full w-full">
         <div class="h-16"></div>
-        <ActionCardSimple
+        <ActionCard
           v-for="(action, key) in $store.state.eventLog.actions"
           :key="key"
           :actionID="key"
