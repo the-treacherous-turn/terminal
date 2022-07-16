@@ -16,7 +16,7 @@
   <span
     class="text-2xl cursor-pointer"
     :class="{
-      'hover:badge hover:badge-success hover:inline': (!isCommitted && !isForecast),
+      'hover:text-success-content hover:bg-success hover:inline': (!isCommitted && !isForecast),
       'badge badge-success inline hover:line-through': (isCommitted && !isForecast),
       'line-through hover:no-underline': isForecast,
     }"
