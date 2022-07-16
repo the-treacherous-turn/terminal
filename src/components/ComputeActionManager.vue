@@ -142,13 +142,13 @@ export default {
   <label class="modal-box relative" for>
     <h3 class="text-lg font-bold">Edit Compute Action</h3>
     <p>
-      <div class="form-control w-full">
+      <form class="form-control w-full" autocomplete="off">
         <label class="label">
           <span class="label-text">Name</span>
         </label>
         <input
           v-model="name"
-          type="text" placeholder="" 
+          type="text" name="compute action name" placeholder="" autocomplete="off"
           class="input input-bordered w-full">
         <label class="label">
           <span class="label-text">Required Compute</span>
@@ -174,7 +174,7 @@ export default {
           placeholder=""
           class="textarea textarea-bordered h-24">
         </textarea>
-      </div>
+      </form>
     </p>
     <div class="btn-group float-right mt-4">
       <label
