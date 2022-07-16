@@ -67,7 +67,9 @@ export default {
 <div class="relative my-4 py-4 border-2">
 
   <div class="absolute right-0 top-0">
-    <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base text-primary-content mr-1 my-1 cursor-pointer hover:text-white"  @click="$emit('edit', this.actionID)" />
+    <label for="modal-edit-compute-action">
+      <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base text-primary-content mr-1 my-1 cursor-pointer hover:text-white"  @click="$emit('edit', this.actionID)" />
+    </label>
     <font-awesome-icon :icon="['fas', 'trash-can']" class="text-base text-primary-content mr-1 my-1 cursor-pointer hover:text-white"      @click="$emit('delete', this.actionID)" />
   </div>
 
