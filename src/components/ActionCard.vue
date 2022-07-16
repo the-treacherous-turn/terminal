@@ -1,18 +1,9 @@
 <template>
 <div class="mx-8 my-4 p-4 relative border">
-  <div class="dropdown dropdown-end absolute right-0 top-0 bg-primary">
-    <span tabindex="0" class="w-4 h-4 flex items-center justify-center">
-      <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
-    </span>
-    <ul tabindex="0" class="text-lg dropdown-content menu p-2 shadow bg-primary rounded-box w-24">
-      <li @click="editCard">
-        <a>Edit</a>
-      </li>
-      <li @click="deleteCard">
-        <a>Delete</a>
-      </li>
-    </ul>
-  </div>
+  <div class="absolute right-0 top-0">
+    <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base mr-1 my-1 cursor-pointer text-primary-content hover:text-white"  @click="editCard" />
+    <font-awesome-icon :icon="['fas', 'trash-can']" class="text-base mr-1 my-1 cursor-pointer text-primary-content hover:text-white"        @click="deleteCard" />
+</div>
   <span
     class="text-2xl cursor-pointer"
     :class="{

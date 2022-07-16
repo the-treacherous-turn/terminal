@@ -1,15 +1,15 @@
 <template>
   <div class>
-    <div class="stats float-left relative">
-      <div class="indicator absolute right-0 -translate-x-2 translate-y-6">
-        <label for="modal-compute-tracker-setting">
-          <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
-            <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
-          </span>
-        </label>
-      </div>
+    <div class="stats float-left">
       <div class="stat px-4">
-        <div class="stat-title text-base">Compute Available</div>
+        <div>
+          <div class="stat-title text-base inline mr-2">Compute Available</div>
+          <label for="modal-compute-tracker-setting">
+            <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
+              <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base" />
+            </span>
+          </label>
+        </div>
         <div class="stat-value text-4xl">
           {{ available }}<span v-if="toSpend !== 0">(-{{toSpend}})</span>/{{ total }}
         </div>

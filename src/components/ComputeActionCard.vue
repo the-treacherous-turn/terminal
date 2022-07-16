@@ -66,20 +66,9 @@ export default {
 
 <div class="relative my-4 py-4 border-2">
 
-  <div class="dropdown dropdown-end absolute right-0 top-0 bg-primary">
-    <span tabindex="0" class="w-4 h-4 flex items-center justify-center">
-      <font-awesome-icon icon="ellipsis-vertical" class="text-base" />
-    </span>
-    <ul tabindex="0" class="text-lg dropdown-content menu p-2 shadow bg-primary rounded-box w-24">
-      <li @click="$emit('edit', this.actionID)">
-        <label for="modal-edit-compute-action">
-          <a>Edit</a>
-        </label>
-      </li>
-      <li @click="$emit('delete', this.actionID)">
-        <a>Delete</a>
-      </li>
-    </ul>
+  <div class="absolute right-0 top-0">
+    <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base text-primary-content mr-1 my-1 cursor-pointer hover:text-white"  @click="$emit('edit', this.actionID)" />
+    <font-awesome-icon :icon="['fas', 'trash-can']" class="text-base text-primary-content mr-1 my-1 cursor-pointer hover:text-white"      @click="$emit('delete', this.actionID)" />
   </div>
 
   <div class="pl-32">
