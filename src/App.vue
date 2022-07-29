@@ -41,8 +41,8 @@ export default {
       <span class="text-base float-right">User ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></span>
     </span>
   
-    <!-- <div class="absolute h-full w-full"> -->
-      <SimpleBar class="absolute h-full w-full">
+    <div class="absolute h-full w-full overflow-y-scroll">
+      <!-- <SimpleBar class="absolute h-full w-full"> -->
         <div class="h-16"></div>
         <ActionCard
           v-for="(action, key) in $store.state.eventLog.actions"
@@ -58,8 +58,8 @@ export default {
           :isForecast="action.isForecast"
         />
         <div class="h-24"></div>
-      </SimpleBar>
-    <!-- </div> -->
+      <!-- </SimpleBar> -->
+    </div>
   
     <div class="absolute bg-base-100 w-full bottom-0 left-0 p-4 pl-8 border-t-2">
       <button class=""

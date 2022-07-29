@@ -102,7 +102,7 @@ export default {
 
 <template>
 <h1 class="text-xl font-bold">Computational Action Manager</h1>
-<SimpleBar id="compute-action-list" class="overflow-y-clip">
+<div id="compute-action-list" class="overflow-y-scroll">
   <ComputeActionCard
     v-for="(action, key) in $store.state.computeAction.computeActions"
     v-bind="action"
@@ -119,7 +119,7 @@ export default {
       <font-awesome-icon icon="plus" class="text-6xl" />
     </label>
   </div>
-</SimpleBar>
+</div>
 <div class="flex justify-center m-4">
   <button
     :disabled="!canAssignCompute"
