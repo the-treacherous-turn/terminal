@@ -38,17 +38,17 @@ html {
   --scrollbarBG: rgba(0,0,0,0);
   --thumbBG: rgba(0,0,0,0.8);
 }
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   width: 11px;
 }
-body {
+* {
   scrollbar-width: thin;
   scrollbar-color: var(--thumbBG) var(--scrollbarBG);
 }
-body::-webkit-scrollbar-track {
+*::-webkit-scrollbar-track {
   background: var(--scrollbarBG);
 }
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background-color: var(--thumbBG) ;
   border-radius: 16px;
   border: 8px solid var(--scrollbarBG);
