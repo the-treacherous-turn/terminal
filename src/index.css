@@ -25,13 +25,6 @@
   }
 }
 
-.simplebar-track {
-  @apply bg-transparent;
-}
-.simplebar-scrollbar {
-  @apply bg-inherit;
-}
-
 /* custom scrollbar that's fairly consistent across browsers */
 
 html {

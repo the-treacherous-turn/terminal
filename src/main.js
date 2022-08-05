@@ -4,7 +4,6 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { faItchIo, faTwitch, faReddit, faTwitter } from '@fortawesome/free-brands-svg-icons'
 library.add(fas, faItchIo, faTwitch, faReddit, faTwitter)
-import 'simplebar/dist/simplebar.min.css';
 import store from './store'
 import App from './App.vue'
 import './index.css'

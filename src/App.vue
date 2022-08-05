@@ -1,5 +1,4 @@
 <script>
-import { SimpleBar } from 'simplebar-vue3';
 import ActionEditor from './components/ActionEditor.vue'
 import ActionCard from './components/ActionCard.vue'
 import Clock from './components/Clock.vue'
@@ -10,7 +9,6 @@ import Footer from './Footer.vue'
 
 export default {
   components: {
-    SimpleBar,
     ActionEditor,
     ActionCard,
     Clock,
@@ -42,7 +40,6 @@ export default {
     </span>
   
     <div class="absolute h-full w-full overflow-y-scroll">
-      <!-- <SimpleBar class="absolute h-full w-full"> -->
         <div class="h-16"></div>
         <ActionCard
           v-for="(action, key) in $store.state.eventLog.actions"
@@ -58,7 +55,6 @@ export default {
           :isForecast="action.isForecast"
         />
         <div class="h-24"></div>
-      <!-- </SimpleBar> -->
     </div>
   
     <div class="absolute bg-base-100 w-full bottom-0 left-0 p-4 pl-8 border-t-2">

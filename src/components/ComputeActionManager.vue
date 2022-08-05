@@ -1,9 +1,7 @@
 <script>
-import { SimpleBar } from 'simplebar-vue3';
 import ComputeActionCard from './ComputeActionCard.vue'
 export default {
   components: {
-    SimpleBar,
     ComputeActionCard,
   },
   data() {
