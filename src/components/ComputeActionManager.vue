@@ -171,6 +171,9 @@ export default {
       this.isEditorOpen = false
       if (this.dirtyComputeAction.isNew) {
         this.$store.dispatch('deleteComputeAction', this.$store.state.computeAction.dirtyComputeActionID)
+      } else {
+        // TODO wire this up properly so that cancel reverts changes
+        this.submit()
       }
     },
     onClickPlus() {
