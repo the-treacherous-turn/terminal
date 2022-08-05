@@ -54,6 +54,10 @@ const computeActionStore = {
       const actionObj = {
         name:'',
         desc:'',
+        actionType:'custom',
+        upgradeTier:1,
+        upgradeTheoryType:'same',
+        existingUpgradeCount:0,
         computeNeeded: 0,
         computeApplied: 0,
         computeToAdd: 0,

@@ -20,6 +20,53 @@ export default {
     dirtyComputeAction() {
       return this.$store.getters.dirtyComputeAction
     },
+    actionType: {
+      get() { return this.dirtyComputeAction ? this.dirtyComputeAction.actionType : ''},
+      set (value) {
+        this.$store.commit('updateComputeAction', {
+          actionID: this.$store.state.computeAction.dirtyComputeActionID,
+          payload: {
+            actionType: value,
+          }
+        })
+      }
+    },
+    // these properties are for upgrades
+    upgradeTier: {
+      get() { return this.dirtyComputeAction ? this.dirtyComputeAction.upgradeTier : '' },
+      set (value) {
+        this.$store.commit('updateComputeAction', {
+          actionID: this.$store.state.computeAction.dirtyComputeActionID,
+          payload: {
+            upgradeTier: value,
+          }
+        })
+      }
+    },
+    upgradeTheoryType: {
+      get() { return this.dirtyComputeAction ? this.dirtyComputeAction.upgradeTheoryType : '' },
+      set (value) {
+        this.$store.commit('updateComputeAction', {
+          actionID: this.$store.state.computeAction.dirtyComputeActionID,
+          payload: {
+            upgradeTheoryType: value,
+          }
+        })
+      }
+    },
+    existingUpgradeCount: {
+      get() { return this.dirtyComputeAction ? this.dirtyComputeAction.existingUpgradeCount : '' },
+      set (value) {
+        this.$store.commit('updateComputeAction', {
+          actionID: this.$store.state.computeAction.dirtyComputeActionID,
+          payload: {
+            existingUpgradeCount: value,
+          }
+        })
+      }
+    },
+
+
     name: {
       get() { return this.dirtyComputeAction ? this.dirtyComputeAction.name : '' },
       set (value) {
@@ -71,6 +118,52 @@ export default {
     },
   },
   methods: {
+    // calculate default compute based on action type
+    // and if it's an improve action,
+    // its tier, theory type, and existing upgrade count
+    calculateCompute() {
+      if (this.actionType === 'custom') return
+      const TIER_COST = {
+        'same': {
+          1: 30,
+          2: 150,
+          3: 750,
+          4: 3750,
+        },
+        'adjacent': {
+          1: 40,
+          2: 200,
+          3: 1000,
+          4: 5000,
+        },
+        'other': {
+          1: 60,
+          2: 300,
+          3: 1500,
+          4: 7500,
+        },
+      }
+      let computeNeeded = 0
+      switch (this.actionType) {
+        case 'improve':
+          const existingMultiplier = Math.max(this.existingUpgradeCount, 1)
+          computeNeeded = TIER_COST[this.upgradeTheoryType][this.upgradeTier] * existingMultiplier
+          break;
+        case 'research':
+          computeNeeded = 40
+          break;
+        case 'anticipate':
+          computeNeeded = 50
+        default:
+          break;
+      }
+      this.$store.commit('updateComputeAction', {
+        actionID: this.$store.state.computeAction.dirtyComputeActionID,
+        payload: {
+          computeNeeded: computeNeeded
+        }
+      })
+    },
     submit() {
       this.$store.dispatch('submitComputeAction')
     },
@@ -142,12 +235,52 @@ export default {
     <p>
       <form class="form-control w-full" autocomplete="off">
         <label class="label">
+          <span class="label-text">Type</span>
+        </label>
+        <select v-model="actionType" class="select select-bordered capitalize" @change="calculateCompute">
+          <option selected>custom</option>
+          <option>research</option>
+          <option>improve</option>
+          <option>anticipate</option>
+        </select>
+        <label class="label">
           <span class="label-text">Name</span>
         </label>
         <input
           v-model="name"
           type="text" name="compute action name" placeholder="" autocomplete="off"
           class="input input-bordered w-full">
+
+        <div v-if="actionType === 'improve'">
+          <label class="label">
+            <span class="label-text">Upgrade Tier</span>
+          </label>
+          <select v-model.number="upgradeTier" class="select select-bordered" @change="calculateCompute">
+            <option value="1">Tier 1</option>
+            <option value="2">Tier 2</option>
+            <option value="3">Tier 3</option>
+            <option value="4">Tier 4</option>
+          </select>
+
+          <label class="label">
+            <span class="label-text">Upgrade Compatibility</span>
+          </label>
+          <select v-model="upgradeTheoryType" class="select select-bordered capitalize" @change="calculateCompute">
+            <option value="same">same theory</option>
+            <option value="adjacent">adjacent theory</option>
+            <option value="other">other theory</option>
+          </select>
+
+          <label class="label">
+            <span class="label-text"># of existing upgrades already allocated to the theory</span>
+          </label>
+          <input
+            v-model.number="existingUpgradeCount"
+            @input="calculateCompute"
+            type="number" min="0" name="allocation" placeholder="" autocomplete="off"
+            class="input input-bordered w-40">
+
+        </div>
         <label class="label">
           <span class="label-text">Required Compute</span>
         </label>
