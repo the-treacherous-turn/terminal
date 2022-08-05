@@ -74,8 +74,10 @@ export default {
     <font-awesome-icon :icon="['fas', 'trash-can']" class="text-base text-primary-content mr-1 my-1 cursor-pointer hover:text-white"      @click="$emit('delete', this.actionID)" />
   </div>
 
-  <div class="pl-32">
-    <span class="badge" v-if="actionType && actionType !== 'custom'">{{ actionType }}</span>
+  <div class="inline-flex">
+    <div class="w-32 flex justify-center items-center">
+      <span class="badge" v-if="actionType && actionType !== 'custom'">{{ actionType }}</span>
+    </div>
     <span class="text-2xl flex items-center cursor-pointer" @click="expanded = !expanded">
       <font-awesome-icon icon="caret-right" class="text-2xl pr-2 origin-[25%_50%] transition-transform" :class="expanded?'rotate-90':''" />
       {{ name }}
