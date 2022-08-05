@@ -254,26 +254,32 @@ export default {
           type="text" name="compute action name" placeholder="" autocomplete="off"
           class="input input-bordered w-full">
 
+        <div v-if="actionType === 'improve'" class="inline-flex">
+          <div class="pr-8">
+            <label class="label">
+              <span class="label-text">Upgrade Tier</span>
+            </label>
+            <select v-model.number="upgradeTier" class="select select-bordered" @change="calculateCompute">
+              <option value="1">Tier 1</option>
+              <option value="2">Tier 2</option>
+              <option value="3">Tier 3</option>
+              <option value="4">Tier 4</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="label">
+              <span class="label-text">Upgrade Compatibility</span>
+            </label>
+            <select v-model="upgradeTheoryType" class="select select-bordered capitalize" @change="calculateCompute">
+              <option value="same">same theory</option>
+              <option value="adjacent">adjacent theory</option>
+              <option value="other">other theory</option>
+            </select>
+          </div>
+        </div>
+
         <div v-if="actionType === 'improve'">
-          <label class="label">
-            <span class="label-text">Upgrade Tier</span>
-          </label>
-          <select v-model.number="upgradeTier" class="select select-bordered" @change="calculateCompute">
-            <option value="1">Tier 1</option>
-            <option value="2">Tier 2</option>
-            <option value="3">Tier 3</option>
-            <option value="4">Tier 4</option>
-          </select>
-
-          <label class="label">
-            <span class="label-text">Upgrade Compatibility</span>
-          </label>
-          <select v-model="upgradeTheoryType" class="select select-bordered capitalize" @change="calculateCompute">
-            <option value="same">same theory</option>
-            <option value="adjacent">adjacent theory</option>
-            <option value="other">other theory</option>
-          </select>
-
           <label class="label">
             <span class="label-text"># of existing upgrades already allocated to the theory</span>
           </label>
@@ -282,23 +288,29 @@ export default {
             @input="calculateCompute"
             type="number" min="0" name="allocation" placeholder="" autocomplete="off"
             class="input input-bordered w-40">
-
         </div>
-        <label class="label">
-          <span class="label-text">Required Compute</span>
-        </label>
-        <!-- <input type="range" min="0" max="100" value="40" class="range"> -->
-        <input
-          v-model="computeNeeded"
-          type="number" placeholder="" min="1" 
-          class="input input-bordered w-40">
-        <label class="label" v-if="!isMakingNewCompute">
-          <span class="label-text">Override Completion</span>
-        </label>
-        <label class="input-group" v-if="!isMakingNewCompute">
-          <input type="number" v-model.number="computeApplied" class="input input-bordered w-20">
-          <span>/{{computeNeeded}}</span>
-        </label>
+
+        <div class="inline-flex">
+          <div class="pr-8">
+            <label class="label">
+              <span class="label-text">Required Compute</span>
+            </label>
+            <!-- <input type="range" min="0" max="100" value="40" class="range"> -->
+            <input
+              v-model="computeNeeded"
+              type="number" placeholder="" min="1" 
+              class="input input-bordered w-40">
+          </div>
+          <div>
+            <label class="label" v-if="!isMakingNewCompute">
+              <span class="label-text">Override Completion</span>
+            </label>
+            <label class="input-group" v-if="!isMakingNewCompute">
+              <input type="number" v-model.number="computeApplied" class="input input-bordered w-20">
+              <span>/{{computeNeeded}}</span>
+            </label>
+          </div>
+        </div>
         
         <label class="label">
           <span class="label-text">Description</span>
