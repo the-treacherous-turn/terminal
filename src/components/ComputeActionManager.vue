@@ -281,7 +281,7 @@ export default {
 
         <div v-if="actionType === 'improve'">
           <label class="label">
-            <span class="label-text"># of existing upgrades already allocated to the theory</span>
+            <span class="label-text"># of previously allocated upgrades</span>
           </label>
           <input
             v-model.number="existingUpgradeCount"
