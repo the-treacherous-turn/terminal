@@ -1,6 +1,9 @@
 @tailwind base;
 
 @layer base {
+  html {
+    @apply font-mono;
+  }
   html, body, div, applet, object, iframe {
     @apply text-white bg-base-100;
   }
