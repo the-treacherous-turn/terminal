@@ -31,7 +31,7 @@ export default {
 
 <template>
 <div class="relative w-full min-w-[1074px] h-9/10 grid grid-cols-2 gap-4">
-  <div class="relative font-mono uppercase border">
+  <div class="relative uppercase border">
     <span class="absolute bg-base-100 z-10 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl">
       <span>
         The Treacherous Turn <span class="text-base">v0.2.7</span>
@@ -66,7 +66,7 @@ export default {
       </button>
     </div>
   </div>
-  <div class="relative font-mono uppercase border flex flex-col overflow-hidden">
+  <div class="relative uppercase border flex flex-col overflow-hidden">
     <div>
       <ComputeTracker />
       <Clock />

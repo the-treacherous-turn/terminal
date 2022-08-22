@@ -2,7 +2,7 @@
   <Transition
     name="modal"
   >
-    <div class="font-mono uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
+    <div class="uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
     v-if="$store.state.eventLog.isEditorOpen">
       <div class="table-cell align-middle bg-transparent">
         <div class="
