@@ -1,81 +1,53 @@
 <script>
 import ActionEditor from './components/ActionEditor.vue'
-import ActionCard from './components/ActionCard.vue'
-import Clock from './components/Clock.vue'
-import ComputeTracker from './components/ComputeTracker.vue'
-import ComputeActionManager from './components/ComputeActionManager.vue'
 
 import Footer from './Footer.vue'
 
 export default {
   components: {
     ActionEditor,
-    ActionCard,
-    Clock,
-    ComputeTracker,
-    ComputeActionManager,
     Footer,
   },
-  data () {
-    return {
-      showActionEditor: false
-    }
-  },
   methods: {
-    editNewAction() {
-      this.$store.dispatch('editNewAction')
-    }
+    goToTracker() {
+      this.$router.push('/')
+    },
+    goToInfo() {
+      this.$router.push('/info')
+    },
   }
 }
 </script>
 
 <template>
-<div class="relative w-full min-w-[1074px] h-9/10 grid grid-cols-2 gap-4">
-  <div class="relative uppercase border">
-    <span class="absolute bg-base-100 z-10 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl">
-      <span>
-        The Treacherous Turn <span class="text-base">v0.2.7</span>
-      </span>
-      <span class="text-base float-right">User ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></span>
+<div class="navbar uppercase bg-base-100 w-full col-span-2">
+  <span class="text-3xl">
+    <span>
+      The Treacherous Turn <span class="text-base">v0.2.7</span>
     </span>
-  
-    <div class="absolute h-full w-full overflow-y-scroll">
-        <div class="h-16"></div>
-        <ActionCard
-          v-for="(action, key) in $store.state.eventLog.actions"
-          :key="key"
-          :actionID="key"
-          :name="action.name"
-          :description="action.description"
-          :risk="action.risk"
-          :confidence="action.confidence"
-          :compute="action.compute"
-          :isDirty="action.isDirty"
-          :isCommitted="action.isCommitted"
-          :isForecast="action.isForecast"
-        />
-        <div class="h-24"></div>
-    </div>
-  
-    <div class="absolute bg-base-100 w-full bottom-0 left-0 p-4 pl-8 border-t-2">
-      <button class=""
-        type="button"
-        @click="editNewAction"
-      >
-        >> New Action
-      </button>
-    </div>
-  </div>
-  <div class="relative uppercase border flex flex-col overflow-hidden">
-    <div>
-      <ComputeTracker />
-      <Clock />
-    </div>
-    <div class="flex flex-col p-8 overflow-hidden">
-      <ComputeActionManager />
-    </div>  
-  </div>
+  </span>
+  <span class="text-base ml-auto">User ID: <span class="bg-white text-black">dev</span></span>
 </div>
+  
+<router-view></router-view>
+
+<div class="btm-nav col-span-2">
+  <button class="transition-all" :class="{'active':($route.path == '/')}" @click="goToTracker">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+    <span class="btm-nav-label">Long Mode Tracker</span>
+  </button>
+  <button class="disabled">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+    <span class="btm-nav-label">Upgrades</span>
+  </button>
+  <button class="transition-all" :class="{'active':($route.path == '/info')}" @click="goToInfo">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    <span class="btm-nav-label">Info</span>
+  </button>
+</div>
+
+<!-- NOTE: Footer may not make sense anymore as its position is filled by Bottom Navigation. -->
+<!-- It's currently blocked behind the bottom navigation. -->
 <Footer />
 <Teleport to="body">
   <ActionEditor />

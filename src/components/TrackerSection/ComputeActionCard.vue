@@ -1,5 +1,5 @@
 <script>
-import ProgressBar from './ProgressBar.vue'
+import ProgressBar from '../ProgressBar.vue'
 export default {
   components: {
     ProgressBar,

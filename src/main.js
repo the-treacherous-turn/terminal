@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createRouter, createMemoryHistory } from 'vue-router'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -7,11 +8,25 @@ library.add(fas, faItchIo, faTwitch, faReddit, faTwitter)
 import store from './store'
 import App from './App.vue'
 import Onboarding from './Onboarding.vue'
+
+import InfoSection from './components/InfoSection.vue'
+import TrackerSection from './components/TrackerSection/index.vue'
+
 import './index.css'
 
 const app = createApp(App)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(store)
+
+const router = createRouter({
+  routes: [
+    { path: '/', component: TrackerSection },
+    { path: '/info', component: InfoSection },
+  ],
+  // createMemoryHistory does not change the hash URL.
+  history: createMemoryHistory(),
+})
+app.use(router)
 
 // If user arrives at plain url,
 // then load the onboarding view
