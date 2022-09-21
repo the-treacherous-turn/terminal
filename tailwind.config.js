@@ -5,7 +5,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      mono: ['IBM Plex Mono', 'Consolas', 'monospace']
+      mono: ['IBM Plex Mono', 'Consolas', 'ui-monospace', 'monospace']
     },
     fontSize: {
       xs: ['0.4rem', { lineHeight: '0.8rem' }],
