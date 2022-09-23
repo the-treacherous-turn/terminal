@@ -1,5 +1,10 @@
 <template>
-<div class="mx-8 my-4 p-4 relative border">
+  <div class="mx-8 my-4 p-4 relative border">
+  <div class="text-sm pb-2">
+    <span class="">
+      {{commitDate}}
+    </span>
+  </div>
   <div class="absolute right-0 top-0">
     <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base mr-1 my-1 cursor-pointer text-primary-content hover:text-white"  @click="editCard" />
     <font-awesome-icon :icon="['fas', 'trash-can']" class="text-base mr-1 my-1 cursor-pointer text-primary-content hover:text-white"        @click="deleteCard" />
@@ -23,6 +28,8 @@
 </template>
 
 <script>
+import { DateTime } from 'luxon'
+
 export default {
   props: {
     name: String,
@@ -34,12 +41,19 @@ export default {
     isDirty: Boolean,
     isCommitted: Boolean,
     isForecast: Boolean,
+    commitTimeISO: String,
   },
   data(){
     return {
       hover: false,
       hoverCommit: false,
       hoverForecast: false,
+    }
+  },
+  computed: {
+    commitDate() {
+      if (!this.commitTimeISO) return ''
+      return DateTime.fromISO(this.commitTimeISO).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
     }
   },
   mounted() {

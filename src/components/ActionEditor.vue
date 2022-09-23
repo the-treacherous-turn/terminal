@@ -124,7 +124,12 @@ export default {
     },
     isCommitted: {
       get() {return this.$store.getters.dirtyAction.isCommitted},
-      set (value) { this.$store.commit('updateAction', {isCommitted: value}) }
+      set (value) {
+        this.$store.commit('updateAction', {
+          isCommitted: value,
+          commitTimeISO: this.$store.state.clock.nowTimeISO,
+        })
+      }
     },
     isForecast: {
       get() {return this.$store.getters.dirtyAction.isForecast},
