@@ -80,7 +80,7 @@
               </label>
               <label class="label cursor-pointer inline-flex">
                 <input v-model="isForecast" type="checkbox" checked="checked" class="checkbox" />
-                <span class="label-text mx-4">marked as forecast</span> 
+                <span class="label-text mx-4">crossed out</span> 
               </label>
             </div>
             <button
