@@ -48,7 +48,7 @@ export default {
 
 <!-- NOTE: Footer may not make sense anymore as its position is filled by Bottom Navigation. -->
 <!-- It's currently blocked behind the bottom navigation. -->
-<Footer />
+<!-- <Footer /> -->
 <Teleport to="body">
   <ActionEditor />
 </Teleport>
