@@ -6,6 +6,7 @@ import ComputeActionManager from './ComputeActionManager.vue'
 
 
 export default {
+  name: "TrackerSection",
   components: {
     ActionCard,
     Clock,
