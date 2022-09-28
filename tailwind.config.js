@@ -43,10 +43,16 @@ module.exports = {
   daisyui: {
     themes: [
       {
+        business: {
+          ...require("daisyui/src/colors/themes")["[data-theme=business]"],
+        },
+        dark: {
+          ...require("daisyui/src/colors/themes")["[data-theme=dark]"],
+        },
         black: {
           ...require("daisyui/src/colors/themes")["[data-theme=black]"],
-          "base-100": "#121b1e",
-        }
+          // "base-100": "#121b1e",
+        },
       }
     ],
   }
