@@ -52,13 +52,13 @@ const computeStore = {
     updateComputeToSpend(state, change) {
       state.computeToSpend += change
     },
-    updateComputeTrackerFromFirebase(state,
-      {baseComputeCost, computeSpent, computeToSpend, computeSources, recurringCosts}) {
-      if (baseComputeCost !== undefined) state.baseComputeCost = baseComputeCost
-      if (computeSpent !== undefined) state.computeSpent = computeSpent
-      if (computeToSpend !== undefined) state.computeToSpend = computeToSpend
-      if (computeSources !== undefined) state.computeSources = computeSources
-      if (recurringCosts !== undefined) state.recurringCosts = recurringCosts
+    updateComputeTracker(state, changesObj) {
+      for (const key in changesObj) {
+        if (Object.hasOwnProperty.call(changesObj, key)) {
+          const val = changesObj[key];
+          state[key] = val
+        }
+      }
     },
     setBaseComputeCost(state, baseComputeCost) {
       state.baseComputeCost = baseComputeCost
@@ -75,7 +75,7 @@ const computeStore = {
   actions: {
     async listenToFBComputeTracker({commit}) {
       onValue(refs.computeTracker, (snapshot) => {
-        commit('updateComputeTrackerFromFirebase', snapshot.val())
+        commit('updateComputeTracker', snapshot.val())
       })
     },
     async addComputeSource(){

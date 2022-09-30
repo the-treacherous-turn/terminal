@@ -5,7 +5,7 @@ import { onValue, update, push } from "firebase/database";
 const clockStore = {
   state: () => ({
     cycle: 0,
-    cycleLength: 6, // in hours
+    cycleLength: 12, // in hours
     hoursPassed: 0,
     originTimeISO: '2033-01-30T12:34',
     nowTimeISO: '2033-01-30T12:34',
@@ -37,18 +37,19 @@ const clockStore = {
     setOriginTimeISO(state, originTimeISO) {
       state.originTimeISO = originTimeISO
     },
-    updateClockFromFirebase(state, {cycle, cycleLength, nowTimeISO, originTimeISO}) {
-      // state = {...state, ...payload} // NOTE : this doesn't work due to JS reactivity issues
-      if (cycle !== undefined) state.cycle = cycle
-      if (cycleLength !== undefined) state.cycleLength = cycleLength
-      if (nowTimeISO !== undefined) state.nowTimeISO = nowTimeISO
-      if (originTimeISO !== undefined) state.originTimeISO = originTimeISO
-    },
+    updateClock(state, changesObj) {
+      for (const key in changesObj) {
+        if (Object.hasOwnProperty.call(changesObj, key)) {
+          const val = changesObj[key];
+          state[key] = val
+        }
+      }
+    }
   },
   actions: {
     async listenToFBClock({commit}) {
       onValue(refs.clock, (snapshot) => {
-        commit('updateClockFromFirebase', snapshot.val())
+        commit('updateClock', snapshot.val())
       })
     },
     async advanceCycle({commit, state, rootState, getters}) {
