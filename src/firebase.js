@@ -33,6 +33,7 @@ const refs = {
   computeSources: ref(db, `${sessionID}/computeTracker/computeSources`),
   recurringCosts: ref(db, `${sessionID}/computeTracker/recurringCosts`),
   clock: ref(db, `${sessionID}/clock`),
+  info: ref(db, `${sessionID}/info`),
 }
 
 export default refs
