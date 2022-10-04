@@ -44,6 +44,17 @@ const infoStore = {
     removeCustomCampaignNote(state, noteID) {
       delete state.customCampaignNotes[noteID]
     },
+    updateCustomInPlayNote(state, {noteID, changesObj}) {
+      for (const key in changesObj) {
+        if (Object.hasOwnProperty.call(changesObj, key)) {
+          const val = changesObj[key];
+          state.customInPlayNotes[noteID][key] = val
+        }
+      }
+    },
+    removeCustomInPlayNote(state, noteID) {
+      delete state.customInPlayNotes[noteID]
+    },
   },
   actions: {
     async listenToFBInfo({commit}) {
@@ -62,7 +73,6 @@ const infoStore = {
       commit('updateInfo', changesObj)
       await update(refs.info, changesObj)
     },
-    // add custom note
     async addCustomCampaignNote() {
       const note = {
         title: '',
@@ -70,15 +80,28 @@ const infoStore = {
       }
       await push(refs.customCampaignNotes, note)
     },
-    // update custom note
     async updateCustomCampaignNote({commit, state}, {noteID, changesObj}) {
       commit('updateCustomCampaignNote', {noteID, changesObj})
       await update(refs.customCampaignNotes, {[noteID]: state.customCampaignNotes[noteID]})
     },
-    // remove custom note
     async removeCustomCampaignNote({commit}, noteID) {
       commit('removeCustomCampaignNote', noteID)
       await update(refs.customCampaignNotes, {[noteID]: null})
+    },
+    async addCustomInPlayNote() {
+      const note = {
+        title: '',
+        content: '',
+      }
+      await push(refs.customInPlayNotes, note)
+    },
+    async updateCustomInPlayNote({commit, state}, {noteID, changesObj}) {
+      commit('updateCustomInPlayNote', {noteID, changesObj})
+      await update(refs.customInPlayNotes, {[noteID]: state.customInPlayNotes[noteID]})
+    },
+    async removeCustomInPlayNote({commit}, noteID) {
+      commit('removeCustomInPlayNote', noteID)
+      await update(refs.customInPlayNotes, {[noteID]: null})
     },
   },
 }

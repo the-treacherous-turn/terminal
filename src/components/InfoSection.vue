@@ -88,6 +88,25 @@
       </label>
       <textarea :value="gatheredInfo" @input="updateInfoField('gatheredInfo', $event)" class="textarea textarea-bordered h-32"></textarea>
 
+      <template v-for="(note, key) in customInPlayNotes" :key="key">
+        <label class="label">
+          <input
+            :value="note.title"
+            @input="updateCustomInPlayNoteField(key, 'title', $event)"
+            type="text" class="input input-bordered input-sm max-w-xs" placeholder="Custom Note Title"
+          />
+          <font-awesome-icon
+            :icon="['fas', 'trash-can']" class="text-base cursor-pointer text-primary-content hover:text-white"
+            @click="removeCustomInPlayNote(key)"
+          />
+        </label>
+        <textarea
+          :value="note.content"
+          @input="updateCustomInPlayNoteField(key, 'content', $event)"
+          class="textarea textarea-bordered h-32"
+        ></textarea>
+      </template>
+
     </div>
     <button class="btn btn-sm mt-4 ml-4" @click="addInPlayNote">+ Add In-Play Notes</button>
   </div>
@@ -135,8 +154,17 @@ export default {
       this.$store.dispatch('removeCustomCampaignNote', noteID)
     },
     addInPlayNote() {
-      // TODO
-    }
+      this.$store.dispatch('addCustomInPlayNote')
+    },
+    updateCustomInPlayNoteField(key, field, event) {
+      const {value} = event.target
+      const changesObj = {}
+      changesObj[field] = value
+      this.$store.dispatch('updateCustomInPlayNote', {noteID: key, changesObj})
+    },
+    removeCustomInPlayNote(noteID) {
+      this.$store.dispatch('removeCustomInPlayNote', noteID)
+    },
   }
 }
 </script>
