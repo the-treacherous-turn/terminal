@@ -75,7 +75,11 @@ const computeStore = {
   actions: {
     async listenToFBComputeTracker({commit}) {
       onValue(refs.computeTracker, (snapshot) => {
-        commit('updateComputeTracker', snapshot.val())
+        const data = snapshot.val()
+        if (data.computeSources === undefined) data.computeSources = {}
+        if (data.recurringCosts === undefined) data.recurringCosts = {}
+        commit('updateComputeTracker', data)
+        // HACK avoid bug with unable to remove last items in an object
       })
     },
     async addComputeSource(){

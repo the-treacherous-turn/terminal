@@ -48,8 +48,14 @@ const infoStore = {
   actions: {
     async listenToFBInfo({commit}) {
       onValue(refs.info, (snapshot) => {
-        // console.log('NEW FROM FB', snapshot.val())
-        commit('updateInfo', snapshot.val())
+        const data = snapshot.val()
+        // HACK avoid bug with unable to remove last custom notes
+        // by manually clearing the notes objects
+        // when incoming data doesn't include them
+        if (data.customCampaignNotes === undefined) data.customCampaignNotes = {}
+        if (data.customInPlayNotes === undefined) data.customInPlayNotes = {}
+        // console.log('NEW FROM FB', data)
+        commit('updateInfo', data)
       })
     },
     async updateInfo({commit}, changesObj) {
