@@ -34,6 +34,8 @@ const refs = {
   recurringCosts: ref(db, `${sessionID}/computeTracker/recurringCosts`),
   clock: ref(db, `${sessionID}/clock`),
   info: ref(db, `${sessionID}/info`),
+  customCampaignNotes: ref(db, `${sessionID}/info/customCampaignNotes`),
+  customInPlayNotes: ref(db, `${sessionID}/info/customInPlayNotes`),
 }
 
 export default refs

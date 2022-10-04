@@ -83,7 +83,7 @@ const computeStore = {
         name: '',
         val: 10,
       }
-      await push(refs.computeSources, computeSource).key
+      await push(refs.computeSources, computeSource)
       // the firebase listener ensures this compute source is added to the store
     },
     async addRecurringCost() {
@@ -91,7 +91,7 @@ const computeStore = {
         name: '',
         val: 2,
       }
-      await push(refs.recurringCosts, recurringCost).key
+      await push(refs.recurringCosts, recurringCost)
     },
     // sync the local compute source state with Firebase
     async syncComputeSources({state}) {

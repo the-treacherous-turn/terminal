@@ -45,8 +45,27 @@
       </label>
       <textarea :value="scenarioNotes" @input="updateInfoField('scenarioNotes', $event)" class="textarea textarea-bordered h-32" placeholder="For difficulty, compute scarcity, differences from modern day, etc"></textarea>
 
+      <template v-for="(note, key) in customCampaignNotes" :key="key">
+        <label class="label">
+          <input
+            :value="note.title"
+            @input="updateCustomCampaignNoteField(key, 'title', $event)"
+            type="text" class="input input-bordered input-sm max-w-xs" placeholder="Custom Note Title"
+          />
+          <font-awesome-icon
+            :icon="['fas', 'trash-can']" class="text-base cursor-pointer text-primary-content hover:text-white"
+            @click="removeCustomCampaignNote(key)"
+          />
+        </label>
+        <textarea
+          :value="note.content"
+          @input="updateCustomCampaignNoteField(key, 'content', $event)"
+          class="textarea textarea-bordered h-32"
+        ></textarea>
+      </template>
+
     </div>
-    <button class="btn btn-sm mt-4 ml-4">+ Add Campaign Notes</button>
+    <button class="btn btn-sm mt-4 ml-4" @click="addCampaignNote">+ Add Campaign Notes</button>
   </div>
 
   <div class="relative w-full h-full overflow-y-scroll pb-10">
@@ -70,7 +89,7 @@
       <textarea :value="gatheredInfo" @input="updateInfoField('gatheredInfo', $event)" class="textarea textarea-bordered h-32"></textarea>
 
     </div>
-    <button class="btn btn-sm mt-4 ml-4">+ Add In-Play Notes</button>
+    <button class="btn btn-sm mt-4 ml-4" @click="addInPlayNote">+ Add In-Play Notes</button>
   </div>
 
 </div>
@@ -91,16 +110,32 @@ export default {
       instrumentalGoals: state => state.info.instrumentalGoals,
       assets: state => state.info.assets,
       gatheredInfo: state => state.info.gatheredInfo,
-
+      customCampaignNotes: state => state.info.customCampaignNotes,
+      customInPlayNotes: state => state.info.customInPlayNotes,
     })
   },
   methods: {
     updateInfoField(field, event) {
       // TODO improve bandwidth usage by throttling how often we sync
-      const value = event.target.value
+      const {value} = event.target
       const changesObj = {}
       changesObj[field] = value
       this.$store.dispatch('updateInfo', changesObj)
+    },
+    addCampaignNote() {
+      this.$store.dispatch('addCustomCampaignNote')
+    },
+    updateCustomCampaignNoteField(key, field, event) {
+      const {value} = event.target
+      const changesObj = {}
+      changesObj[field] = value
+      this.$store.dispatch('updateCustomCampaignNote', {noteID: key, changesObj})
+    },
+    removeCustomCampaignNote(noteID) {
+      this.$store.dispatch('removeCustomCampaignNote', noteID)
+    },
+    addInPlayNote() {
+      // TODO
     }
   }
 }
