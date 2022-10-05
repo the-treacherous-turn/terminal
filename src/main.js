@@ -11,6 +11,8 @@ import Onboarding from './Onboarding.vue'
 
 import InfoSection from './components/InfoSection.vue'
 import TrackerSection from './components/TrackerSection/index.vue'
+import ComputeSection from './components/TrackerSection/ComputeSection.vue'
+import EventLogSection from './components/TrackerSection/EventLogSection.vue'
 
 import './index.css'
 
@@ -22,6 +24,8 @@ const router = createRouter({
   routes: [
     { path: '/', component: TrackerSection },
     { path: '/info', component: InfoSection },
+    { path: '/eventLog', component: EventLogSection },
+    { path: '/compute', component: ComputeSection },
   ],
   // createMemoryHistory does not change the hash URL.
   history: createMemoryHistory(),

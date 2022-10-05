@@ -1,0 +1,25 @@
+<script>
+import Clock from './Clock.vue'
+import ComputeTracker from './ComputeTracker.vue'
+import ComputeActionManager from './ComputeActionManager.vue'
+
+export default {
+  components: {
+    Clock,
+    ComputeTracker,
+    ComputeActionManager,
+  },
+}
+</script>
+
+<template>
+<div class="h-4/5 w-full max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden">
+  <div>
+    <ComputeTracker />
+    <Clock />
+  </div>
+  <div class="flex flex-col p-8 overflow-hidden">
+    <ComputeActionManager />
+  </div>  
+</div>
+</template>
