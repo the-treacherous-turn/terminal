@@ -1,11 +1,16 @@
 <script>
+import ChooseSpec from './ChooseSpec.vue'
+
 export default {
   name: "UpgradeSection",
+  components: {
+    ChooseSpec,
+  },
 }
 </script>
 
 <template>
-<div>
-  <h1>Upgrades</h1>
-</div>
+  <div>
+    <ChooseSpec />
+  </div>
 </template>

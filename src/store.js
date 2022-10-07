@@ -6,6 +6,7 @@ import computeStore from './stores/computeStore'
 import computeActionStore from './stores/computeActionStore'
 import clockStore from './stores/clockStore'
 import infoStore from './stores/infoStore'
+import specStore from './stores/specStore'
 
 // HACK: use location hash to differentiate between different sessions.
 // HACK: duplicated code getting the sessionID between here and firebase.js
@@ -18,6 +19,7 @@ const store = createStore({
     computeAction: computeActionStore,
     clock: clockStore,
     info: infoStore,
+    spec: specStore,
   },
   state () {
     return {
