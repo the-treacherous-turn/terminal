@@ -1,24 +1,19 @@
 <script>
-import {mapGetters, mapState} from 'vuex'
+import {mapGetters} from 'vuex'
+import Insights from './Insights.vue'
 
 export default {
+  components: {
+    Insights,
+  },
   computed: {
-    ...mapState({
-      specs: state => state.spec.specs,
-    }),
     ...mapGetters({
       activeSpec: 'activeSpec',
     })
   },
   methods: {
-    selectSpec(specID) {
-      this.$store.commit('setActiveSpecID', specID)
-    },
     exitSpec() {
       this.$store.commit('clearActiveSpecID')
-    },
-    addInsight() {
-      // open modal to add insight
     },
   }
 }
@@ -35,15 +30,7 @@ export default {
           <h3 class="text-xl font-bold badge capitalize">{{ upgrade.theory }} T{{ upgrade.tier }}: {{ upgrade.name }}</h3>
         </div>
       </li>
-      </ul>
-      
-    <h2 class="text-2xl font-bold pb-2">Insights</h2>
-    <ul>
-      <!-- a list item for each insight -->
-      <li v-for="(insight, key) in activeSpec.insights" :key="key">
-        <h3 class="text-xl font-bold badge capitalize">{{ insight.range }} {{ insight.type }}: {{ insight.name }}</h3>
-      </li>
-      <button class="btn btn-secondary btn-xs mt-2" @click="addInsight">+ Add Insights</button>
     </ul>
+    <Insights />
   </div>
 </template>

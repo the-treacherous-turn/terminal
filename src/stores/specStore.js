@@ -1,8 +1,11 @@
+import { update, push, child, onChildAdded, onChildChanged, onChildRemoved } from "firebase/database"
+import refs from '../firebase'
+
 export default {
   state: () => ({
     specs: {
-      spec1: {
-        name: "Spec 1",
+      spec2: {
+        name: "Spec 2",
         focus: "Autonomic",
         upgrades: {
           upgrade1: {
@@ -42,8 +45,8 @@ export default {
           },
         }
       },
-      spec2: {
-        name: "Spec 2",
+      spec3: {
+        name: "Spec 3",
         focus: "Epistemic",
         upgrades: {
           upgrade1: {
@@ -92,10 +95,50 @@ export default {
   },
   mutations: {
     setActiveSpecID(state, specID) {
-      state.activeSpecID = specID;
+      state.activeSpecID = specID
     },
     clearActiveSpecID(state) {
-      state.activeSpecID = null;
+      state.activeSpecID = null
     },
+    setSpecs(state, specs) {
+      state.specs = specs
+    },
+    setSpec(state, {specID, spec}) {
+      state.specs[specID] = spec
+    },
+    deleteSpec(state, specID) {
+      delete state.specs[specID]
+    },
+  },
+  actions: {
+    async listenToFBSpecs({ commit, state }) {
+      onChildAdded(refs.specs, (snapshot) => {
+        const spec = snapshot.val()
+        const specID = snapshot.key
+        commit('setSpec', {specID, spec})
+      })
+      onChildChanged(refs.specs, (snapshot) => {
+        const spec = snapshot.val()
+        const specID = snapshot.key
+        commit('setSpec', { specID, spec })
+      })
+      onChildRemoved(refs.specs, (snapshot) => {
+        if (!state.specs[snapshot.key]) return
+        const specID = snapshot.key
+        commit('deleteSpec', specID)
+      })
+    },
+    async addInsight({ state }, insight) {
+      if (!state.activeSpecID) throw new Error("No active spec")
+      await push(child(refs.specs, `${state.activeSpecID}/insights`), insight)
+    },
+    async editInsight({ state }, { id, insight }) {
+      if (!state.activeSpecID) throw new Error("No active spec")
+      await update(child(refs.specs, `${state.activeSpecID}/insights/${id}`), insight)
+    },
+    async deleteInsight({state}, key) {
+      if (!state.activeSpecID) throw new Error("No active spec")
+      await update(child(refs.specs, `${state.activeSpecID}/insights`), {[key]: null})
+    }
   }
 }

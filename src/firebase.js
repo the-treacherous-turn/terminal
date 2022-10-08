@@ -36,6 +36,7 @@ const refs = {
   info: ref(db, `${sessionID}/info`),
   customCampaignNotes: ref(db, `${sessionID}/info/customCampaignNotes`),
   customInPlayNotes: ref(db, `${sessionID}/info/customInPlayNotes`),
+  specs: ref(db, `${sessionID}/specs`),
 }
 
 export default refs

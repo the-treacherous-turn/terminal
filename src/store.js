@@ -33,6 +33,7 @@ store.dispatch('listenToFBComputeTracker')
 store.dispatch('listenToFBComputeActions')
 store.dispatch('listenToFBClock')
 store.dispatch('listenToFBInfo')
+store.dispatch('listenToFBSpecs')
 // TODO: remember to dispatch actions for each module to listen to FB changes
 
 export default store
