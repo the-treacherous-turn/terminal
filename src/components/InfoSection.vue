@@ -65,7 +65,7 @@
       </template>
 
     </div>
-    <button class="btn btn-sm mt-4 ml-4" @click="addCampaignNote">+ Add Campaign Notes</button>
+    <button class="btn btn-secondary btn-sm mt-4 ml-4" @click="addCampaignNote">+ Add Campaign Notes</button>
   </div>
 
   <div class="relative w-full h-full overflow-y-scroll pb-10">
@@ -108,7 +108,7 @@
       </template>
 
     </div>
-    <button class="btn btn-sm mt-4 ml-4" @click="addInPlayNote">+ Add In-Play Notes</button>
+    <button class="btn btn-secondary btn-sm mt-4 ml-4" @click="addInPlayNote">+ Add In-Play Notes</button>
   </div>
 
 </div>
