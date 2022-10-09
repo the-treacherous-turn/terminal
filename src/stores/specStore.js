@@ -6,17 +6,17 @@ export default {
     specs: {
       spec2: {
         name: "Spec 2",
-        focus: "Autonomic",
+        focus: "autonomic",
         upgrades: {
           upgrade1: {
             name: "Upgrade 1",
-            theory: "Autonomic",
+            theory: "autonomic",
             tier: 1,
             description: "Upgrade 1 description. Amet sunt ut culpa minim cillum minim qui velit consectetur aliquip. Dolore duis nostrud sint mollit proident tempor laborum elit sunt anim do occaecat nostrud deserunt. Elit sunt ipsum enim ex id sint elit. Officia velit reprehenderit amet ullamco.",
           },
           upgrade2: {
             name: "Upgrade 2",
-            theory: "Autonomic",
+            theory: "autonomic",
             tier: 1,
             description: "Upgrade 2 description. Laboris mollit reprehenderit do reprehenderit minim magna adipisicing ipsum elit occaecat adipisicing do dolor. Pariatur Lorem labore elit voluptate ullamco officia officia. Proident ad fugiat minim culpa nostrud ad veniam pariatur laborum eu sit consequat. Laboris qui ipsum nostrud ad consequat amet excepteur labore mollit qui veniam exercitation nulla.",
           },
@@ -47,17 +47,17 @@ export default {
       },
       spec3: {
         name: "Spec 3",
-        focus: "Epistemic",
+        focus: "epistemic",
         upgrades: {
           upgrade1: {
             name: "Upgrade 1",
-            theory: "Epistemic",
+            theory: "epistemic",
             tier: 1,
             description: "Upgrade 1 description",
           },
           upgrade3: {
             name: "Upgrade 2",
-            theory: "Epistemic",
+            theory: "epistemic",
             tier: 1,
             description: "Upgrade 3 description",
           },
@@ -139,6 +139,15 @@ export default {
     async deleteInsight({state}, key) {
       if (!state.activeSpecID) throw new Error("No active spec")
       await update(child(refs.specs, `${state.activeSpecID}/insights`), {[key]: null})
-    }
+    },
+    async addSpec({ state }, spec) {
+      await push(refs.specs, spec)
+    },
+    async editSpec({ state }, { id, spec }) {
+      await update(child(refs.specs, id), spec)
+    },
+    async deleteSpec({ state }, key) {
+      await update(refs.specs, {[key]: null})
+    },
   }
 }

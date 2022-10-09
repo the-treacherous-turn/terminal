@@ -1,10 +1,13 @@
 <script>
-import {mapGetters, mapState} from 'vuex'
+import {mapState} from 'vuex'
 
 export default {
   data() {
     return {
-      // TODO any temporary variables to track here?
+      isEditorOpen: false,
+      isAddNewSpec: false,
+      editorSpec: {},
+      editorSpecID: null,
     }
   },
   computed: {
@@ -12,30 +15,135 @@ export default {
       specs: state => state.spec.specs,
       activeSpecID: state => state.spec.activeSpecID,
     }),
-    ...mapGetters({
-      activeSpec: 'activeSpec',
-    })
+    isSubmitDisabled () {
+      return !this.editorSpec.name
+    },
   },
   methods: {
     selectSpec(specID) {
       this.$store.commit('setActiveSpecID', specID)
+    },
+    onClickAdd() {
+      this.isEditorOpen = true
+      this.isAddNewSpec = true
+    },
+    onClickEdit(key) {
+      this.isEditorOpen = true
+      this.isAddNewSpec = false
+      this.editorSpecID = key
+      this.editorSpec = this.specs[key]
+    },
+    onClickDelete(key) {
+      // TODO a spec definitely shouldn't be deleted so easily.
+      // Maybe a confirmation?
+      // Or better, finish the undo system and use that.
+      this.$store.dispatch('deleteSpec', key)
+    },
+    onClickModalOutside() {
+      if (this.isEditorOpen) this.cancel()
+    },
+    submit() {
+      if (this.isAddNewSpec) {
+        this.$store.dispatch('addSpec', this.editorSpec)
+      } else {
+        this.$store.dispatch('editSpec', {
+          id: this.editorSpecID,
+          spec: this.editorSpec,
+        })
+      }
+      this.editorSpec = {}
+      this.editorSpecID = null
+      this.isEditorOpen = false
+      this.isAddNewSpec = false
+    },
+    cancel() {
+      this.editorSpec = {}
+      this.editorSpecID = null
+      this.isAddNewSpec = false
+      this.isEditorOpen = false
     },
   }
 }
 </script>
 
 <template>
-  <div>
-    <h1 class="text-3xl font-bold pb-2">Specializations</h1>
-    <ul>
-      <!-- render each spec as a list item, and display name, focus, and number of upgrades and insights -->
-      <li class="card max-w-sm m-4 p-4 shadow-xl bg-secondary" v-for="(spec, key) in specs" :key="key">
-        <h2 class="text-xl font-bold">{{ spec.name }}</h2>
-        <p class="capitalize">Focus: {{ spec.focus }}</p>
-        <p>Upgrades: {{ Object.keys(spec.upgrades).length }}</p>
-        <p>Insights: {{ Object.keys(spec.insights).length }}</p>
-        <button class="btn mt-4" @click="selectSpec(key)">Enter</button>
-      </li>
-    </ul>
+<div class="relative h-4/5 pb-1/10">
+  <h1 class="text-3xl font-bold pb-2">Specializations</h1>
+  <div class="grid grid-cols-3">
+    <li class="card max-w-sm m-4 p-4 shadow-xl bg-secondary group flex flex-col justify-between" v-for="(spec, key) in specs" :key="key">
+      <div class="bg-inherit">
+        <div class="flex justify-between bg-inherit">
+          <h2 class="text-xl font-bold">{{ spec.name }}</h2>
+          <div class="bg-inherit hidden group-hover:block">
+            <label for="modal-edit-spec">
+              <font-awesome-icon
+                :icon="['fas', 'pen-to-square']"
+                class="text-base text-secondary-content mr-1 my-1 cursor-pointer hover:text-white"
+                @click="onClickEdit(key)"
+              />
+            </label>
+            <font-awesome-icon
+              :icon="['fas', 'trash-can']"
+              class="text-base text-secondary-content mr-1 my-1 cursor-pointer hover:text-white"
+              @click="onClickDelete(key)"
+            />
+          </div>
+        </div>
+        <p v-if="spec.focus" class="capitalize">Focus: {{ spec.focus }}</p>
+        <p v-if="spec.upgrades">Upgrades: {{ Object.keys(spec.upgrades).length }}</p>
+        <p v-if="spec.insights">Insights: {{ Object.keys(spec.insights).length }}</p>
+      </div>
+      <button class="btn mt-4" @click="selectSpec(key)">Enter</button>
+    </li>
+    <label for="modal-edit-spec"
+      class="card btn btn-ghost hover:btn-secondary h-20 max-w-sm m-4 p-4 shadow-xl flex justify-center items-center cursor-pointer border-dashed border-4 border-neutral group"
+      @click="onClickAdd">
+      <font-awesome-icon icon="plus" class="text-6xl" />
+    </label>
   </div>
+</div>
+
+<input
+  type="checkbox" id="modal-edit-spec"
+  class="modal-toggle"
+/>
+<label
+  for="modal-edit-spec"
+  class="modal cursor-pointer"
+  @click.self="onClickModalOutside"
+>
+  <label class="modal-box max-w-xs relative">
+    <h3 class="text-lg font-bold">{{ isAddNewSpec ? 'Add' : 'Edit' }} Specialization</h3>
+    <form class="form-control w-full" autocomplete="off">
+      <label class="label label-text">Name</label>
+      <input
+        v-model="editorSpec.name"
+        type="text" placeholder="" autocomplete="off"
+        class="input input-bordered">
+      <label class="label label-text">Focus</label>
+      <select v-model="editorSpec.focus" class="select select-bordered capitalize">
+        <option>autonomic</option>
+        <option>digital</option>
+        <option>physical</option>
+        <option>anthropic</option>
+        <option>agentic</option>
+        <option>chaos</option>
+        <option>constellation</option>
+        <option>epistemic</option>
+      </select>
+      <div class="btn-group flex justify-end mt-4">
+        <label
+          for="modal-edit-spec"
+          class="btn btn-primary"
+          :class="{'btn-disabled':isSubmitDisabled}"
+          @click="submit">
+          Submit</label>
+        <label
+          for="modal-edit-spec"
+          class="btn"
+          @click="cancel">Cancel</label>
+      </div>
+    </form>
+  </label>
+</label>
 </template>

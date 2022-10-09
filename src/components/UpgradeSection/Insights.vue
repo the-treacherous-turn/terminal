@@ -7,7 +7,7 @@ export default {
       isEditorOpen: false,
       isAddNewInsight: false,
       editorInsight: {},
-      insightID: null,
+      editorInsightID: null,
     }
   },
   computed: {
@@ -26,7 +26,7 @@ export default {
     onClickEdit(key) {
       this.isEditorOpen = true
       this.isAddNewInsight = false
-      this.insightID = key
+      this.editorInsightID = key
       this.editorInsight = this.activeSpec.insights[key]
     },
     onClickDelete(key) {
@@ -39,18 +39,19 @@ export default {
       if (this.isAddNewInsight) {
         this.$store.dispatch('addInsight', this.editorInsight)
       } else {
-        // TODO make sure there is an insight ID
         this.$store.dispatch('editInsight', {
-          id: this.insightID,
+          id: this.editorInsightID,
           insight: this.editorInsight,
         })
       }
       this.editorInsight = {}
+      this.editorInsightID = null
       this.isEditorOpen = false
       this.isAddNewInsight = false
     },
     cancel() {
       this.editorInsight = {}
+      this.editorInsightID = null
       this.isAddNewInsight = false
       this.isEditorOpen = false
     },
@@ -92,24 +93,30 @@ export default {
   @click.self="onClickModalOutside"
 >
   <label class="modal-box relative">
-    <h3 class="text-lg font-bold">Edit Insight</h3>
+    <h3 class="text-lg font-bold">{{ isAddNewInsight ? 'Add' : 'Edit' }} Insight</h3>
     <form class="form-control w-full" autocomplete="off">
       <label class="label label-text">Name</label>
       <input
         v-model="editorInsight.name"
         type="text" placeholder="" autocomplete="off"
         class="input input-bordered w-full max-w-xs">
-      <label class="label label-text">Range</label>
-      <select v-model="editorInsight.range" class="select select-bordered max-w-xs capitalize">
-        <option>narrow</option>
-        <option>broad</option>
-      </select>
-      <label class="label label-text">Type</label>
-      <select v-model="editorInsight.type" class="select select-bordered max-w-xs capitalize">
-        <option>standard</option>
-        <option>technological</option>
-        <option>linguistic</option>
-      </select>
+      <div class="grid grid-cols-2 gap-8">
+        <div>
+          <label class="label label-text">Range</label>
+          <select v-model="editorInsight.range" class="select select-bordered w-full capitalize">
+            <option>narrow</option>
+            <option>broad</option>
+          </select>
+        </div>
+        <div>
+          <label class="label label-text">Type</label>
+          <select v-model="editorInsight.type" class="select select-bordered w-full capitalize">
+            <option>standard</option>
+            <option>technological</option>
+            <option>linguistic</option>
+          </select>
+        </div>
+      </div>
       
 
       <div class="btn-group flex justify-end mt-4">
