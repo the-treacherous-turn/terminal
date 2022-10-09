@@ -64,7 +64,10 @@ export default {
 <ul>
   <!-- a list item for each insight -->
   <li v-for="(insight, key) in activeSpec.insights" :key="key" class="group">
-    <h3 class="text-xl font-bold badge capitalize mr-2">{{ insight.range }} {{ insight.type }}: {{ insight.name }}</h3>
+    <h3 class="text-xl font-bold badge capitalize mr-2">
+      <span class="whitespace-pre" v-if="insight.range || insight.type">{{ insight.range }} {{ insight.type }}: </span>
+      <span>{{ insight.name }}</span>
+    </h3>
     <div class="hidden group-hover:inline">
       <label for="modal-edit-insight">
         <font-awesome-icon
