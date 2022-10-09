@@ -69,8 +69,8 @@ export default {
 <template>
 <div class="relative h-4/5 pb-1/10">
   <h1 class="text-3xl font-bold pb-2">Specializations</h1>
-  <div class="grid grid-cols-3">
-    <li class="card max-w-sm m-4 p-4 shadow-xl bg-secondary group flex flex-col justify-between" v-for="(spec, key) in specs" :key="key">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+    <li class="card max-w-lg m-4 p-4 shadow-xl bg-secondary group flex flex-col justify-between" v-for="(spec, key) in specs" :key="key">
       <div class="bg-inherit">
         <div class="flex justify-between bg-inherit">
           <h2 class="text-xl font-bold">{{ spec.name }}</h2>
