@@ -50,6 +50,11 @@ export default {
         theory,
         tier,
       }
+      // if upgrade.flavor exists, prepend its content to the description
+      // HACK this is a bandaid to make sure we include the flavor text.
+      if (upgrade.flavor) {
+        this.editorUpgrade.description = `${upgrade.flavor} ${this.editorUpgrade.description}`
+      }
     },
     submit() {
       if (this.isAddNewUpgrade) {
@@ -77,7 +82,7 @@ export default {
 
 <template>
 <h2 class="text-2xl font-bold pb-2">Upgrades</h2>
-<ul class="grid grid-cols-3 gap-4">
+<ul class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
   <li
     v-for="(upgrade, key) in activeSpec.upgrades" :key="key"
     class="collapse bg-base-100 content-start group">
@@ -85,7 +90,7 @@ export default {
       <span>
         {{ upgrade.theory }} T{{ upgrade.tier }}: {{ upgrade.name }}
       </span>
-      <div class="hidden absolute z-10 right-0 group-hover:inline">
+      <div class="hidden absolute z-10 right-0 bg-inherit group-hover:inline">
         <label for="modal-edit-upgrade">
           <font-awesome-icon
             :icon="['fas', 'pen-to-square']"
@@ -146,7 +151,7 @@ export default {
       
       <div class="btn-group btn-group-vertical">
         <template v-for="upgrade in upgradesAvailable" :key="upgrade.name">
-          <div class="tooltip tooltip-info" :data-tip="upgrade.description">
+          <div class="tooltip tooltip-info" :data-tip="upgrade.flavor?upgrade.flavor+' '+upgrade.description:upgrade.description">
             <div
               class="btn btn-xs w-full" :class="editorUpgrade.name === upgrade.name && 'btn-active'"
               @click="setEditorUpgrade(upgrade, editorUpgrade.theory, editorUpgrade.tier)"
