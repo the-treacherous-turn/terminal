@@ -23,6 +23,16 @@ module.exports = {
       '9xl': ['3.5rem', { lineHeight: '5rem' }],
     },
     extend: {
+      colors: {
+        epistemic: '#5db84e',
+        constellation: '#fcc831',
+        chaos: '#ff8c36',
+        agentic: '#ec4245',
+        anthropic: '#e458bb',
+        physical: '#954bff',
+        digital: '#0090fe',
+        autonomic: '#0ecbb1',
+      },
       borderColor: {
         DEFAULT: "white",
       },
