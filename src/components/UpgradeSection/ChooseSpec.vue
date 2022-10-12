@@ -20,6 +20,20 @@ export default {
     },
   },
   methods: {
+    // HACK this is to make sure Tailwind can read full class names and thus output their CSS
+    getTheoryStyle(theoryName) {
+      const bgStyleMap = {
+        epistemic: 'bg-epistemic',
+        constellation: 'bg-constellation',
+        chaos: 'bg-chaos',
+        agentic: 'bg-agentic',
+        anthropic: 'bg-anthropic',
+        physical: 'bg-physical',
+        digital: 'bg-digital',
+        autonomic: 'bg-autonomic',
+      }
+      return bgStyleMap[theoryName]
+    },
     selectSpec(specID) {
       this.$store.commit('setActiveSpecID', specID)
     },
@@ -70,7 +84,7 @@ export default {
 <div class="relative h-4/5 pb-1/10">
   <h1 class="text-3xl font-bold pb-2">Specializations</h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-    <li class="card max-w-lg m-4 p-4 shadow-xl bg-secondary group flex flex-col justify-between" :class="`bg-${spec.focus}`" v-for="(spec, key) in specs" :key="key">
+    <li class="card max-w-lg m-4 p-4 shadow-xl bg-secondary group flex flex-col justify-between" :class="getTheoryStyle(spec.focus)" v-for="(spec, key) in specs" :key="key">
       <div class="bg-inherit">
         <div class="flex justify-between bg-inherit">
           <h2 class="text-xl font-bold capitalize">{{ spec.focus }} Theory</h2>
