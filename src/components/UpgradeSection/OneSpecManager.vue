@@ -25,6 +25,7 @@ export default {
   <div class="relative h-4/5 pb-1/10">
     <button class="btn btn-xs my-4" @click="exitSpec">&lt; Select Spec</button>
     <h1 class="text-3xl font-bold pb-2">{{activeSpec.name}}</h1>
+    <div class="badge badge-outline" :class="`text-${activeSpec.focus} border-${activeSpec.focus}`">{{activeSpec.focus}}</div>
     <Upgrades />
     <Insights />
   </div>

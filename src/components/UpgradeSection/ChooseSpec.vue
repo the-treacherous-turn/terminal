@@ -73,7 +73,7 @@ export default {
     <li class="card max-w-lg m-4 p-4 shadow-xl bg-secondary group flex flex-col justify-between" :class="`bg-${spec.focus}`" v-for="(spec, key) in specs" :key="key">
       <div class="bg-inherit">
         <div class="flex justify-between bg-inherit">
-          <h2 class="text-xl font-bold">{{ spec.name }}</h2>
+          <h2 class="text-xl font-bold capitalize">{{ spec.focus }} Theory</h2>
           <div class="bg-inherit hidden group-hover:block">
             <label for="modal-edit-spec">
               <font-awesome-icon
@@ -89,7 +89,7 @@ export default {
             />
           </div>
         </div>
-        <p v-if="spec.focus" class="capitalize">Focus: {{ spec.focus }}</p>
+        <p v-if="spec.focus" class="capitalize">Player: {{ spec.name }}</p>
         <p v-if="spec.upgrades">Upgrades: {{ Object.keys(spec.upgrades).length }}</p>
         <p v-if="spec.insights">Insights: {{ Object.keys(spec.insights).length }}</p>
       </div>
@@ -115,7 +115,7 @@ export default {
   <label class="modal-box max-w-xs relative">
     <h3 class="text-lg font-bold">{{ isAddNewSpec ? 'Add' : 'Edit' }} Specialization</h3>
     <form class="form-control w-full" autocomplete="off">
-      <label class="label label-text">Name</label>
+      <label class="label label-text">Player</label>
       <input
         v-model="editorSpec.name"
         type="text" placeholder="" autocomplete="off"
