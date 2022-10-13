@@ -19,6 +19,18 @@ export default {
     },
   },
   methods: {
+    typeAbbr(type) {
+      switch (type) {
+        case 'standard':
+          return ''
+        case 'technological':
+          return 'tech'
+        case 'linguistic':
+          return 'lang'
+        default:
+          return ''
+      }
+    },
     onClickAdd() {
       this.isEditorOpen = true
       this.isAddNewInsight = true
@@ -65,8 +77,10 @@ export default {
   <!-- a list item for each insight -->
   <li v-for="(insight, key) in activeSpec.insights" :key="key" class="group">
     <h3 class="text-xl font-bold badge capitalize mr-2">
-      <span class="whitespace-pre" v-if="insight.range || insight.type">{{ insight.range }} {{ insight.type }}: </span>
-      <span>{{ insight.name }}</span>
+      <span v-if="insight.range && typeAbbr(insight.type)" class="whitespace-pre">{{ insight.range }} {{ typeAbbr(insight.type) }}: </span>
+      <span v-else-if="insight.range" class="whitespace-pre">{{ insight.range }}: </span>
+      <span v-else-if="typeAbbr(insight.type)" class="whitespace-pre">{{ typeAbbr(insight.type) }}: </span>
+      {{ insight.name }}
     </h3>
     <div class="hidden group-hover:inline">
       <label for="modal-edit-insight">
