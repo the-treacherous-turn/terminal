@@ -85,7 +85,7 @@ export default {
 <ul class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
   <li
     v-for="(upgrade, key) in activeSpec.upgrades" :key="key"
-    class="collapse bg-base-100 content-start group">
+    class="collapse bg-base-100 content-start items-end group">
     <h3 class="collapse-title text-xl font-bold badge min-h-0 capitalize relative">
       <!-- a visual indicator for the upgrade's theory and tier. -->
       <!-- It displays x squares with the color of the theory, where x is the tier number. -->
@@ -99,7 +99,7 @@ export default {
         </span>
       </div>
       <span>
-        {{ upgrade.theory }} T{{ upgrade.tier }}: {{ upgrade.name }}
+        {{ upgrade.name }}
       </span>
       <div class="hidden absolute z-10 right-0 bg-inherit group-hover:inline">
         <label for="modal-edit-upgrade">
@@ -118,7 +118,10 @@ export default {
     </h3>
     <input type="checkbox">
     <div class="collapse-content">
-      <p class="text-lg">{{upgrade.description}}</p>
+      <!-- Use badges to display the upgrade's theory and tier -->
+      <span class="badge badge-sm text-white font-bold mr-1" :class="`bg-${upgrade.theory}`">{{ upgrade.theory }}</span>
+      <span class="badge badge-sm text-white font-bold mr-1">tier {{ upgrade.tier }}</span>
+      <p class="text-lg ">{{upgrade.description}}</p>
     </div>
   </li>
 </ul>
