@@ -114,7 +114,7 @@ export default {
       <button class="btn mt-4" @click="selectSpec(key)">Enter</button>
     </li>
     <label for="modal-edit-spec"
-      class="card btn btn-ghost hover:btn-secondary h-20 max-w-sm m-4 p-4 shadow-xl flex justify-center items-center cursor-pointer border-dashed border-4 border-neutral group"
+      class="card btn btn-ghost hover:btn-secondary h-20 max-w-lg m-4 p-4 shadow-xl flex justify-center items-center cursor-pointer border-dashed border-4 border-neutral group"
       @click="onClickAdd">
       <font-awesome-icon icon="plus" class="text-6xl" />
     </label>
