@@ -82,11 +82,22 @@ export default {
 
 <template>
 <h2 class="text-2xl font-bold pb-2">Upgrades</h2>
-<ul class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+<ul class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
   <li
     v-for="(upgrade, key) in activeSpec.upgrades" :key="key"
     class="collapse bg-base-100 content-start group">
     <h3 class="collapse-title text-xl font-bold badge min-h-0 capitalize relative">
+      <!-- a visual indicator for the upgrade's theory and tier. -->
+      <!-- It displays x squares with the color of the theory, where x is the tier number. -->
+      <div class="flex flex-wrap mr-2 bg-inherit" :class="Number(upgrade.tier) === 4 ? 'max-w-[1.5em]' : ''">
+        <span
+          v-for="i in Number(upgrade.tier)"
+          :key="i"
+          class="w-1 h-1 m-0.5"
+          :class="`bg-${upgrade.theory}`"
+          >
+        </span>
+      </div>
       <span>
         {{ upgrade.theory }} T{{ upgrade.tier }}: {{ upgrade.name }}
       </span>
