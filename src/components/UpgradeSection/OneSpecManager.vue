@@ -38,8 +38,10 @@ export default {
 <template>
   <div class="relative h-4/5 pb-1/10">
     <button class="btn btn-xs my-4" @click="exitSpec">&lt; Select Spec</button>
-    <h1 class="text-3xl font-bold pb-2">{{activeSpec.name}}</h1>
-    <div class="badge badge-outline" :class="theoryStyle">{{activeSpec.focus}}</div>
+    <div>
+      <h2 class="inline-block text-3xl capitalize font-bold px-2 mb-2 text-primary" :class="`bg-${activeSpec.focus}`">{{ activeSpec.focus }}</h2>
+    </div>
+    <p v-if="activeSpec.focus" class="capitalize pb-8">Player: {{ activeSpec.name }}</p>
     <Upgrades />
     <Insights />
   </div>

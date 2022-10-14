@@ -38,6 +38,7 @@ module.exports = {
       },
       borderWidth: {
         DEFAULT: '2px',
+        '1': '1px',
       },
       spacing: {
         '1/10': '10%',
@@ -61,7 +62,15 @@ module.exports = {
         },
         black: {
           ...require("daisyui/src/colors/themes")["[data-theme=black]"],
-          // "base-100": "#121b1e",
+          "primary": "#1d2226",
+          "secondary": "#1d2226",
+          "accent": "#fffe00",
+          "neutral": "#1d2226",
+          "base-100": "#000000",
+          "info": "#0f2cff",
+          "success": "#00ffa8",
+          "warning": "#fffe00",
+          "error": "#FF0056",
         },
       }
     ],

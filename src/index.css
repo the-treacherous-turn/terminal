@@ -4,15 +4,12 @@
   html {
     @apply font-mono;
   }
-  html, body, div, applet, object, iframe {
-    @apply text-white bg-base-100;
-  }
-  button {
-    /* @apply uppercase underline underline-offset-8 decoration-dotted disabled:opacity-50 hover:decoration-solid; */
-  }
 }
 
 @tailwind components;
+.btn {
+  @apply border-1 border-primary-content font-normal capitalize;
+}
 @tailwind utilities;
 
 @layer utilities {

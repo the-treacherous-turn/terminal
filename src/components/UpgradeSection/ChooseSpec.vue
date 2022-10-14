@@ -21,8 +21,24 @@ export default {
   },
   methods: {
     // HACK this is to make sure Tailwind can read full class names and thus output their CSS
-    getTheoryStyle(theoryName) {
-      const bgStyleMap = {
+    getTheoryBorderStyle(theoryName) {
+      const styleMap = {
+        epistemic: 'border-epistemic',
+        constellation: 'border-constellation',
+        chaos: 'border-chaos',
+        agentic: 'border-agentic',
+        anthropic: 'border-anthropic',
+        physical: 'border-physical',
+        digital: 'border-digital',
+        autonomic: 'border-autonomic',
+      }
+      if (theoryName in styleMap) {
+        return styleMap[theoryName]
+      }
+      return 'border-secondary'
+    },
+    getTheoryTextStyle(theoryName) {
+      const styleMap = {
         epistemic: 'bg-epistemic',
         constellation: 'bg-constellation',
         chaos: 'bg-chaos',
@@ -32,10 +48,10 @@ export default {
         digital: 'bg-digital',
         autonomic: 'bg-autonomic',
       }
-      if (theoryName in bgStyleMap) {
-        return bgStyleMap[theoryName]
+      if (theoryName in styleMap) {
+        return styleMap[theoryName]
       }
-      return 'bg-secondary'
+      return ''
     },
     selectSpec(specID) {
       this.$store.commit('setActiveSpecID', specID)
@@ -88,10 +104,10 @@ export default {
   <h1 class="text-3xl font-bold pb-2">Specializations</h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
     <!-- <div class="hidden bg-epistemic"></div> -->
-    <li class="card max-w-lg m-4 p-4 shadow-xl group flex flex-col justify-between" :class="getTheoryStyle(spec.focus)" v-for="(spec, key) in specs" :key="key">
+    <li class="card max-w-lg m-4 p-4 shadow-xl group flex flex-col justify-between bg-primary" v-for="(spec, key) in specs" :key="key">
       <div class="bg-inherit">
         <div class="flex justify-between bg-inherit">
-          <h2 class="text-xl font-bold capitalize">{{ spec.focus }} Theory</h2>
+          <h2 class="text-3xl capitalize font-bold px-2 mb-2 text-primary" :class="getTheoryTextStyle(spec.focus)">{{ spec.focus }}</h2>
           <div class="bg-inherit hidden group-hover:block">
             <label for="modal-edit-spec">
               <font-awesome-icon
@@ -107,11 +123,11 @@ export default {
             />
           </div>
         </div>
-        <p v-if="spec.focus" class="capitalize">Player: {{ spec.name }}</p>
+        <p v-if="spec.name" class="capitalize">Player: {{ spec.name }}</p>
         <p v-if="spec.upgrades">Upgrades: {{ Object.keys(spec.upgrades).length }}</p>
         <p v-if="spec.insights">Insights: {{ Object.keys(spec.insights).length }}</p>
       </div>
-      <button class="btn mt-4" @click="selectSpec(key)">Enter</button>
+      <button class="btn w-1/2 mx-auto mt-4" @click="selectSpec(key)">Enter</button>
     </li>
     <label for="modal-edit-spec"
       class="card btn btn-ghost hover:btn-secondary h-20 max-w-lg m-4 p-4 shadow-xl flex justify-center items-center cursor-pointer border-dashed border-4 border-neutral group"

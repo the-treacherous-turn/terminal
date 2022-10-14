@@ -11,6 +11,7 @@
         w-3/5 m-auto p-8
         border
         transition-all
+        bg-base-100
         ">
           <button class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
             @click="cancel"
