@@ -56,12 +56,6 @@ export default {
       return DateTime.fromISO(this.commitTimeISO).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
     }
   },
-  mounted() {
-    // scroll into view
-    this.$el.scrollIntoView({
-      behavior: 'smooth',
-    });
-  },
   methods: {
     toggleCardMode() {
       if (!this.isCommitted) this.commitCard()

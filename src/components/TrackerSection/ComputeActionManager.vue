@@ -189,14 +189,22 @@ export default {
     },
     onClickModalOutside() {
       if (this.isEditorOpen) this.cancel()
-    }
-  }
+    },
+    saveScrollPos(e) {
+      this.$store.commit('setComputeActionScrollPos', e.target.scrollTop)
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs.scroller.scrollTop = this.$store.state.computeAction.scrollPos
+    })
+  },
 }
 </script>
 
 <template>
 <h1 class="text-xl font-bold">Computational Action Manager</h1>
-<div id="compute-action-list" class="overflow-y-scroll">
+<div id="compute-action-list" class="overflow-y-scroll" ref="scroller" @scroll.passive="saveScrollPos">
   <ComputeActionCard
     v-for="(action, key) in $store.state.computeAction.computeActions"
     v-bind="action"

@@ -5,6 +5,7 @@ const computeActionStore = {
   state: () => ({
     computeActions: {},
     dirtyComputeActionID: null,
+    scrollPos: 0,
   }),
   getters: {
     dirtyComputeAction(state) {
@@ -35,6 +36,9 @@ const computeActionStore = {
     deleteComputeAction(state, computeActionID) {
       if (!state.computeActions[computeActionID]) throw new Error(`Cannot delete compute action ${computeActionID}: compute action does not exist`)
       delete state.computeActions[computeActionID]
+    },
+    setComputeActionScrollPos(state, pos) {
+      state.scrollPos = pos
     },
   },
   actions: {

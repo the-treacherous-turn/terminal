@@ -6,6 +6,7 @@ const eventLogStore = {
     actions: {},
     isEditorOpen: false,
     dirtyActionID: null,
+    scrollPos: 0,
   }),
   getters: {
     dirtyAction(state) {
@@ -59,6 +60,9 @@ const eventLogStore = {
     },
     closeEditor(state) {
       state.isEditorOpen = false
+    },
+    setEventLogScrollPos(state, pos) {
+      state.scrollPos = pos
     },
   },
   actions: {

@@ -9,7 +9,15 @@ export default {
     editNewAction() {
       this.$store.dispatch('editNewAction')
     },
-  }
+    saveScrollPos(e) {
+      this.$store.commit('setEventLogScrollPos', e.target.scrollTop)
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs.scroller.scrollTop = this.$store.state.eventLog.scrollPos
+    })
+  },
 }
 </script>
 
@@ -21,7 +29,7 @@ export default {
     </span>
   </span>
 
-  <div class="absolute h-full w-full overflow-y-scroll">
+  <div class="absolute h-full w-full overflow-y-scroll" ref="scroller" @scroll.passive="saveScrollPos">
       <div class="h-16"></div>
       <ActionCard
         v-for="(action, key) in $store.state.eventLog.actions"
