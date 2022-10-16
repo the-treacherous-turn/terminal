@@ -93,7 +93,7 @@ export default {
       </div>
     </div>
     <div v-else class="p-2 flex items-center w-32">
-      <div class="m-0.5 btn btn-xs btn-square btn-ghost" :class="canSubtract?'':'btn-disabled'" @click="subtractComputeToApply">
+      <div class="m-0.5 btn btn-xs btn-square btn-ghost border-0" :class="canSubtract?'':'btn-disabled'" @click="subtractComputeToApply">
         <font-awesome-icon icon="chevron-down" class="text-2xl" />
       </div>
       <span class="text-lg w-12 text-center inline-block">+ 
@@ -102,7 +102,7 @@ export default {
           class="inline input text-center input-bordered input-xs px-1 w-8"
         >
       </span>
-      <div class="m-0.5 btn btn-xs btn-square btn-ghost" :class="canAdd?'':'btn-disabled'" @click="addComputeToApply">
+      <div class="m-0.5 btn btn-xs btn-square btn-ghost border-0" :class="canAdd?'':'btn-disabled'" @click="addComputeToApply">
         <font-awesome-icon icon="chevron-up" class="text-2xl" />
       </div>
     </div>

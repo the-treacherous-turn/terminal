@@ -34,7 +34,7 @@ module.exports = {
         autonomic: '#0ecbb1',
       },
       borderColor: {
-        DEFAULT: "white",
+        DEFAULT: "#e2ddd9",
       },
       borderWidth: {
         DEFAULT: '2px',
@@ -63,6 +63,7 @@ module.exports = {
         black: {
           ...require("daisyui/src/colors/themes")["[data-theme=black]"],
           "primary": "#1d2226",
+          "primary-content": "#e2ddd9",
           "secondary": "#1d2226",
           "accent": "#fffe00",
           "neutral": "#1d2226",
