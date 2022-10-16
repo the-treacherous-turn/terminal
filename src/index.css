@@ -8,26 +8,17 @@
 
 @tailwind components;
 .btn {
-  @apply border-1 border-primary-content font-normal capitalize;
+  @apply border-1 border-primary-content font-normal capitalize transition-none;
+}
+.btn:hover {
+  @apply border-primary-content
 }
 @tailwind utilities;
 
 @layer utilities {
-  /* Chrome, Safari, Edge, Opera */
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  /* Firefox */
-  input[type=number] {
-    -moz-appearance: textfield;
-  }
-
   .highlighter {
     position: relative;
     z-index: 0;
-
   }
   .highlighter::after {
     content: "";
@@ -40,6 +31,36 @@
     height: 30%;
     background: #ff0056;
   }
+
+  .btn-stylish:hover {
+    overflow: hidden;
+    position: relative;
+    @apply text-primary;
+    box-shadow: 6px 6px 0px 0px var(--tw-shadow-color);
+  }
+  .btn-stylish:hover::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 5px;
+    left: 5px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--tw-shadow-color);
+  }
+}
+
+/* Hide default input widget */
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 /* custom scrollbar that's fairly consistent across browsers */
