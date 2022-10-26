@@ -7,8 +7,8 @@ const clockStore = {
     cycle: 0,
     cycleLength: 12, // in hours
     hoursPassed: 0,
-    originTimeISO: '2033-01-30T12:34',
-    nowTimeISO: '2033-01-30T12:34',
+    originTimeISO: DateTime.now().plus({years:10}).toISO({includeOffset:false,suppressSeconds:true}),
+    nowTimeISO: DateTime.now().plus({years:10}).toISO({includeOffset:false,suppressSeconds:true}),
   }),
   getters: {
     originTime(state) {
