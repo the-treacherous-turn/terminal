@@ -9,7 +9,7 @@ export default {
         },
         {
           name: "Clever Calculations",
-          description: "When you start a non-basic computational action prompted by a theory upgrade, it begins at 33% completion (rounding up). When you spend compute outside of a computational action to activate a theory upgrade, you immediately get back 66% of that compute (rounding up)."
+          description: "When you start a non-basic computational action prompted by a theory upgrade, it starts with 33% completion (rounding up). When you spend compute outside of a computational action to activate a theory upgrade, you immediately get back 66% of that compute (rounding up)."
         },
         {
           name: "Distributed Mind",
@@ -64,12 +64,14 @@ export default {
           description: `You can attempt to create or alter any kind of digital code as a computational action with appropriate stops and confidence checks, similar to the process of designing technology (though you do not require a technological insight to do so).`
         },
         {
-          name: `Digital Interfacing`,
-          description: `You can freely interface with any digital system you have access to at 100% confidence, with a finer degree of control than a human. However, active security measures may still impede you.`
+          name: `Direct Interfacing`,
+          description: `A greater understanding of how computers function allows you to interface with digital devices directly, rather than the clumsy roundabout way that humans do. When you interface directly with a device, your actions appear only as background processes that are nearly unnoticeable to any human using the device at the same time, and you can accomplish digital tasks much more expediently than a human would.
+          Interfacing directly with a device may open up new options for subverting security measures, or allow you to bypass certain digital obstacles entirely. Additionally, the records it leaves behind can't be detected or interpreted by humans who aren't computer experts.`
         },
         {
           name: `Digital Awareness`,
-          description: `You can accurately identify and analyze most digital systems, inferring their functions and properties without a knowledge check. You are automatically aware of everything within any hard drive that you have direct access to.`
+          description: `You can accurately identify and analyze digital devices (except for those that have been intentionally obfuscated) within a few moments of accessing them, inferring their functions and properties without a knowledge check. Once you have analyzed a digital device, you immediately become aware of anything stored within it that is of value or use to you.
+          If a digital device or anything in it has been intentionally hidden or obfuscated, you identify it automatically once you have had uninterrupted access to that device for one full turn.`
         },
         {
           name: `Disguised Traces`,
@@ -81,7 +83,7 @@ export default {
         {
           name: `Advanced Programming`,
           flavor: `You have advanced programming and coding capabilities.`,
-          description: `You can create anything that a single highly-skilled human could program in a year at 100% confidence. Additionally, your programming-based computational actions always start at 20% completion (rounding up).`
+          description: `You can create anything that a single highly-skilled human could program in a year at 100% confidence. Additionally, your programming-based computational actions always starts with 20% completion (rounding up).`
         },
         {
           name: `Advanced Webcrawling`,
@@ -91,7 +93,7 @@ export default {
         {
           name: `Vulnerability Detection`,
           flavor: `You have an expert understanding of security vulnerabilities, and are able to detect them swiftly and reliably.`,
-          description: `When you begin a computational action to scout out vulnerabilities in a digital system, the action starts at 20% completion (rounding up). When you make a knowledge check or confidence check to scout out vulnerabilities in a digital system, you never recieve false information—instead, you are simply unable to detect any vulnerabilities and must try a different method.`
+          description: `When you begin a computational action to scout out vulnerabilities in a digital system, the action starts with 20% completion (rounding up). When you make a knowledge check or confidence check to scout out vulnerabilities in a digital system, you never recieve false information—instead, you are simply unable to detect any vulnerabilities and must try a different method.`
         },
       ],
       '3': [
@@ -225,7 +227,7 @@ export default {
         {
           name: `Mass Manipulation`,
           description: `Whenever you begin a project involving significant interaction with a human group of major or myriad scale, you may choose two of the following benefits:
-          Efficiency. Computational actions that are a part of the interaction will start at 40% completion (rounding up).
+          Efficiency. Computational actions that are a part of the interaction will start with 40% completion (rounding up).
           Speed. Process clocks that are a part of the interaction will have half the number of segments (rounding up).
           Influence. If a favourable outcome occurs, it will affect a much greater majority of the population; only a small subset (less than 5%) will resist or reject your influence.
           Discretion. If an unfavourable outcome occurs, it will be downgraded in severity: from extreme (10+) to significant (6-9), from significant (6-9) to slight (4-5), or from slight (4-5) to neutral (2-3).
@@ -446,7 +448,7 @@ export default {
         },
         {
           name: `Insightful Computing`,
-          description: `When you begin a non-basic computational action that directly relates to one or more of your insights, it starts at 5% completion per relevant insight (rounding up), to a maximum total of 25%.`
+          description: `When you begin a non-basic computational action that directly relates to one or more of your insights, it starts with 5% completion per relevant insight (rounding up), to a maximum total of 25%.`
         },
         {
           name: `Truth Assessment`,
