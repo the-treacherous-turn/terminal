@@ -18,7 +18,7 @@ export default {
 <div class="navbar uppercase bg-base-100 w-full col-span-2">
   <span class="text-3xl">
     <span>
-      The Treacherous Turn <span class="text-base">v0.2.7</span>
+      The Treacherous Turn <span class="text-base">v0.3.0</span>
     </span>
   </span>
   <span class="text-base ml-auto">User ID: <span class="bg-white text-black">dev</span></span>
