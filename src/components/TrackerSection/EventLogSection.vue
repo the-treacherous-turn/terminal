@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-<div class="h-4/5 w-full max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden">
+<div class="h-full w-full max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden">
   <span class="absolute bg-base-100 z-10 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl">
     <span>
       Event Log

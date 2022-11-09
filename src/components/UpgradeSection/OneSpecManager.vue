@@ -36,7 +36,7 @@ export default {
 </script>
 
 <template>
-  <div class="relative h-4/5 p-4 pb-[10vh]">
+  <div class="relative h-full p-4 pb-[10vh]">
     <button class="btn btn-xs my-4" @click="exitSpec">&lt; Select Spec</button>
     <div>
       <h2 class="inline-block text-3xl capitalize font-bold px-2 mb-2 text-primary" :class="`bg-${activeSpec.focus}`">{{ activeSpec.focus }}</h2>

@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-<div class="relative w-full min-w-[1074px] h-4/5 grid grid-cols-2 gap-4">
+<div class="relative w-full min-w-[1074px] h-full grid grid-cols-2 gap-4">
   <div class="relative uppercase border">
     <span class="absolute bg-base-100 z-10 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl">
       <span>

@@ -1,5 +1,5 @@
 <template>
-<div class="relative w-full min-w-[1074px] h-4/5 grid grid-cols-2 gap-4">
+<div class="relative w-full h-full md:grid md:grid-cols-2 md:gap-4">
   <div class="relative w-full h-full overflow-y-scroll pb-10">
 
     <div class="relative form-control w-full max-w-2xl p-4">

@@ -1,4 +1,5 @@
 <script>
+import { mapState } from 'vuex'
 import ActionEditor from './components/ActionEditor.vue'
 
 import Footer from './Footer.vue'
@@ -9,22 +10,41 @@ export default {
     Footer,
   },
   methods: {
-
-  }
+    onToggleGM(e) {
+      this.$store.commit('setIsGM', e.target.checked)
+    }
+  },
+  computed: {
+    ...mapState(['isGM']),
+  },
 }
 </script>
 
 <template>
-<div class="navbar uppercase bg-base-100 w-full col-span-2">
-  <span class="text-3xl">
+<div class="drawer">
+<input id="app-drawer" type="checkbox" class="drawer-toggle" />
+<div class="drawer-content">
+  
+<div class="navbar uppercase bg-base-100 w-full col-span-2 sticky top-0 left-0 z-10">
+  <div class="tooltip tooltip-bottom z-50 lowercase" data-tip="menu">
+    <label for="app-drawer" class="btn btn-square btn-ghost border-none text-2xl">
+      <font-awesome-icon :icon="['fas', 'bars']" />
+    </label>
+  </div>
+  <span class="text-3xl pl-2">
     <span>
       The Treacherous Turn <span class="text-base">v0.3.0</span>
     </span>
   </span>
-  <span class="text-base ml-auto">User ID: <span class="bg-white text-black">dev</span></span>
+  <span class="text-base ml-auto">Session ID: <span class="bg-white text-black">dev</span></span>
 </div>
-  
-<router-view></router-view>
+
+<div class="h-[calc(100%-8rem)]" :class="{'flex':isGM}">
+  <router-view :class="{'w-2/3':isGM}"></router-view>
+  <div v-if="isGM" class="border grow">
+    <h1>GM Tools</h1>
+  </div>
+</div>
 
 <div class="btm-nav col-span-2">
   <!-- <button class="transition-all" :class="{'active':($route.path == '/')}" @click="$router.push('/')">
@@ -49,12 +69,30 @@ export default {
   </button>
 </div>
 
+</div>
 <!-- NOTE: Footer may not make sense anymore as its position is filled by Bottom Navigation. -->
 <!-- It's currently blocked behind the bottom navigation. -->
 <!-- <Footer /> -->
 <Teleport to="body">
   <ActionEditor />
 </Teleport>
+
+<div class="drawer-side">
+  <label for="app-drawer" class="drawer-overlay"></label>
+  <ul class="menu p-4 w-80 bg-base-100 text-base-content">
+    <!-- Sidebar content here -->
+    <!-- TODO: button to bring up About page, with info and links -->
+    <!-- <li><a><font-awesome-icon :icon="['fas', 'circle-question']" /> About</a></li> -->
+    <li class="form-control">
+        <label class="label cursor-pointer">
+          <span class="label-text">GM mode</span>
+          <input :checked="isGM" @change="onToggleGM" type="checkbox" class="toggle"/>
+        </label>
+    </li>
+  </ul>
+</div>
+
+</div>
 </template>
 
 <style>

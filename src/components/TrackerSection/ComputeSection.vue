@@ -13,7 +13,7 @@ export default {
 </script>
 
 <template>
-<div class="h-4/5 w-full max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden">
+<div class="h-full w-full max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden">
   <div>
     <ComputeTracker />
     <Clock />

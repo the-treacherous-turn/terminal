@@ -24,6 +24,12 @@ const store = createStore({
   state () {
     return {
       sessionID: sessionID,
+      isGM: false,
+    }
+  },
+  mutations: {
+    setIsGM (state, isGM) {
+      state.isGM = isGM
     }
   },
 })

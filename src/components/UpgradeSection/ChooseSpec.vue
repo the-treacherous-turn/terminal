@@ -132,7 +132,7 @@ export default {
 </script>
 
 <template>
-<div class="relative h-4/5 pb-1/10">
+<div class="relative pb-1/10">
   <h1 class="text-3xl pl-4 pb-2">Specializations</h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
     <!-- <div class="hidden bg-epistemic"></div> -->
