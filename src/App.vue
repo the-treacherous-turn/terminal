@@ -1,12 +1,13 @@
 <script>
 import { mapState } from 'vuex'
 import ActionEditor from './components/ActionEditor.vue'
-
+import GMPanel from './components/GM/GMPanel.vue'
 import Footer from './Footer.vue'
 
 export default {
   components: {
     ActionEditor,
+    GMPanel,
     Footer,
   },
   methods: {
@@ -42,7 +43,7 @@ export default {
 <div class="h-[calc(100%-8rem)]" :class="{'flex':isGM}">
   <router-view :class="{'w-2/3':isGM}"></router-view>
   <div v-if="isGM" class="border grow">
-    <h1>GM Tools</h1>
+    <GMPanel />
   </div>
 </div>
 
