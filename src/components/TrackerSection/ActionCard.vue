@@ -6,7 +6,7 @@
     </span>
   </div>
   <div class="absolute right-0 top-0">
-    <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base mr-1 my-1 cursor-pointer text-primary-content hover:text-white"  @click="editCard" />
+    <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base mr-4 my-1 cursor-pointer text-primary-content hover:text-white"  @click="editCard" />
     <font-awesome-icon :icon="['fas', 'trash-can']" class="text-base mr-1 my-1 cursor-pointer text-primary-content hover:text-white"        @click="deleteCard" />
 </div>
   <span

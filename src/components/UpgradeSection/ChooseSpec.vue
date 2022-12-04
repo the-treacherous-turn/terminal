@@ -135,7 +135,6 @@ export default {
 <div class="relative pb-1/10">
   <h1 class="text-3xl pl-4 pb-2">Specializations</h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-    <!-- <div class="hidden bg-epistemic"></div> -->
     <li class="card max-w-lg m-4 p-4 shadow-xl group flex flex-col justify-between bg-primary relative" v-for="(spec, key) in specs" :key="key">
       <img :src="`high_res_${spec.focus}.png`" class="absolute m-auto top-0 bottom-32 -right-32 scale-150 pointer-events-none" alt="">
       <div class="bg-inherit">
@@ -145,7 +144,7 @@ export default {
             <label for="modal-edit-spec">
               <font-awesome-icon
                 :icon="['fas', 'pen-to-square']"
-                class="text-base text-secondary-content mr-1 my-1 cursor-pointer hover:text-white"
+                class="text-base text-secondary-content mr-4 my-1 cursor-pointer hover:text-white"
                 @click="onClickEdit(key)"
               />
             </label>

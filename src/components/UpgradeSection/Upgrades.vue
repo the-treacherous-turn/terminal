@@ -105,7 +105,7 @@ export default {
         <label for="modal-edit-upgrade">
           <font-awesome-icon
             :icon="['fas', 'pen-to-square']"
-            class="text-base text-primary-content mr-1 my-1 cursor-pointer hover:text-white"
+            class="text-base text-primary-content mr-4 my-1 cursor-pointer hover:text-white"
             @click="onClickEdit(key)"
           />
         </label>
