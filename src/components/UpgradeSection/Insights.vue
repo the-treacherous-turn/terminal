@@ -76,10 +76,10 @@ export default {
 <ul>
   <!-- a list item for each insight -->
   <li v-for="(insight, key) in activeSpec.insights" :key="key" class="group">
-    <h3 class="text-xl font-bold badge capitalize mr-2">
-      <span v-if="insight.range && typeAbbr(insight.type)" class="whitespace-pre">{{ insight.range }} {{ typeAbbr(insight.type) }}: </span>
-      <span v-else-if="insight.range" class="whitespace-pre">{{ insight.range }}: </span>
-      <span v-else-if="typeAbbr(insight.type)" class="whitespace-pre">{{ typeAbbr(insight.type) }}: </span>
+    <h3 class="text-xl font-bold badge mr-2">
+      <span v-if="insight.range && typeAbbr(insight.type)" class="whitespace-pre capitalize">{{ insight.range }} {{ typeAbbr(insight.type) }}: </span>
+      <span v-else-if="insight.range" class="whitespace-pre capitalize">{{ insight.range }}: </span>
+      <span v-else-if="typeAbbr(insight.type)" class="whitespace-pre capitalize">{{ typeAbbr(insight.type) }}: </span>
       {{ insight.name }}
     </h3>
     <div class="hidden group-hover:inline">

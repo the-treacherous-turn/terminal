@@ -41,7 +41,7 @@ export default {
     <div>
       <h2 class="inline-block text-3xl capitalize font-bold px-2 mb-2 text-primary" :class="`bg-${activeSpec.focus}`">{{ activeSpec.focus }}</h2>
     </div>
-    <p v-if="activeSpec.focus" class="capitalize pb-8 text-primary-content">Player: {{ activeSpec.name }}</p>
+    <p v-if="activeSpec.focus" class="pb-8 text-primary-content">Player: {{ activeSpec.name }}</p>
     <Upgrades />
     <Insights />
   </div>

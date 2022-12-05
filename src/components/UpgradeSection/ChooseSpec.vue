@@ -155,7 +155,7 @@ export default {
             />
           </div>
         </div>
-        <p v-if="spec.name" class="capitalize">Player: {{ spec.name }}</p>
+        <p v-if="spec.name">Player: {{ spec.name }}</p>
         <p v-if="spec.upgrades">Upgrades: {{ Object.keys(spec.upgrades).length }}</p>
         <p v-if="spec.insights">Insights: {{ Object.keys(spec.insights).length }}</p>
       </div>
