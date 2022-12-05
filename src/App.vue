@@ -34,10 +34,9 @@ export default {
   </div>
   <span class="text-3xl pl-2">
     <span>
-      The Treacherous Turn <span class="text-base">v0.3.0</span>
+      The Treacherous Turn <span class="text-base">v0.3.0</span> <span class="text-base ml-4">Session ID: <span class="bg-white text-black">{{$store.state.sessionID}}</span></span>
     </span>
   </span>
-  <span class="text-base ml-auto">Session ID: <span class="bg-white text-black">dev</span></span>
 </div>
 
 <div class="h-[calc(100%-8rem)]" :class="{'flex':isGM}">
