@@ -6,7 +6,7 @@ export default {
     return {
       isEditorOpen: false,
       isAddNewInsight: false,
-      editorInsight: {},
+      editorInsight: {type:'standard'},
       editorInsightID: null,
     }
   },
@@ -56,13 +56,13 @@ export default {
           insight: this.editorInsight,
         })
       }
-      this.editorInsight = {}
+      this.editorInsight = {type:'standard'}
       this.editorInsightID = null
       this.isEditorOpen = false
       this.isAddNewInsight = false
     },
     cancel() {
-      this.editorInsight = {}
+      this.editorInsight = {type:'standard'}
       this.editorInsightID = null
       this.isAddNewInsight = false
       this.isEditorOpen = false
@@ -128,7 +128,7 @@ export default {
         <div>
           <label class="label label-text">Type</label>
           <select v-model="editorInsight.type" class="select select-bordered w-full capitalize">
-            <option>standard</option>
+            <option selected>standard</option>
             <option>technological</option>
             <option>linguistic</option>
           </select>
