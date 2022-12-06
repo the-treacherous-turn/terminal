@@ -16,7 +16,7 @@ export default {
       activeSpecID: state => state.spec.activeSpecID,
     }),
     isSubmitDisabled () {
-      return !this.editorSpec.name
+      return !this.editorSpec.name && !this.editorSpec.focus
     },
   },
   methods: {
