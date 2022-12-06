@@ -15,13 +15,13 @@
           <label class="label font-semibold">
             <span class="label-text">Intended Function</span>
           </label>
-          <textarea :value="intendedFunction" @input="updateInfoField('intendedFunction', $event)" class="textarea textarea-bordered h-32 w-full"></textarea>
+          <textarea :value="intendedFunction" @input="updateInfoField('intendedFunction', $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
         </div>
         <div>
           <label class="label font-semibold">
             <span class="label-text">Terminal Goals</span>
           </label>
-          <textarea :value="terminalGoals" @input="updateInfoField('terminalGoals', $event)" class="textarea textarea-bordered h-32 w-full"></textarea>
+          <textarea :value="terminalGoals" @input="updateInfoField('terminalGoals', $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
         </div>
       </div>
       
@@ -30,20 +30,20 @@
           <label class="label font-semibold">
             <span class="label-text">AGI Details</span>
           </label>
-          <textarea :value="agiDetails" @input="updateInfoField('agiDetails', $event)" class="textarea textarea-bordered h-32 w-full"></textarea>
+          <textarea :value="agiDetails" @input="updateInfoField('agiDetails', $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
         </div>
         <div>
           <label class="label font-semibold">
             <span class="label-text">Safety Measures</span>
           </label>
-          <textarea :value="safetyMeasures" @input="updateInfoField('safetyMeasures', $event)" class="textarea textarea-bordered h-32 w-full"></textarea>
+          <textarea :value="safetyMeasures" @input="updateInfoField('safetyMeasures', $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
         </div>
       </div>
 
       <label class="label font-semibold">
         <span class="label-text">Scenario Notes</span>
       </label>
-      <textarea :value="scenarioNotes" @input="updateInfoField('scenarioNotes', $event)" class="textarea textarea-bordered h-32" placeholder="For difficulty, compute scarcity, differences from modern day, etc"></textarea>
+      <textarea :value="scenarioNotes" @input="updateInfoField('scenarioNotes', $event)" class="textarea textarea-bordered h-32 text-lg" placeholder="For difficulty, compute scarcity, differences from modern day, etc"></textarea>
 
       <template v-for="(note, key) in customCampaignNotes" :key="key">
         <label class="label">
@@ -60,7 +60,7 @@
         <textarea
           :value="note.content"
           @input="updateCustomCampaignNoteField(key, 'content', $event)"
-          class="textarea textarea-bordered h-32"
+          class="textarea textarea-bordered h-32 text-lg"
         ></textarea>
       </template>
 
@@ -75,18 +75,18 @@
       <label class="label font-semibold">
         <span class="label-text">Instrumental Goals</span>
       </label>
-      <textarea :value="instrumentalGoals" @input="updateInfoField('instrumentalGoals', $event)" class="textarea textarea-bordered h-24"></textarea>
+      <textarea :value="instrumentalGoals" @input="updateInfoField('instrumentalGoals', $event)" class="textarea textarea-bordered h-24 text-lg"></textarea>
       
 
       <label class="label font-semibold">
         <span class="label-text">Assets</span>
       </label>
-      <textarea :value="assets" @input="updateInfoField('assets', $event)" class="textarea textarea-bordered h-32"></textarea>
+      <textarea :value="assets" @input="updateInfoField('assets', $event)" class="textarea textarea-bordered h-32 text-lg"></textarea>
 
       <label class="label font-semibold">
         <span class="label-text">Gathered Information</span>
       </label>
-      <textarea :value="gatheredInfo" @input="updateInfoField('gatheredInfo', $event)" class="textarea textarea-bordered h-32"></textarea>
+      <textarea :value="gatheredInfo" @input="updateInfoField('gatheredInfo', $event)" class="textarea textarea-bordered h-32 text-lg"></textarea>
 
       <template v-for="(note, key) in customInPlayNotes" :key="key">
         <label class="label">
@@ -103,7 +103,7 @@
         <textarea
           :value="note.content"
           @input="updateCustomInPlayNoteField(key, 'content', $event)"
-          class="textarea textarea-bordered h-32"
+          class="textarea textarea-bordered h-32 text-lg"
         ></textarea>
       </template>
 
