@@ -3,6 +3,8 @@ import { onValue, update, push } from "firebase/database";
 
 const infoStore = {
   state: () => ({
+    sort: '',
+    sort_inplayinfo: '',
     agiName: '',
     intendedFunction: '',
     terminalGoals: '',
@@ -12,24 +14,50 @@ const infoStore = {
     instrumentalGoals: '',
     assets: '',
     gatheredInfo: '',
+    keysOfCampaignNotes: '',
+    keysOfInPlayNotes: '',
     customCampaignNotes: {},
-    customInPlayNotes: {
-      'a': {
-        'title': 'In-Play Note A',
-        'content': 'This is an in-play note.'
-      },
-      'b': {
-        'title': 'In-Play Note B',
-        'content': 'This is another in-play note.'
-      }
-    },
+    customInPlayNotes: {},
   }),
   mutations: {
     updateInfo(state, changesObj) {
-      for (const key in changesObj) {
-        if (Object.hasOwnProperty.call(changesObj, key)) {
-          const val = changesObj[key];
-          state[key] = val
+      if(!Object.hasOwnProperty.call(changesObj, 'sort') && changesObj['sort'] === undefined){
+        state['sort'] = ['intendedFunction','terminalGoals','agiDetails','safetyMeasures']
+      }
+      if(!Object.hasOwnProperty.call(changesObj, 'sort_inplayinfo') && changesObj['sort_inplayinfo'] === undefined){
+        state['sort_inplayinfo'] = ['instrumentalGoals','assets','gatheredInfo']
+      }
+      if(Object.hasOwnProperty.call(changesObj, 'customCampaignNotes') && Object.hasOwnProperty.call(changesObj, 'customInPlayNotes')){
+        if(changesObj['keysOfCampaignNotes'] === undefined || (JSON.stringify(Object.keys(changesObj['customCampaignNotes'])).length !== JSON.stringify(state['keysOfCampaignNotes']).length && state['keysOfCampaignNotes'] !== '')){
+          for (const key in changesObj) {
+            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfCampaignNotes') {
+              const val = changesObj[key];
+              state[key] = val
+            }
+          }
+          state['keysOfCampaignNotes'] = Object.keys(changesObj['customCampaignNotes'])
+        }else if(changesObj['keysOfInPlayNotes'] === undefined || (JSON.stringify(Object.keys(changesObj['customInPlayNotes'])).length !== JSON.stringify(state['keysOfInPlayNotes']).length && state['keysOfInPlayNotes'] !== '')){
+          for (const key in changesObj) {
+            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfInPlayNotes') {
+              const val = changesObj[key];
+              state[key] = val
+            }
+          }
+          state['keysOfInPlayNotes'] = Object.keys(changesObj['customInPlayNotes'])
+        }else{
+          for (const key in changesObj) {
+            if (Object.hasOwnProperty.call(changesObj, key)) {
+              const val = changesObj[key];
+              state[key] = val
+            }
+          }
+        }
+      }else{
+        for (const key in changesObj) {
+          if (Object.hasOwnProperty.call(changesObj, key)) {
+            const val = changesObj[key];
+            state[key] = val
+          }
         }
       }
     },
@@ -58,6 +86,7 @@ const infoStore = {
   },
   actions: {
     async listenToFBInfo({commit}) {
+      await update(refs.info, {a:''})
       onValue(refs.info, (snapshot) => {
         const data = snapshot.val()
         // HACK avoid bug with unable to remove last custom notes
@@ -79,6 +108,7 @@ const infoStore = {
         content: '',
       }
       await push(refs.customCampaignNotes, note)
+      // await update(refs.info, )
     },
     async updateCustomCampaignNote({commit, state}, {noteID, changesObj}) {
       commit('updateCustomCampaignNote', {noteID, changesObj})
