@@ -3,7 +3,7 @@ import { onValue, update, push } from "firebase/database";
 
 const infoStore = {
   state: () => ({
-    agiName: {},
+    agiName: '',
     intendedFunction: {},
     terminalGoals: {},
     agiDetails: {},
