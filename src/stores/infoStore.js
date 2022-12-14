@@ -3,17 +3,15 @@ import { onValue, update, push } from "firebase/database";
 
 const infoStore = {
   state: () => ({
-    sort: '',
-    sort_inplayinfo: '',
-    agiName: '',
-    intendedFunction: '',
-    terminalGoals: '',
-    agiDetails: '',
-    safetyMeasures: '',
-    scenarioNotes: '',
-    instrumentalGoals: '',
-    assets: '',
-    gatheredInfo: '',
+    agiName: {},
+    intendedFunction: {},
+    terminalGoals: {},
+    agiDetails: {},
+    safetyMeasures: {},
+    scenarioNotes: {},
+    instrumentalGoals: {},
+    assets: {},
+    gatheredInfo: {},
     keysOfCampaignNotes: '',
     keysOfInPlayNotes: '',
     customCampaignNotes: {},
@@ -21,12 +19,6 @@ const infoStore = {
   }),
   mutations: {
     updateInfo(state, changesObj) {
-      if(!Object.hasOwnProperty.call(changesObj, 'sort') && changesObj['sort'] === undefined){
-        state['sort'] = ['intendedFunction','terminalGoals','agiDetails','safetyMeasures']
-      }
-      if(!Object.hasOwnProperty.call(changesObj, 'sort_inplayinfo') && changesObj['sort_inplayinfo'] === undefined){
-        state['sort_inplayinfo'] = ['instrumentalGoals','assets','gatheredInfo']
-      }
       if(Object.hasOwnProperty.call(changesObj, 'customCampaignNotes') && Object.hasOwnProperty.call(changesObj, 'customInPlayNotes')){
         if(changesObj['keysOfCampaignNotes'] === undefined || (JSON.stringify(Object.keys(changesObj['customCampaignNotes'])).length !== JSON.stringify(state['keysOfCampaignNotes']).length && state['keysOfCampaignNotes'] !== '')){
           for (const key in changesObj) {
@@ -58,6 +50,17 @@ const infoStore = {
             const val = changesObj[key];
             state[key] = val
           }
+        }
+      }
+    },
+    updateDefault(state, {noteID, changesObj}){
+      for (const key in changesObj) {
+        if (Object.hasOwnProperty.call(changesObj, key)) {
+          console.log(noteID)
+          console.log(changesObj[key])
+          console.log(state)
+          const val = changesObj[key];
+          state[noteID][key] = val
         }
       }
     },
@@ -102,10 +105,17 @@ const infoStore = {
       commit('updateInfo', changesObj)
       await update(refs.info, changesObj)
     },
+
+    async updateDefault({commit, state}, {noteID, changesObj}){
+      commit('updateDefault', {noteID, changesObj})
+      await update(refs.info, {[noteID]: state[noteID]})
+    },
+
     async addCustomCampaignNote() {
       const note = {
         title: '',
         content: '',
+        height: '',
       }
       await push(refs.customCampaignNotes, note)
       // await update(refs.info, )

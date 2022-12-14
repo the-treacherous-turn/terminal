@@ -7,46 +7,66 @@
       <label class="label font-semibold">
         <span class="label-text">AGI Name</span>
       </label>
-      <input :value="agiName" @input="updateInfoField('agiName', $event)" type="text" class="input input-bordered w-full max-w-xs" />
-      <draggable
-      class="container m-auto grid grid-cols-2 gap-8"
-      :list="sort"
-      @change="sort !== []?checkMove('sort', sort):''"
-      item-key="id"
-      >
-        <template #item="{ element }" :key="element">
-          <div>
-            <label class="label font-semibold">
-              <span class="label-text">{{MAP_ITEMS[element]}}</span>
-            </label>
-            <textarea :value="pp(element)" @input="updateInfoField(element, $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
-          </div>
-        </template>
-      </draggable>
+      <input id="agiName" :value="agiName" @input="updateInfoField('agiName', $event)" class="textarea textarea-bordered text-lg w-full max-w-xs"/>
+      <div class="grid grid-cols-2 gap-8">
+        <div>
+          <label class="label font-semibold">
+            <span class="label-text">Intended Function</span>
+          </label>
+          <textarea id="intendedFunction" :value="intendedFunction.content" @input="updateDefaultField('intendedFunction','content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:intendedFunction.height + 'px'}"></textarea>
+        </div>
+        <div>
+          <label class="label font-semibold">
+            <span class="label-text">Terminal Goals</span>
+          </label>
+          <textarea id="terminalGoals" :value="terminalGoals.content" @input="updateDefaultField('terminalGoals','content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:terminalGoals.height + 'px'}"></textarea>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-8">
+        <div>
+          <label class="label font-semibold">
+            <span class="label-text">AGI Details</span>
+          </label>
+          <textarea id="agiDetails" :value="agiDetails.content" @input="updateDefaultField('agiDetails', 'content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:agiDetails.height + 'px'}"></textarea>
+        </div>
+        <div>
+          <label class="label font-semibold">
+            <span class="label-text">Safety Measures</span>
+          </label>
+          <textarea id="safetyMeasures" :value="safetyMeasures.content" @input="updateDefaultField('safetyMeasures', 'content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:safetyMeasures.height + 'px'}"></textarea>
+        </div>
+      </div>
 
       <label class="label font-semibold">
         <span class="label-text">Scenario Notes</span>
       </label>
-      <textarea :value="scenarioNotes" @input="updateInfoField('scenarioNotes', $event)" class="textarea textarea-bordered h-32 text-lg" placeholder="For difficulty, compute scarcity, differences from modern day, etc"></textarea>
+      <textarea id="scenarioNotes" :value="scenarioNotes.content" @input="updateDefaultField('scenarioNotes','content', $event)" class="textarea textarea-bordered h-32 text-lg" placeholder="For difficulty, compute scarcity, differences from modern day, etc" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:scenarioNotes.height + 'px'}"></textarea>
 
-      <draggable :list="keysOfCampaignNotes" class="w-full" @change="keysOfCampaignNotes !== [] ? campaignMove('keysOfCampaignNotes', keysOfCampaignNotes):''" item-key="id">
+      <draggable :list="keysOfCampaignNotes" class="w-full" @change="keysOfCampaignNotes !== [] ? campaignMove('keysOfCampaignNotes', keysOfCampaignNotes):''" item-key="id" handle=".handle">
         <template #item="{element}" :key="key">
           <div>
             <label class="label">
-            <input
-              :value="customCampaignNotes[element].title"
-              @input="updateCustomCampaignNoteField(element, 'title', $event)"
-              type="text" class="input input-bordered input-sm max-w-xs" placeholder="Custom Note Title"
-            />
+              <div>
+                <font-awesome-icon :icon="['fas', 'bars']" class="handle"/>
+                <input
+                  :value="customCampaignNotes[element].title"
+                  @input="updateCustomCampaignNoteField(element, 'title', $event)"
+                  type="text" class="input input-bordered input-sm max-w-xs ml-2" placeholder="Custom Note Title"
+                />
+              </div>
             <font-awesome-icon
               :icon="['fas', 'trash-can']" class="text-base cursor-pointer text-primary-content hover:text-white"
               @click="removeCustomCampaignNote(element)"
             />
           </label>
           <textarea
+            :id="element"
             :value="customCampaignNotes[element].content"
             @input="updateCustomCampaignNoteField(element, 'content', $event)"
             class="textarea textarea-bordered h-32 text-lg w-full"
+            v-on:mouseup="resizeTextarea($event, 'updateCustomCampaignNote')"
+            :style="{height:customCampaignNotes[element].height + 'px'}"
           ></textarea>
           </div>
         </template>
@@ -58,38 +78,45 @@
   <div class="relative w-full h-full overflow-y-scroll pb-10">
     <div class="relative form-control w-full max-w-2xl p-4">
       <h1 class="text-3xl font-bold pb-2">In-Play Info</h1>
-      <draggable
-      :list="sort_inplayinfo"
-      @change="sort_inplayinfo !== []?checkMove('sort_inplayinfo', sort_inplayinfo):''"
-      item-key="id"
-      >
-        <template #item="{ element }" :key="element">
-          <div>
-            <label class="label font-semibold">
-              <span class="label-text">{{MAP_ITEMS_inplayinfo[element]}}</span>
-            </label>
-            <textarea :value="getComputedInplayInfo(element)" @input="updateInfoField(element, $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
-          </div>
-        </template>
-      </draggable>
-      <draggable :list="keysOfInPlayNotes" class="w-full" @change="keysOfInPlayNotes !== [] ? campaignMove('keysOfInPlayNotes', keysOfInPlayNotes):''" item-key="id">
+      <label class="label font-semibold">
+        <span class="label-text">Instrumental Goals</span>
+      </label>
+      <textarea id="instrumentalGoals" :value="instrumentalGoals.content" @input="updateDefaultField('instrumentalGoals','content', $event)" class="textarea textarea-bordered h-24 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:instrumentalGoals.height + 'px'}"></textarea>
+
+
+      <label class="label font-semibold">
+        <span class="label-text">Assets</span>
+      </label>
+      <textarea id="assets" :value="assets.content" @input="updateDefaultField('assets','content', $event)" class="textarea textarea-bordered h-32 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:assets.height + 'px'}"></textarea>
+
+      <label class="label font-semibold">
+        <span class="label-text">Gathered Information</span>
+      </label>
+      <textarea id="gatheredInfo" :value="gatheredInfo.content" @input="updateDefaultField('gatheredInfo','content', $event)" class="textarea textarea-bordered h-32 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:gatheredInfo.height + 'px'}"></textarea>
+      <draggable :list="keysOfInPlayNotes" class="w-full" @change="keysOfInPlayNotes !== [] ? campaignMove('keysOfInPlayNotes', keysOfInPlayNotes):''" item-key="id"  handle=".handle">
         <template #item="{element}" :key="key">
           <div>
-          <label class="label">
-            <input
-              :value="customInPlayNotes[element].title"
-              @input="updateCustomInPlayNoteField(element, 'title', $event)"
-              type="text" class="input input-bordered input-sm max-w-xs" placeholder="Custom Note Title"
-            />
+            <label class="label">
+            <div>
+              <font-awesome-icon :icon="['fas', 'bars']" class="handle"/>
+              <input
+                :value="customInPlayNotes[element].title"
+                @input="updateCustomInPlayNoteField(element, 'title', $event)"
+                type="text" class="input input-bordered input-sm max-w-xs ml-2" placeholder="Custom Note Title"
+              />
+            </div>
             <font-awesome-icon
               :icon="['fas', 'trash-can']" class="text-base cursor-pointer text-primary-content hover:text-white"
               @click="removeCustomInPlayNote(element)"
             />
           </label>
           <textarea
+            :id="element"
             :value="customInPlayNotes[element].content"
             @input="updateCustomInPlayNoteField(element, 'content', $event)"
             class="textarea textarea-bordered h-32 text-lg w-full"
+            v-on:mouseup="resizeTextarea($event, 'updateCustomInPlayNote')"
+            :style="{height:customInPlayNotes[element].height + 'px'}"
           ></textarea>
         </div>
         </template>
@@ -109,20 +136,6 @@ import draggable from 'vuedraggable'
 let temp_keysOfCampaignNotes;
 let temp_keysOfInPlayNotes;
 
-const MAP_ITEMS = {
-  'agiName': 'AGI Name',
-  'intendedFunction': 'Intended Function',
-  'terminalGoals': 'Terminal Goals',
-  'agiDetails': 'AGI Details',
-  'safetyMeasures': 'Safety Measures',
-  'scenarioNotes': 'Scenario Notes',
-}
-
-const MAP_ITEMS_inplayinfo = {
-  'instrumentalGoals': 'Instrumental Goals',
-  'assets': 'Assets',
-  'gatheredInfo': 'Gathered Information',
-}
 export default {
     watch: {
       keysOfCampaignNotes(newVal){
@@ -145,13 +158,12 @@ export default {
     mounted(){
       temp_keysOfCampaignNotes = [...this.keysOfCampaignNotes]
       temp_keysOfInPlayNotes = [...this.keysOfInPlayNotes]
+      // this.resizeTextarea()
     },
     data() {
       return{
-        MAP_ITEMS,
         temp_keysOfCampaignNotes,
-        temp_keysOfInPlayNotes,
-        MAP_ITEMS_inplayinfo
+        temp_keysOfInPlayNotes
       };
     },
     components: {
@@ -159,8 +171,6 @@ export default {
     },
     computed: {
         ...mapState({
-            sort: state => state.info.sort,
-            sort_inplayinfo: state => state.info.sort_inplayinfo,
             agiName: state => state.info.agiName,
             intendedFunction: state => state.info.intendedFunction,
             terminalGoals: state => state.info.terminalGoals,
@@ -176,12 +186,15 @@ export default {
             customInPlayNotes: state => state.info.customInPlayNotes,
         })
     },
-    methods: {
-        checkMove(field, event){
-          const value = event;
-          const changesObj = {};
-          changesObj[field] = value;
-          this.$store.dispatch("updateInfo", changesObj);
+      methods: {
+        resizeTextarea(e, dispatch) {
+        let area = e.target;
+        let title = area.id;
+        let height = area.scrollHeight;
+        const changesObj = {};
+        console.log(title)
+        changesObj['height'] = height;
+        this.$store.dispatch(dispatch, { noteID: title, changesObj})
         },
         campaignMove(field, event){
           const value = event;
@@ -189,48 +202,11 @@ export default {
           changesObj[field] = value;
           this.$store.dispatch("updateInfo", changesObj);
         },
-        getComputedInplayInfo(element) {
-          switch (element) {
-            case 'instrumentalGoals':
-              return this.instrumentalGoals
-              break;
-            case 'assets':
-              return this.assets
-              break;
-            case 'gatheredInfo':
-            return this.gatheredInfo
-            break;
-            default:
-              break;
-          }
-        },
-        pp(element) {
-          switch (element) {
-            case 'agiName':
-              return this.agiName
-              break;
-            case 'intendedFunction':
-              return this.intendedFunction
-              break;
-            case 'terminalGoals':
-            return this.terminalGoals
-            break;
-
-            case 'agiDetails':
-            return this.agiDetails
-            break;
-
-            case 'safetyMeasures':
-            return this.safetyMeasures
-            break;
-
-            case 'scenarioNotes':
-            return this.scenarioNotes
-            break;
-
-            default:
-              break;
-          }
+        updateDefaultField(title, field, event){
+          const { value } = event.target;
+          const changesObj = {};
+          changesObj[field] = value;
+          this.$store.dispatch("updateDefault", { noteID: title, changesObj});
         },
         updateInfoField(field, event) {
             // TODO improve bandwidth usage by throttling how often we sync
