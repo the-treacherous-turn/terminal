@@ -158,7 +158,6 @@ export default {
     mounted(){
       temp_keysOfCampaignNotes = [...this.keysOfCampaignNotes]
       temp_keysOfInPlayNotes = [...this.keysOfInPlayNotes]
-      // this.resizeTextarea()
     },
     data() {
       return{
@@ -190,9 +189,10 @@ export default {
         resizeTextarea(e, dispatch) {
         let area = e.target;
         let title = area.id;
-        let height = area.scrollHeight;
+        let height = area.style.height;
         const changesObj = {};
         console.log(title)
+        console.log(area.style.height)
         changesObj['height'] = height;
         this.$store.dispatch(dispatch, { noteID: title, changesObj})
         },

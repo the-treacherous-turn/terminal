@@ -19,26 +19,67 @@ const infoStore = {
   }),
   mutations: {
     updateInfo(state, changesObj) {
-      if(Object.hasOwnProperty.call(changesObj, 'customCampaignNotes') && Object.hasOwnProperty.call(changesObj, 'customInPlayNotes')){
-        if(changesObj['keysOfCampaignNotes'] === undefined || (JSON.stringify(Object.keys(changesObj['customCampaignNotes'])).length !== JSON.stringify(state['keysOfCampaignNotes']).length && state['keysOfCampaignNotes'] !== '')){
+      if(Object.hasOwnProperty.call(changesObj, 'customCampaignNotes')){
+        if(JSON.stringify(Object.keys(changesObj['customCampaignNotes'])).length > JSON.stringify(changesObj['keysOfCampaignNotes']).length){
+          state['keysOfCampaignNotes'] = [...state['keysOfCampaignNotes'], Object.keys(changesObj['customCampaignNotes']).slice(-1).pop()]
           for (const key in changesObj) {
-            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfCampaignNotes') {
+            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfCampaignNotes' && key !== 'keysOfInPlayNotes') {
               const val = changesObj[key];
               state[key] = val
             }
           }
-          state['keysOfCampaignNotes'] = Object.keys(changesObj['customCampaignNotes'])
-        }else if(changesObj['keysOfInPlayNotes'] === undefined || (JSON.stringify(Object.keys(changesObj['customInPlayNotes'])).length !== JSON.stringify(state['keysOfInPlayNotes']).length && state['keysOfInPlayNotes'] !== '')){
+        }else if(JSON.stringify(Object.keys(changesObj['customCampaignNotes'])).length < JSON.stringify(changesObj['keysOfCampaignNotes']).length){
+          let originArray = Object.keys(changesObj['customCampaignNotes']);
+          changesObj['keysOfCampaignNotes'] = changesObj['keysOfCampaignNotes'].filter(item => originArray.includes(item));
+          state['keysOfCampaignNotes'] = changesObj['keysOfCampaignNotes']
           for (const key in changesObj) {
-            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfInPlayNotes') {
+            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfCampaignNotes' && key !== 'keysOfInPlayNotes') {
               const val = changesObj[key];
               state[key] = val
             }
           }
-          state['keysOfInPlayNotes'] = Object.keys(changesObj['customInPlayNotes'])
-        }else{
+        }
+        else{
+          state['keysOfCampaignNotes'] = changesObj['keysOfCampaignNotes']
+          for (const key in changesObj) {
+            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfCampaignNotes' && key !== 'keysOfInPlayNotes') {
+              const val = changesObj[key];
+              state[key] = val
+            }
+          }
+        }
+      }else{
           for (const key in changesObj) {
             if (Object.hasOwnProperty.call(changesObj, key)) {
+              const val = changesObj[key];
+              state[key] = val
+            }
+          }
+      }
+      if(Object.hasOwnProperty.call(changesObj, 'customInPlayNotes')){
+        if(JSON.stringify(Object.keys(changesObj['customInPlayNotes'])).length > JSON.stringify(changesObj['keysOfInPlayNotes']).length){
+          state['keysOfInPlayNotes'] = [...state['keysOfInPlayNotes'], Object.keys(changesObj['customInPlayNotes']).slice(-1).pop()]
+          for (const key in changesObj) {
+            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfInPlayNotes' && key !== 'keysOfCampaignNotes') {
+              const val = changesObj[key];
+              state[key] = val
+            }
+          }
+        }else if(JSON.stringify(Object.keys(changesObj['customInPlayNotes'])).length < JSON.stringify(changesObj['keysOfInPlayNotes']).length){
+          let originArray = Object.keys(changesObj['customInPlayNotes']);
+          changesObj['keysOfInPlayNotes'] = changesObj['keysOfInPlayNotes'].filter(item => originArray.includes(item));
+          state['keysOfInPlayNotes'] = changesObj['keysOfInPlayNotes']
+          for (const key in changesObj) {
+            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfInPlayNotes' && key !== 'keysOfCampaignNotes') {
+              const val = changesObj[key];
+              state[key] = val
+            }
+          }
+        }
+        else{
+          state['keysOfInPlayNotes'] = changesObj['keysOfInPlayNotes']
+          for (const key in changesObj) {
+            if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfInPlayNotes' && key !== 'keysOfCampaignNotes') {
               const val = changesObj[key];
               state[key] = val
             }
@@ -51,14 +92,90 @@ const infoStore = {
             state[key] = val
           }
         }
-      }
+    }
+        // if(changesObj['keysOfCampaignNotes'])
+        // if((JSON.stringify(Object.keys(changesObj['customCampaignNotes'])).length !== JSON.stringify(state['keysOfCampaignNotes']).length) && state['keysOfCampaignNotes'] !== undefined){
+        //   console.log('a')
+        //   console.log(changesObj['keysOfCampaignNotes'] === undefined)
+        //   state['keysOfCampaignNotes'] = [...state['keysOfCampaignNotes'], Object.keys(changesObj['customCampaignNotes']).slice(-1).pop()]
+        //   for (const key in changesObj) {
+        //     if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfCampaignNotes') {
+        //       const val = changesObj[key];
+        //       state[key] = val
+        //     }
+        //   }
+        // }else{
+        //   console.log('b')
+        //   console.log(JSON.stringify(Object.keys(changesObj['customCampaignNotes'])).length !== JSON.stringify(state['keysOfCampaignNotes']).length)
+        //   console.log(state['keysOfCampaignNotes'])
+        //   for (const key in changesObj) {
+        //     if (Object.hasOwnProperty.call(changesObj, key)) {
+        //       const val = changesObj[key];
+        //       state[key] = val
+        //     }
+        //   }
+        // }
+      // if(Object.keys(changesObj['customCampaignNotes']).length !== 0){
+      //   if(changesObj['keysOfCampaignNotes'] === undefined || (JSON.stringify(Object.keys(changesObj['customCampaignNotes'])).length !== JSON.stringify(state['keysOfCampaignNotes']).length && state['keysOfCampaignNotes'] !== '')){
+      //     console.log('a')
+      //     for (const key in changesObj) {
+      //       if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfCampaignNotes') {
+      //         const val = changesObj[key];
+      //         state[key] = val
+      //       }
+      //     }
+      //     state['keysOfCampaignNotes'] = Object.keys(changesObj['customCampaignNotes'])
+      //   }
+      // }
+      // if(changesObj['customInPlayNotes'] === undefined || changesObj['customCampaignNotes'] === undefined){
+      //   for (const key in changesObj) {
+      //     if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfCampaignNotes') {
+      //       const val = changesObj[key];
+      //       state[key] = val
+      //     }
+      //   }
+      // }else if(Object.keys(changesObj['customCampaignNotes']).length !== 0 || Object.keys(changesObj['customInPlayNotes']).length !== 0){
+      //   if((changesObj['keysOfCampaignNotes'] === undefined && changesObj['keysOfInPlayNotes'] !== undefined) || (JSON.stringify(Object.keys(changesObj['customCampaignNotes'])).length !== JSON.stringify(state['keysOfCampaignNotes']).length && state['keysOfCampaignNotes'] === '')){
+      //     console.log('a')
+      //     for (const key in changesObj) {
+      //       if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfCampaignNotes') {
+      //         const val = changesObj[key];
+      //         state[key] = val
+      //       }
+      //     }
+      //     state['keysOfCampaignNotes'] = [...state['keysOfCampaignNotes'], Object.keys(changesObj['customCampaignNotes']).slice(-1).pop()]
+      //   }else if((changesObj['keysOfInPlayNotes'] === undefined && changesObj['keysOfCampaignNotes'] !== undefined) || (JSON.stringify(Object.keys(changesObj['customInPlayNotes'])).length !== JSON.stringify(state['keysOfInPlayNotes']).length && state['keysOfInPlayNotes'] === '')){
+      //     console.log('b')
+      //     for (const key in changesObj) {
+      //       if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfInPlayNotes') {
+      //         const val = changesObj[key];
+      //         state[key] = val
+      //       }
+      //     }
+      //     state['keysOfInPlayNotes'] =[...state['keysOfInPlayNotes'], Object.keys(changesObj['customInPlayNotes']).slice(-1).pop()]
+      //   }else{
+      //     console.log('c')
+      //     console.log(changesObj)
+      //     for (const key in changesObj) {
+      //       if (Object.hasOwnProperty.call(changesObj, key)) {
+      //         const val = changesObj[key];
+      //         state[key] = val
+      //       }
+      //     }
+      //   }
+      // }else{
+      //   console.log('d')
+      //   for (const key in changesObj) {
+      //     if (Object.hasOwnProperty.call(changesObj, key)) {
+      //       const val = changesObj[key];
+      //       state[key] = val
+      //     }
+      //   }
+      // }
     },
     updateDefault(state, {noteID, changesObj}){
       for (const key in changesObj) {
         if (Object.hasOwnProperty.call(changesObj, key)) {
-          console.log(noteID)
-          console.log(changesObj[key])
-          console.log(state)
           const val = changesObj[key];
           state[noteID][key] = val
         }
@@ -74,6 +191,7 @@ const infoStore = {
     },
     removeCustomCampaignNote(state, noteID) {
       delete state.customCampaignNotes[noteID]
+      // delete state.keysOfCampaignNotes[noteID]
     },
     updateCustomInPlayNote(state, {noteID, changesObj}) {
       for (const key in changesObj) {
@@ -97,6 +215,9 @@ const infoStore = {
         // when incoming data doesn't include them
         if (data.customCampaignNotes === undefined) data.customCampaignNotes = {}
         if (data.customInPlayNotes === undefined) data.customInPlayNotes = {}
+        if (data.keysOfCampaignNotes === undefined) data.keysOfCampaignNotes = []
+        if (data.keysOfInPlayNotes === undefined) data.keysOfInPlayNotes = []
+
         // console.log('NEW FROM FB', data)
         commit('updateInfo', data)
       })
@@ -125,13 +246,18 @@ const infoStore = {
       await update(refs.customCampaignNotes, {[noteID]: state.customCampaignNotes[noteID]})
     },
     async removeCustomCampaignNote({commit}, noteID) {
+      // const changesObj = {}
+      // changesObj['keysOfCampaignNotes'] = {}
+      // changesObj['keysOfCampaignNotes'][noteID] = null
       commit('removeCustomCampaignNote', noteID)
       await update(refs.customCampaignNotes, {[noteID]: null})
+      // await update(refs.info, changesObj)
     },
     async addCustomInPlayNote() {
       const note = {
         title: '',
         content: '',
+        height: '',
       }
       await push(refs.customInPlayNotes, note)
     },
