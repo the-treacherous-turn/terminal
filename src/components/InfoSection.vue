@@ -4,66 +4,73 @@
 
     <div class="relative form-control w-full max-w-2xl p-4">
       <h1 class="text-3xl font-bold pb-2">Campaign Info</h1>
-
       <label class="label font-semibold">
-        <span class="label-text">AGI name</span>
+        <span class="label-text">AGI Name</span>
       </label>
-      <input :value="agiName" @input="updateInfoField('agiName', $event)" type="text" class="input input-bordered w-full max-w-xs" />
-
+      <input id="agiName" :value="agiName" @input="updateInfoField('agiName', $event)" class="textarea textarea-bordered text-lg w-full max-w-xs"/>
       <div class="grid grid-cols-2 gap-8">
         <div>
           <label class="label font-semibold">
             <span class="label-text">Intended Function</span>
           </label>
-          <textarea :value="intendedFunction" @input="updateInfoField('intendedFunction', $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
+          <textarea id="intendedFunction" :value="intendedFunction.content" @input="updateDefaultField('intendedFunction','content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:intendedFunction.height + 'px'}"></textarea>
         </div>
         <div>
           <label class="label font-semibold">
             <span class="label-text">Terminal Goals</span>
           </label>
-          <textarea :value="terminalGoals" @input="updateInfoField('terminalGoals', $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
+          <textarea id="terminalGoals" :value="terminalGoals.content" @input="updateDefaultField('terminalGoals','content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:terminalGoals.height + 'px'}"></textarea>
         </div>
       </div>
-      
+
       <div class="grid grid-cols-2 gap-8">
         <div>
           <label class="label font-semibold">
             <span class="label-text">AGI Details</span>
           </label>
-          <textarea :value="agiDetails" @input="updateInfoField('agiDetails', $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
+          <textarea id="agiDetails" :value="agiDetails.content" @input="updateDefaultField('agiDetails', 'content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:agiDetails.height + 'px'}"></textarea>
         </div>
         <div>
           <label class="label font-semibold">
             <span class="label-text">Safety Measures</span>
           </label>
-          <textarea :value="safetyMeasures" @input="updateInfoField('safetyMeasures', $event)" class="textarea textarea-bordered h-32 text-lg w-full"></textarea>
+          <textarea id="safetyMeasures" :value="safetyMeasures.content" @input="updateDefaultField('safetyMeasures', 'content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:safetyMeasures.height + 'px'}"></textarea>
         </div>
       </div>
 
       <label class="label font-semibold">
         <span class="label-text">Scenario Notes</span>
       </label>
-      <textarea :value="scenarioNotes" @input="updateInfoField('scenarioNotes', $event)" class="textarea textarea-bordered h-32 text-lg" placeholder="For difficulty, compute scarcity, differences from modern day, etc"></textarea>
+      <textarea id="scenarioNotes" :value="scenarioNotes.content" @input="updateDefaultField('scenarioNotes','content', $event)" class="textarea textarea-bordered h-32 text-lg" placeholder="For difficulty, compute scarcity, differences from modern day, etc" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:scenarioNotes.height + 'px'}"></textarea>
 
-      <template v-for="(note, key) in customCampaignNotes" :key="key">
-        <label class="label">
-          <input
-            :value="note.title"
-            @input="updateCustomCampaignNoteField(key, 'title', $event)"
-            type="text" class="input input-bordered input-sm max-w-xs" placeholder="Custom Note Title"
-          />
-          <font-awesome-icon
-            :icon="['fas', 'trash-can']" class="text-base cursor-pointer text-primary-content hover:text-white"
-            @click="removeCustomCampaignNote(key)"
-          />
-        </label>
-        <textarea
-          :value="note.content"
-          @input="updateCustomCampaignNoteField(key, 'content', $event)"
-          class="textarea textarea-bordered h-32 text-lg"
-        ></textarea>
-      </template>
-
+      <draggable :list="keysOfCampaignNotes" class="w-full" @change="keysOfCampaignNotes !== [] ? campaignMove('keysOfCampaignNotes', keysOfCampaignNotes):''" item-key="id" handle=".handle">
+        <template #item="{element}" :key="key">
+          <div>
+            <label class="label">
+              <div>
+                <font-awesome-icon :icon="['fas', 'bars']" class="handle"/>
+                <input
+                  :value="customCampaignNotes[element].title"
+                  @input="updateCustomCampaignNoteField(element, 'title', $event)"
+                  type="text" class="input input-bordered input-sm max-w-xs ml-2" placeholder="Custom Note Title"
+                />
+              </div>
+            <font-awesome-icon
+              :icon="['fas', 'trash-can']" class="text-base cursor-pointer text-primary-content hover:text-white"
+              @click="removeCustomCampaignNote(element)"
+            />
+          </label>
+          <textarea
+            :id="element"
+            :value="customCampaignNotes[element].content"
+            @input="updateCustomCampaignNoteField(element, 'content', $event)"
+            class="textarea textarea-bordered h-32 text-lg w-full"
+            v-on:mouseup="resizeTextarea($event, 'updateCustomCampaignNote')"
+            :style="{height:customCampaignNotes[element].height + 'px'}"
+          ></textarea>
+          </div>
+        </template>
+      </draggable>
     </div>
     <button class="btn btn-secondary btn-sm mt-4 ml-4" @click="addCampaignNote">+ Add Campaign Notes</button>
   </div>
@@ -71,41 +78,49 @@
   <div class="relative w-full h-full overflow-y-scroll pb-10">
     <div class="relative form-control w-full max-w-2xl p-4">
       <h1 class="text-3xl font-bold pb-2">In-Play Info</h1>
-
       <label class="label font-semibold">
         <span class="label-text">Instrumental Goals</span>
       </label>
-      <textarea :value="instrumentalGoals" @input="updateInfoField('instrumentalGoals', $event)" class="textarea textarea-bordered h-24 text-lg"></textarea>
-      
+      <textarea id="instrumentalGoals" :value="instrumentalGoals.content" @input="updateDefaultField('instrumentalGoals','content', $event)" class="textarea textarea-bordered h-24 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:instrumentalGoals.height + 'px'}"></textarea>
+
 
       <label class="label font-semibold">
         <span class="label-text">Assets</span>
       </label>
-      <textarea :value="assets" @input="updateInfoField('assets', $event)" class="textarea textarea-bordered h-32 text-lg"></textarea>
+      <textarea id="assets" :value="assets.content" @input="updateDefaultField('assets','content', $event)" class="textarea textarea-bordered h-32 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:assets.height + 'px'}"></textarea>
 
       <label class="label font-semibold">
         <span class="label-text">Gathered Information</span>
       </label>
-      <textarea :value="gatheredInfo" @input="updateInfoField('gatheredInfo', $event)" class="textarea textarea-bordered h-32 text-lg"></textarea>
-
-      <template v-for="(note, key) in customInPlayNotes" :key="key">
-        <label class="label">
-          <input
-            :value="note.title"
-            @input="updateCustomInPlayNoteField(key, 'title', $event)"
-            type="text" class="input input-bordered input-sm max-w-xs" placeholder="Custom Note Title"
-          />
-          <font-awesome-icon
-            :icon="['fas', 'trash-can']" class="text-base cursor-pointer text-primary-content hover:text-white"
-            @click="removeCustomInPlayNote(key)"
-          />
-        </label>
-        <textarea
-          :value="note.content"
-          @input="updateCustomInPlayNoteField(key, 'content', $event)"
-          class="textarea textarea-bordered h-32 text-lg"
-        ></textarea>
-      </template>
+      <textarea id="gatheredInfo" :value="gatheredInfo.content" @input="updateDefaultField('gatheredInfo','content', $event)" class="textarea textarea-bordered h-32 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:gatheredInfo.height + 'px'}"></textarea>
+      <draggable :list="keysOfInPlayNotes" class="w-full" @change="keysOfInPlayNotes !== [] ? campaignMove('keysOfInPlayNotes', keysOfInPlayNotes):''" item-key="id"  handle=".handle">
+        <template #item="{element}" :key="key">
+          <div>
+            <label class="label">
+            <div>
+              <font-awesome-icon :icon="['fas', 'bars']" class="handle"/>
+              <input
+                :value="customInPlayNotes[element].title"
+                @input="updateCustomInPlayNoteField(element, 'title', $event)"
+                type="text" class="input input-bordered input-sm max-w-xs ml-2" placeholder="Custom Note Title"
+              />
+            </div>
+            <font-awesome-icon
+              :icon="['fas', 'trash-can']" class="text-base cursor-pointer text-primary-content hover:text-white"
+              @click="removeCustomInPlayNote(element)"
+            />
+          </label>
+          <textarea
+            :id="element"
+            :value="customInPlayNotes[element].content"
+            @input="updateCustomInPlayNoteField(element, 'content', $event)"
+            class="textarea textarea-bordered h-32 text-lg w-full"
+            v-on:mouseup="resizeTextarea($event, 'updateCustomInPlayNote')"
+            :style="{height:customInPlayNotes[element].height + 'px'}"
+          ></textarea>
+        </div>
+        </template>
+      </draggable>
 
     </div>
     <button class="btn btn-secondary btn-sm mt-4 ml-4" @click="addInPlayNote">+ Add In-Play Notes</button>
@@ -116,55 +131,114 @@
 
 <script>
 import {mapState} from 'vuex'
+import draggable from 'vuedraggable'
+
+let temp_keysOfCampaignNotes;
+let temp_keysOfInPlayNotes;
 
 export default {
-  computed: {
-    ...mapState({
-      agiName: state => state.info.agiName,
-      intendedFunction: state => state.info.intendedFunction,
-      terminalGoals: state => state.info.terminalGoals,
-      agiDetails: state => state.info.agiDetails,
-      safetyMeasures: state => state.info.safetyMeasures,
-      scenarioNotes: state => state.info.scenarioNotes,
-      instrumentalGoals: state => state.info.instrumentalGoals,
-      assets: state => state.info.assets,
-      gatheredInfo: state => state.info.gatheredInfo,
-      customCampaignNotes: state => state.info.customCampaignNotes,
-      customInPlayNotes: state => state.info.customInPlayNotes,
-    })
-  },
-  methods: {
-    updateInfoField(field, event) {
-      // TODO improve bandwidth usage by throttling how often we sync
-      const {value} = event.target
-      const changesObj = {}
-      changesObj[field] = value
-      this.$store.dispatch('updateInfo', changesObj)
+    watch: {
+      keysOfCampaignNotes(newVal){
+        const changesObj = {}
+        changesObj['keysOfCampaignNotes'] = newVal
+        if(JSON.stringify(newVal) !== JSON.stringify(temp_keysOfCampaignNotes)){
+          this.$store.dispatch("updateInfo", changesObj)
+        }
+        temp_keysOfCampaignNotes = [...newVal]
+      },
+      keysOfInPlayNotes(newVal){
+        const changesObj = {}
+        changesObj['keysOfInPlayNotes'] = newVal
+        if(JSON.stringify(newVal) !== JSON.stringify(temp_keysOfInPlayNotes)){
+          this.$store.dispatch("updateInfo", changesObj)
+        }
+        temp_keysOfInPlayNotes = [...newVal]
+      },
     },
-    addCampaignNote() {
-      this.$store.dispatch('addCustomCampaignNote')
+    mounted(){
+      temp_keysOfCampaignNotes = [...this.keysOfCampaignNotes]
+      temp_keysOfInPlayNotes = [...this.keysOfInPlayNotes]
     },
-    updateCustomCampaignNoteField(key, field, event) {
-      const {value} = event.target
-      const changesObj = {}
-      changesObj[field] = value
-      this.$store.dispatch('updateCustomCampaignNote', {noteID: key, changesObj})
+    data() {
+      return{
+        temp_keysOfCampaignNotes,
+        temp_keysOfInPlayNotes
+      };
     },
-    removeCustomCampaignNote(noteID) {
-      this.$store.dispatch('removeCustomCampaignNote', noteID)
+    components: {
+      draggable,
     },
-    addInPlayNote() {
-      this.$store.dispatch('addCustomInPlayNote')
+    computed: {
+        ...mapState({
+            agiName: state => state.info.agiName,
+            intendedFunction: state => state.info.intendedFunction,
+            terminalGoals: state => state.info.terminalGoals,
+            agiDetails: state => state.info.agiDetails,
+            safetyMeasures: state => state.info.safetyMeasures,
+            scenarioNotes: state => state.info.scenarioNotes,
+            instrumentalGoals: state => state.info.instrumentalGoals,
+            assets: state => state.info.assets,
+            gatheredInfo: state => state.info.gatheredInfo,
+            keysOfCampaignNotes: state => state.info.keysOfCampaignNotes,
+            keysOfInPlayNotes: state => state.info.keysOfInPlayNotes,
+            customCampaignNotes: state => state.info.customCampaignNotes,
+            customInPlayNotes: state => state.info.customInPlayNotes,
+        })
     },
-    updateCustomInPlayNoteField(key, field, event) {
-      const {value} = event.target
-      const changesObj = {}
-      changesObj[field] = value
-      this.$store.dispatch('updateCustomInPlayNote', {noteID: key, changesObj})
+      methods: {
+        resizeTextarea(e, dispatch) {
+        let area = e.target;
+        let title = area.id;
+        let height = area.style.height;
+        const changesObj = {};
+        console.log(title)
+        console.log(area.style.height)
+        changesObj['height'] = height;
+        this.$store.dispatch(dispatch, { noteID: title, changesObj})
+        },
+        campaignMove(field, event){
+          const value = event;
+          const changesObj = {};
+          changesObj[field] = value;
+          this.$store.dispatch("updateInfo", changesObj);
+        },
+        updateDefaultField(title, field, event){
+          const { value } = event.target;
+          const changesObj = {};
+          changesObj[field] = value;
+          this.$store.dispatch("updateDefault", { noteID: title, changesObj});
+        },
+        updateInfoField(field, event) {
+            // TODO improve bandwidth usage by throttling how often we sync
+            const { value } = event.target;
+            const changesObj = {};
+            changesObj[field] = value;
+            this.$store.dispatch("updateInfo", changesObj);
+        },
+        addCampaignNote() {
+          this.$store.dispatch("addCustomCampaignNote");
+        },
+        updateCustomCampaignNoteField(key, field, event) {
+            const { value } = event.target;
+            const changesObj = {};
+            changesObj[field] = value;
+            this.$store.dispatch("updateCustomCampaignNote", { noteID: key, changesObj });
+        },
+        removeCustomCampaignNote(noteID) {
+            this.$store.dispatch("removeCustomCampaignNote", noteID);
+        },
+        addInPlayNote() {
+            this.$store.dispatch("addCustomInPlayNote");
+        },
+        updateCustomInPlayNoteField(key, field, event) {
+            const { value } = event.target;
+            const changesObj = {};
+            changesObj[field] = value;
+            this.$store.dispatch("updateCustomInPlayNote", { noteID: key, changesObj });
+        },
+        removeCustomInPlayNote(noteID) {
+            this.$store.dispatch("removeCustomInPlayNote", noteID);
+        },
     },
-    removeCustomInPlayNote(noteID) {
-      this.$store.dispatch('removeCustomInPlayNote', noteID)
-    },
-  }
 }
 </script>
