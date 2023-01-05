@@ -41,7 +41,7 @@ export default {
 
 <div class="h-[calc(100%-8rem)]" :class="{'flex':isGM}">
   <router-view :class="{'w-2/3':isGM}"></router-view>
-  <div v-if="isGM" class="border grow">
+  <div v-if="isGM" class="border grow h-full">
     <GMPanel />
   </div>
 </div>
