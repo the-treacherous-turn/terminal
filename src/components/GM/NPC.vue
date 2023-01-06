@@ -1,4 +1,6 @@
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return{
@@ -17,17 +19,83 @@ export default {
         },
     ],
     isOpenEditor: false,
+    isEditFlag: false,
+    isAddFlag: false,
     isDeleteFlag: false,
+    editorNpc: {},
+    editorNpcID: null,
   }},
+  computed: {
+    ...mapState({
+      npcs: state => state.gmNPC.npcs,
+      activeNpcID: state => state.gmNPC.activeNpcID,
+    })
+  },
   methods: {
     addNpc() {
+      this.editorNpc.trust = '• '
+      this.editorNpc.lev = '• '
+      this.editorNpc.emo = '• '
+      this.editorNpc.connect = '• '
+      this.editorNpc.assets = '• '
       this.isOpenEditor = true
+      this.isAddFlag = true
+      this.isEditFlag = false
+    },
+    onClickEdit(key) {
+      this.isOpenEditor = true
+      this.isAddFlag = false
+      this.isEditFlag = true
+      this.editorNpcID = key
+      this.editorNpc = this.npcs[key]
+      if(!this.editorNpc.trust){
+        this.editorNpc.trust = '• '
+      }
+      if(!this.editorNpc.lev){
+        this.editorNpc.lev = '• '
+      }
+      if(!this.editorNpc.emo){
+        this.editorNpc.emo = '• '
+      }
+      if(!this.editorNpc.connect){
+        this.editorNpc.connect = '• '
+      }
+      if(!this.editorNpc.assets){
+        this.editorNpc.assets = '• '
+      }
+    },
+    submit() {
+      if (this.isAddFlag) {
+        this.$store.dispatch('addNpc', this.editorNpc)
+      } else {
+        this.$store.dispatch('editNpc', {
+          id: this.editorNpcID,
+          npc: this.editorNpc,
+        })
+      }
+      this.editorNpc = {}
+      this.editorNpcID = null
+      this.isOpenEditor = false
+      this.isAddNewNpc = false
+      this.isEditFlag = false
+    },
+    onClickDelete() {
+      this.$store.dispatch('deleteNpc', this.editorNpcID)
+      this.isDeleteFlag = false
+      this.editorNpc = {}
+      this.editorNpcID = null
+      this.isOpenEditor = false
+      this.isAddNewNpc = false
+      this.isEditFlag = false
     },
     close() {
       this.isOpenEditor = false
+      this.editorNpc = {}
+      this.editorNpcID = null
+      this.isAddNewNpc = false
+      this.isEditFlag = false
     },
     openDeleteModal() {
-      console.log("delete")
       this.isDeleteFlag = true
     },
     cancelDeleteModal() {
@@ -35,8 +103,8 @@ export default {
     },
     resize(e) {
       let area_ele = this.$refs[e];
-      area_ele.style.height = '28px'
       area_ele.style.height = area_ele.scrollHeight + 'px'
+      this.editorNpc[e] = area_ele.scrollHeight + 'px'
     },
     process(e){
       let val = document.getElementById(e)
@@ -65,7 +133,7 @@ export default {
         <div class="mt-[24px] text-[20px] text-black">This action cannot be reverse.</div>
         <div class="flex mt-[48px] justify-end items-end">
           <button class="text-middlegrey text-[14px] px-[16px] py-[8px] border border-black" @click="cancelDeleteModal">Cancel</button>
-          <button class="ml-[24px] bg-[#1D2225] text-grey text-[14px] px-[16px] py-[8px] border border-white">DELETE NPC</button>
+          <button class="ml-[24px] bg-[#1D2225] text-grey text-[14px] px-[16px] py-[8px] border border-white" @click="onClickDelete">DELETE NPC</button>
         </div>
       </div>
     </div>
@@ -87,29 +155,29 @@ export default {
       <div class="mt-[24px] flex justify-between items-center px-[23px]">
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Name</div>
-          <input placeholder="Enter Name" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white font-bold outline-none"/>
+          <input v-model="editorNpc.name" placeholder="Enter Name" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white font-bold outline-none"/>
         </div>
         <div class="flex flex-col items-end">
           <div class="text-[14px] text-white">Status</div>
-          <input placeholder="[None]" dir="rtl" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <input v-model="editorNpc.status" placeholder="[None]" dir="rtl" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
         </div>
       </div>
       <div class="mt-[16px] flex justify-between items-center border-b w-full border-b-3 border-b-white px-[23px] pb-[8px]">
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Type</div>
-          <input placeholder="[None]" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <input v-model="editorNpc.type" placeholder="[None]" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
         </div>
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Size</div>
-          <input placeholder="[None]" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <input v-model="editorNpc.size" placeholder="[None]" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
         </div>
         <div class="flex flex-col items-end">
           <div class="text-[14px] text-white">Scale</div>
-          <input placeholder="[None]" dir="rtl" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <input v-model="editorNpc.scale" placeholder="[None]" dir="rtl" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
         </div>
       </div>
       <div class="py-[4px] px-[16px] border-b-3 border-b-white border-b">
-        <textarea ref="textarea_des" placeholder="Type description here" @input="resize('textarea_des')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none'}"></textarea>
+        <textarea v-model="editorNpc.description" ref="textarea_des" placeholder="Type description here" @input="resize('textarea_des')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_des}"></textarea>
       </div>
       <div class="flex border-b-3 border-b-white border-b">
         <div class="flex justify-center -rotate-180 text-white text-[20px] border-l-3 border-l-white border-l px-[12px]" :style="{writingMode:'vertical-lr'}">
@@ -118,29 +186,36 @@ export default {
         <div class="flex flex-col px-1 w-full">
           <div class="flex flex-col px-[12px] py-[5px] border-b-1 border-b-white first-letter:border-b ">
             <div class="text-[14px] text-white font-bold">Trust</div>
-            <textarea id="textarea_trust" ref="textarea_trust" placeholder="[None]" v-on:keyup.enter="process('textarea_trust')" @input="resize('textarea_trust')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none'}">• </textarea>
+            <textarea v-model="editorNpc.trust" id="textarea_trust" ref="textarea_trust" placeholder="[None]" v-on:keyup.enter="process('textarea_trust')" @input="resize('textarea_trust')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_trust}"></textarea>
           </div>
           <div class="flex flex-col px-[12px] py-[5px] border-b-1 border-b-white first-letter:border-b ">
             <div class="text-[14px] text-white font-bold">Leverage</div>
-            <textarea id="textarea_lev" ref="textarea_lev" placeholder="[None]" v-on:keyup.enter="process('textarea_lev')" @input="resize('textarea_lev')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none'}">• </textarea>
+            <textarea v-model="editorNpc.lev" id="textarea_lev" ref="textarea_lev" placeholder="[None]" v-on:keyup.enter="process('textarea_lev')" @input="resize('textarea_lev')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_lev}"></textarea>
           </div>
           <div class="flex flex-col px-[12px] py-[5px]">
             <div class="text-[14px] text-white font-bold">Emotion</div>
-            <textarea id="textarea_emo" ref="textarea_emo" placeholder="[None]" v-on:keyup.enter="process('textarea_emo')" @input="resize('textarea_emo')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none'}">• </textarea>
+            <textarea v-model="editorNpc.emo" id="textarea_emo" ref="textarea_emo" placeholder="[None]" v-on:keyup.enter="process('textarea_emo')" @input="resize('textarea_emo')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_emo}"></textarea>
           </div>
         </div>
       </div>
       <div class="flex flex-col py-[5px] border-b border-b-3 border-b-white">
         <div class="text-[14px] ml-[16px] text-white font-normal">Connections</div>
-        <textarea id="textarea_connect" ref="textarea_connect" placeholder="[None]" v-on:keyup.enter="process('textarea_connect')" @input="resize('textarea_connect')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none'}">• </textarea>
+        <textarea v-model="editorNpc.connect" id="textarea_connect" ref="textarea_connect" placeholder="[None]" v-on:keyup.enter="process('textarea_connect')" @input="resize('textarea_connect')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_connect}"></textarea>
       </div>
       <div class="flex flex-col py-[5px] border-b border-b-3 border-b-white">
         <div class="text-[14px] ml-[16px] text-white font-normal">Assests & Capabilities</div>
-        <textarea id="textarea_assets" ref="textarea_assets" placeholder="[None]" v-on:keyup.enter="process('textarea_assets')" @input="resize('textarea_assets')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none'}">• </textarea>
+        <textarea v-model="editorNpc.assets" id="textarea_assets" ref="textarea_assets" placeholder="[None]" v-on:keyup.enter="process('textarea_assets')" @input="resize('textarea_assets')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_assets}"></textarea>
       </div>
       <div class="flex flex-col py-[5px] border-b border-b-3 border-b-white">
         <div class="text-[14px] ml-[16px] text-white font-normal">Notes</div>
-        <textarea id="textarea_notes" ref="textarea_notes" placeholder="Type notes here" @input="resize('textarea_notes')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none'}"></textarea>
+        <textarea v-model="editorNpc.notes" id="textarea_notes" ref="textarea_notes" placeholder="Type notes here" @input="resize('textarea_notes')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_notes}"></textarea>
+      </div>
+      <div class="btn-group flex justify-end mt-4">
+        <label
+          for="modal-edit-spec"
+          class="btn btn-primary"
+          @click="submit">
+          Submit</label>
       </div>
     </div>
   </div>
@@ -184,8 +259,8 @@ export default {
 
       </div>
     </div>
-    <div v-for="data in initialData" class="flex flex-col mt-[16px] space-y-[12px]">
-      <div class="flex justify-between tooltip tooltip-info" :data-tip="data.description">
+    <div v-for="(data, key) in npcs" class="flex flex-col mt-[16px] space-y-[12px]">
+      <div class="flex justify-between tooltip tooltip-info" :data-tip="data.description" @click="onClickEdit(key)">
         <div class="text-[14px] text-white w-[140px] font-bold flex">{{data.name}}</div>
         <div class="text-[14px] text-white w-[150px] font-bold flex">{{data.type}}</div>
         <div class="text-[14px] text-white w-[100px] font-bold flex">{{data.status}}</div>

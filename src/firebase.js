@@ -37,6 +37,7 @@ const refs = {
   customCampaignNotes: ref(db, `${sessionID}/info/customCampaignNotes`),
   customInPlayNotes: ref(db, `${sessionID}/info/customInPlayNotes`),
   specs: ref(db, `${sessionID}/specs`),
+  gmNPCs: ref(db, `${sessionID}/gmNPCs`),
 }
 
 export default refs
