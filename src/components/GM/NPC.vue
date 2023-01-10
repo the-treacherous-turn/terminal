@@ -1,5 +1,6 @@
 <script>
 import { mapState } from 'vuex'
+import { createPopper } from "@popperjs/core";
 
 export default {
   data() {
@@ -24,6 +25,7 @@ export default {
     isDeleteFlag: false,
     editorNpc: {},
     editorNpcID: null,
+    tooltipShow: false
   }},
   computed: {
     ...mapState({
@@ -43,11 +45,12 @@ export default {
       this.isEditFlag = false
     },
     onClickEdit(key) {
+      this.tooltipShow = false;
       this.isOpenEditor = true
       this.isAddFlag = false
       this.isEditFlag = true
       this.editorNpcID = key
-      this.editorNpc = this.npcs[key]
+      this.editorNpc = {...this.npcs[key]}
       if(!this.editorNpc.trust){
         this.editorNpc.trust = '• '
       }
@@ -64,21 +67,6 @@ export default {
         this.editorNpc.assets = '• '
       }
     },
-    submit() {
-      if (this.isAddFlag) {
-        this.$store.dispatch('addNpc', this.editorNpc)
-      } else {
-        this.$store.dispatch('editNpc', {
-          id: this.editorNpcID,
-          npc: this.editorNpc,
-        })
-      }
-      this.editorNpc = {}
-      this.editorNpcID = null
-      this.isOpenEditor = false
-      this.isAddNewNpc = false
-      this.isEditFlag = false
-    },
     onClickDelete() {
       this.$store.dispatch('deleteNpc', this.editorNpcID)
       this.isDeleteFlag = false
@@ -89,6 +77,14 @@ export default {
       this.isEditFlag = false
     },
     close() {
+      if (this.isAddFlag) {
+        this.$store.dispatch('addNpc', this.editorNpc)
+      } else {
+        this.$store.dispatch('editNpc', {
+          id: this.editorNpcID,
+          npc: this.editorNpc,
+        })
+      }
       this.isOpenEditor = false
       this.editorNpc = {}
       this.editorNpcID = null
@@ -109,6 +105,31 @@ export default {
     process(e){
       let val = document.getElementById(e)
       val.value = val.value + "• "
+    },
+    toggleTooltip: function(key){
+      if(this.tooltipShow){
+        this.tooltipShow = false;
+        let ele2 = document.getElementById(`tooltipRef${key}`)
+        ele2.classList.remove('block')
+        ele2.classList.add('hidden')
+      } else {
+        this.tooltipShow = true;
+        let ele1 = document.getElementById(`divRef${key}`)
+        let ele2 = document.getElementById(`tooltipRef${key}`)
+        ele2.classList.remove('hidden')
+        ele2.classList.add('block')
+        createPopper(ele1, ele2, {
+          placement: "bottom",
+          modifiers: [
+            {
+              name: 'offset',
+              options: {
+                offset: [30, -10],
+              },
+            },
+          ],
+        });
+      }
     }
   },
 }
@@ -142,7 +163,7 @@ export default {
   <div v-if="isOpenEditor" class="flex flex-col w-full h-[calc(100%-63px)]">
     <div class="flex justify-between items-center w-full mt-[9px] px-[23px]">
       <div class="flex justify-center items-center cursor-pointer" @click="close">
-        <div class="w-[14px] h-[24px] bg-[url('/back_icon.png')] bg-cover"></div>
+        <div class="w-[14px] h-[24px] bg-[url('/back_icon.svg')] bg-cover"></div>
         <div class="ml-[15px] text-[20px] text-grey">back</div>
       </div>
       <div class="flex" @click="openDeleteModal">
@@ -159,7 +180,7 @@ export default {
         </div>
         <div class="flex flex-col items-end">
           <div class="text-[14px] text-white">Status</div>
-          <input v-model="editorNpc.status" placeholder="[None]" dir="rtl" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <input v-model="editorNpc.status" placeholder="[None]" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none" style="text-align: right"/>
         </div>
       </div>
       <div class="mt-[16px] flex justify-between items-center border-b w-full border-b-3 border-b-white px-[23px] pb-[8px]">
@@ -169,11 +190,11 @@ export default {
         </div>
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Size</div>
-          <input v-model="editorNpc.size" placeholder="[None]" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <input v-model="editorNpc.size" placeholder="[None]" class="bg-darkgray w-[120px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
         </div>
         <div class="flex flex-col items-end">
           <div class="text-[14px] text-white">Scale</div>
-          <input v-model="editorNpc.scale" placeholder="[None]" dir="rtl" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <input v-model="editorNpc.scale" placeholder="[None]" style="text-align: right" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
         </div>
       </div>
       <div class="py-[4px] px-[16px] border-b-3 border-b-white border-b">
@@ -210,24 +231,17 @@ export default {
         <div class="text-[14px] ml-[16px] text-white font-normal">Notes</div>
         <textarea v-model="editorNpc.notes" id="textarea_notes" ref="textarea_notes" placeholder="Type notes here" @input="resize('textarea_notes')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_notes}"></textarea>
       </div>
-      <div class="btn-group flex justify-end mt-4">
-        <label
-          for="modal-edit-spec"
-          class="btn btn-primary"
-          @click="submit">
-          Submit</label>
-      </div>
     </div>
   </div>
   <div v-else class="flex flex-col w-full px-[23px]">
     <div class="flex justify-between mt-[26px]">
       <div class="flex px-[16px] py-[4px] border-white border-1 justify-center items-center">
         <div class="text-grey text-[14px]">search</div>
-        <div class="w-[24px] h-[24px] bg-[url('/search_icon.png')] bg-cover ml-[16px]"></div>
+        <div class="w-[24px] h-[24px] bg-[url('/search_icon.svg')] bg-cover ml-[16px]"></div>
       </div>
       <div class="flex px-[16px] py-[8px] border-white border-1 justify-center items-center cursor-pointer" @click="addNpc">
         <div class="text-grey text-[14px] leading-snug">add NPC</div>
-        <div class="w-[15px] h-[15px] bg-[url('/Union.png')] bg-cover ml-[8px]"></div>
+        <div class="w-[15px] h-[15px] bg-[url('/Union.svg')] bg-cover ml-[8px]"></div>
       </div>
     </div>
     <div class="mt-[40px] flex flex-col w-full">
@@ -260,10 +274,24 @@ export default {
       </div>
     </div>
     <div v-for="(data, key) in npcs" class="flex flex-col mt-[16px] space-y-[12px]">
-      <div class="flex justify-between tooltip tooltip-info" :data-tip="data.description" @click="onClickEdit(key)">
-        <div class="text-[14px] text-white w-[140px] font-bold flex">{{data.name}}</div>
-        <div class="text-[14px] text-white w-[150px] font-bold flex">{{data.type}}</div>
-        <div class="text-[14px] text-white w-[100px] font-bold flex">{{data.status}}</div>
+      <div :id="'divRef'+key" class="hover:bg-white hover:text-black text-white cursor-pointer flex justify-between" v-on:mouseenter="toggleTooltip(key)" v-on:mouseleave="toggleTooltip(key)" @click="onClickEdit(key)">
+        <div class="text-[14px] w-[140px] font-bold flex">{{data.name}}</div>
+        <div class="w-[150px] flex">
+          <span class="text-[14px] font-bold">{{data.type+','}}</span>
+          <span class="text-[14px]">{{data.size.slice(0,3)+'.'}}</span>
+          <span class="text-[14px]">{{'('+data.scale+')'}}</span>
+        </div>
+        <div class="text-[14px] w-[100px] font-bold flex">{{data.status}}</div>
+      </div>
+      <div :id="'tooltipRef'+key" class="hidden mt-[-120px] bg-grey border-1 border-black ml-3 z-50 w-[450px] font-normal leading-normal text-left">
+        <div>
+          <div class="bg-grey text-black text-[16px]">
+            Description
+          </div>
+          <div class="text-black">
+            {{data.description.split('. ', 1)[0]+'...'}}
+          </div>
+        </div>
       </div>
     </div>
   </div>
