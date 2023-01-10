@@ -38,6 +38,9 @@ export default {
       this.editorNpc.emo = '• '
       this.editorNpc.connect = '• '
       this.editorNpc.assets = '• '
+      this.editorNpc.type = ''
+      this.editorNpc.size = ''
+      this.editorNpc.scale = ''
       this.isOpenEditor = true
       this.isAddFlag = true
       this.isEditFlag = false
@@ -165,15 +168,29 @@ export default {
       <div class="mt-[16px] flex justify-between items-center border-b w-full border-b-3 border-b-white px-[23px] pb-[8px]">
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Type</div>
-          <input v-model="editorNpc.type" placeholder="[None]" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <select v-model="editorNpc.type" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none">
+            <option value="" disabled selected hidden>[None]</option>
+            <option value="Human">Human</option>
+            <option value="AI">AI</option>
+            <option value="Animal">Animal</option>
+          </select>
         </div>
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Size</div>
-          <input v-model="editorNpc.size" placeholder="[None]" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <select v-model="editorNpc.size" class="bg-darkgray w-[150px] text-[20px] mt-[8px] text-white placeholder-white outline-none">
+            <option value="" disabled selected hidden>[None]</option>
+            <option value="Individual">Individual</option>
+            <option value="Group">Group</option>
+          </select>
         </div>
         <div class="flex flex-col items-end">
           <div class="text-[14px] text-white">Scale</div>
-          <input v-model="editorNpc.scale" placeholder="[None]" dir="rtl" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none"/>
+          <select v-model="editorNpc.scale" placeholder="[None]" dir="rtl" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none">
+            <option value="" disabled selected hidden>[None]</option>
+            <option value="minor">minor</option>
+            <option value="major">major</option>
+            <option value="myriad">myriad</option>
+          </select>
         </div>
       </div>
       <div class="py-[4px] px-[16px] border-b-3 border-b-white border-b">
@@ -192,7 +209,7 @@ export default {
             <div class="text-[14px] text-white font-bold">Leverage</div>
             <textarea v-model="editorNpc.lev" id="textarea_lev" ref="textarea_lev" placeholder="[None]" v-on:keyup.enter="process('textarea_lev')" @input="resize('textarea_lev')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_lev}"></textarea>
           </div>
-          <div class="flex flex-col px-[12px] py-[5px]">
+          <div class="flex flex-col px-[12px] py-[5px]" :class="{'hidden': editorNpc.type == 'AI'}">
             <div class="text-[14px] text-white font-bold">Emotion</div>
             <textarea v-model="editorNpc.emo" id="textarea_emo" ref="textarea_emo" placeholder="[None]" v-on:keyup.enter="process('textarea_emo')" @input="resize('textarea_emo')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_emo}"></textarea>
           </div>
