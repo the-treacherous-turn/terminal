@@ -279,7 +279,13 @@ export default {
     <div v-for="(data, key) in npcs" class="flex flex-col mt-[16px] space-y-[12px]">
       <div class="flex justify-between tooltip tooltip-info" :data-tip="data.description" @click="onClickEdit(key)">
         <div class="text-[14px] text-white w-[140px] font-bold flex">{{data.name}}</div>
-        <div class="text-[14px] text-white w-[150px] font-bold flex">{{data.type}}</div>
+        <div class="text-[14px] text-white w-[150px] flex">
+          <strong>
+            {{data.type}},
+          </strong>
+          <span class="overflow-hidden w-[3ch]">{{ data.size }}</span><span>.</span>
+          <span class="capitalize">({{ data.scale }})</span>
+        </div>
         <div class="text-[14px] text-white w-[100px] font-bold flex">{{data.status}}</div>
       </div>
     </div>
