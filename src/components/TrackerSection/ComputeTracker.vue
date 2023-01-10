@@ -10,8 +10,18 @@
             </span>
           </label>
         </div>
-        <div class="stat-value text-4xl">
-          {{ available }}<span v-if="toSpend !== 0">(-{{toSpend}})</span>/{{ total }}
+        <div class="stat-value text-4xl flex">
+          <span class="self-end">
+            {{ available }}<span v-if="toSpend !== 0">(-{{toSpend}})</span>/{{ total }}
+          </span>
+          <div class="inline-flex flex-col pl-2">
+            <div class="m-0.5 btn h-4 min-h-0 w-8 btn-square btn-ghost border-0" @click="">
+              <font-awesome-icon icon="chevron-up" class="text-base" />
+            </div>
+            <div class="m-0.5 btn h-4 min-h-0 w-8 btn-square btn-ghost border-0" @click="">
+              <font-awesome-icon icon="chevron-down" class="text-base" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
