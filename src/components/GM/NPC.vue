@@ -283,7 +283,8 @@ export default {
           <strong>
             {{data.type}},
           </strong>
-          <span class="overflow-hidden w-[3ch]">{{ data.size }}</span><span>.</span>
+          <span v-if="data.size == 'Individual'">Ind.</span>
+          <span v-else>{{ data.size }}</span>
           <span class="capitalize">({{ data.scale }})</span>
         </div>
         <div class="text-[14px] text-white w-[100px] font-bold flex">{{data.status}}</div>
