@@ -5,33 +5,24 @@ import { createPopper } from "@popperjs/core";
 export default {
   data() {
     return{
-      initialData: [
-        {
-        name:'Edith Hartman',
-        type:'Human,Ind.(Minor)',
-        status:'Status1',
-        description: 'An older woman with greying hair and a tall posture who is the stern but caring administrator of Emerald Hills. Out of all of the staff, she is the most distrustful and hostile towards PAC. She is in her office most of the time, but occassionally leaves for several minutes. At 21:00 each day, she locks her office and leaves, taking the key with her until 12:00 the next day. '
-        },
-        {
-        name:'Edith Hartman',
-        type:'Human,Ind.(Minor)',
-        status:'Status1',
-        description: 'An older woman with greying hair and a tall posture who is the stern but caring administrator of Emerald Hills. Out of all of the staff, she is the most distrustful and hostile towards PAC. She is in her office most of the time, but occassionally leaves for several minutes. At 21:00 each day, she locks her office and leaves, taking the key with her until 12:00 the next day. '
-        },
-    ],
     isOpenEditor: false,
     isEditFlag: false,
     isAddFlag: false,
     isDeleteFlag: false,
     editorNpc: {},
     editorNpcID: null,
-    tooltipShow: false
+    tooltipShow: false,
+    sortNpcs: [],
+    searchValue: '',
   }},
   computed: {
     ...mapState({
       npcs: state => state.gmNPC.npcs,
       activeNpcID: state => state.gmNPC.activeNpcID,
     })
+  },
+  mounted() {
+    this.sortNpcs = {...this.npcs}
   },
   methods: {
     addNpc() {
@@ -93,6 +84,7 @@ export default {
       this.editorNpcID = null
       this.isAddNewNpc = false
       this.isEditFlag = false
+      this.sortNpcs = this.npcs
     },
     openDeleteModal() {
       this.isDeleteFlag = true
@@ -133,6 +125,84 @@ export default {
           ],
         });
       }
+    },
+    sortByBTS(prop){
+      let entries = Object.entries(this.sortNpcs)
+      if(prop !== 'type'){
+        let sorted = entries.sort((a, b) =>
+          a[1][prop] > b[1][prop] ? -1 : 1
+        );
+        this.sortNpcs = Object.fromEntries(sorted)
+      }else{
+        let sorted = entries.sort((a, b) =>{
+          if(a[1]['type'] > b[1]['type']){
+              return -1;
+            }else if(a[1]['type'] < b[1]['type']){
+              return 1;
+            }else {
+              if(a[1]['size'] > b[1]['size']){
+                return -1;
+              }else if(a[1]['size'] < b[1]['size']){
+                return 1;
+              }else {
+                if(a[1]['scale'] > b[1]['scale']){
+                  return -1;
+                }else if(a[1]['scale'] < b[1]['scale']){
+                  return 1;
+                }else{
+                  return 0;
+                }
+              }
+          }
+        }
+        );
+        this.sortNpcs = Object.fromEntries(sorted)
+      }
+    },
+    sortBySTB(prop){
+      let entries = Object.entries(this.sortNpcs)
+      if(prop !== 'type'){
+        let sorted = entries.sort((a, b) =>
+          a[1][prop] < b[1][prop] ? -1 : 1
+        );
+        this.sortNpcs = Object.fromEntries(sorted)
+      }else{
+        let sorted = entries.sort((a, b) =>{
+          if(a[1]['type'] < b[1]['type']){
+            return -1;
+          }else if(a[1]['type'] > b[1]['type']){
+            return 1;
+          }else {
+            if(a[1]['size'] < b[1]['size']){
+              return -1;
+            }else if(a[1]['size'] > b[1]['size']){
+              return 1;
+            }else {
+              if(a[1]['scale'] < b[1]['scale']){
+                return -1;
+              }else if(a[1]['scale'] > b[1]['scale']){
+                return 1;
+              }else{
+                return 0;
+              }
+            }
+          }
+        }
+        );
+        this.sortNpcs = Object.fromEntries(sorted)
+      }
+    },
+    searchResult(event){
+      this.sortNpcs = {...this.npcs}
+      const {value} = event.target;
+      let entries = Object.entries(this.sortNpcs)
+      let result = [];
+      entries.map(entry => {
+        if(Object.values(entry[1]).join(',').includes(value)){
+          result.push(entry)
+        }
+      })
+      this.sortNpcs = Object.fromEntries(result)
     }
   },
 }
@@ -206,7 +276,7 @@ export default {
         </div>
         <div class="flex flex-col items-end">
           <div class="text-[14px] text-white">Scale</div>
-          <select v-model="editorNpc.scale" placeholder="[None]" dir="rtl" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none">
+          <select v-model="editorNpc.scale" placeholder="[None]" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none" style="text-align: right">
             <option value="" disabled selected hidden>[None]</option>
             <option value="minor">minor</option>
             <option value="major">major</option>
@@ -253,7 +323,7 @@ export default {
   <div v-else class="flex flex-col w-full px-[23px]">
     <div class="flex justify-between mt-[26px]">
       <div class="flex px-[16px] py-[4px] border-white border-1 justify-center items-center">
-        <div class="text-grey text-[14px]">search</div>
+        <input placeholder="search" class="bg-darkgray outline-none text-grey text-[14px]" v-model="searchValue" @input="searchResult($event)"/>
         <div class="w-[24px] h-[24px] bg-[url('/search_icon.svg')] bg-cover ml-[16px]"></div>
       </div>
       <div class="flex px-[16px] py-[8px] border-white border-1 justify-center items-center cursor-pointer" @click="addNpc">
@@ -266,8 +336,8 @@ export default {
         <div class="flex justify-between w-[140px]">
           <div class="text-[16px] text-white">Name</div>
           <div class="flex flex-col">
-            <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover"></div>
-            <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover"></div>
+            <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover cursor-pointer" @click="sortByBTS('name')"></div>
+            <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover cursor-pointer" @click="sortBySTB('name')"></div>
           </div>
         </div>
         <div class="flex justify-between w-[150px]">
@@ -275,27 +345,27 @@ export default {
           <div class="flex justify-center items-center">
             <div class="w-[16px] h-[14px] bg-[url('/filter.png')] bg-cover"></div>
             <div class="flex flex-col ml-[8px]">
-              <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover"></div>
-              <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover"></div>
+              <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover cursor-pointer" @click="sortByBTS('type')"></div>
+              <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover cursor-pointer" @click="sortBySTB('type')"></div>
             </div>
           </div>
         </div>
         <div class="flex justify-between w-[100px]">
           <div class="text-[16px] text-white">Status</div>
           <div class="flex flex-col">
-            <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover"></div>
-            <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover"></div>
+            <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover cursor-pointer" @click="sortByBTS('status')"></div>
+            <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover cursor-pointer" @click="sortBySTB('status')"></div>
           </div>
         </div>
 
       </div>
     </div>
-    <div v-for="(data, key) in npcs" class="flex flex-col mt-[16px] space-y-[12px]">
+    <div v-for="(data, key) in sortNpcs" class="flex flex-col mt-[16px] space-y-[12px]">
       <div :id="'divRef'+key" class="hover:bg-white hover:text-black text-white cursor-pointer flex justify-between" v-on:mouseenter="toggleTooltip(key)" v-on:mouseleave="toggleTooltip(key)" @click="onClickEdit(key)">
         <div class="text-[14px] w-[140px] font-bold flex">{{data.name}}</div>
         <div class="w-[150px] flex">
           <span class="text-[14px] font-bold">{{data.type+','}}</span>
-          <span class="text-[14px]">{{data.size.slice(0,3)+'.'}}</span>
+          <span class="text-[14px]">{{data.size?data.size.slice(0,3)+'.':''}}</span>
           <span class="text-[14px]">{{'('+data.scale+')'}}</span>
         </div>
         <div class="text-[14px] w-[100px] font-bold flex">{{data.status}}</div>
@@ -306,7 +376,7 @@ export default {
             Description
           </div>
           <div class="text-black">
-            {{data.description.split('. ', 1)[0]+'...'}}
+            {{data.description?data.description.split('. ', 1)[0]+'...':''}}
           </div>
         </div>
       </div>
