@@ -1,6 +1,7 @@
 <script>
 import { mapState } from 'vuex'
 import { createPopper } from "@popperjs/core";
+import { createObjectExpression } from '@vue/compiler-core';
 
 export default {
   data() {
@@ -9,10 +10,13 @@ export default {
     isEditFlag: false,
     isAddFlag: false,
     isDeleteFlag: false,
-    editorNpc: {},
-    editorNpcID: null,
     tooltipShow: false,
+	isFilter: false,
+    editorNpcID: null,
+    editorNpc: {},
     sortNpcs: [],
+    filterNpcs: [],
+    filterQuery: [],
     searchValue: '',
   }},
   computed: {
@@ -23,6 +27,28 @@ export default {
   },
   mounted() {
     this.sortNpcs = {...this.npcs}
+  },
+  watch : {
+    filterQuery: {
+        handler(data){
+        this.sortNpcs = {...this.npcs}
+        let entries = Object.entries(this.sortNpcs)
+        let result = [];
+        entries.map(entry => {
+            if(this.filterQuery.length === 0){
+                result.push(entry)
+            }else if(Object.values(this.filterQuery).includes('Other')){
+                if(entry[1].type !== 'Human' && entry[1].type !== 'Animal' && entry[1].type !== 'AI' || Object.values(this.filterQuery).includes(entry[1].type))
+                    result.push(entry)
+            }else if(Object.values(this.filterQuery).includes(entry[1].type)){
+                result.push(entry)
+            }
+        })
+        this.sortNpcs = Object.fromEntries(result)
+
+        },
+        deep: true
+    }
   },
   methods: {
     addNpc() {
@@ -92,6 +118,21 @@ export default {
     cancelDeleteModal() {
       this.isDeleteFlag = false
     },
+	openFilterModal() {
+		this.isFilter = true
+		setTimeout(() => {
+			document.addEventListener('click', this.closeWhenClickedOutside);
+		}, 100);
+	},
+	closeFilterModal() {
+		this.isFilter = false
+		document.removeEventListener('click', this.closeWhenClickedOutside)
+	},
+	closeWhenClickedOutside(event) {
+		if(!event.target.closest('#filterModal')){
+			this.closeFilterModal();
+		}
+	},
     resize(e) {
       let area_ele = this.$refs[e];
       area_ele.style.height = area_ele.scrollHeight + 'px'
@@ -203,6 +244,20 @@ export default {
         }
       })
       this.sortNpcs = Object.fromEntries(result)
+    },
+    updateFilterQuery(event, query){
+        if(event.target.checked){
+            this.filterQuery.push(query)
+        }else {
+            this.filterQuery.splice(this.filterQuery.indexOf(query), 1);
+        }
+    },
+    clearFilter(){
+        let eles = document.querySelectorAll('.filter_checkbox')
+        eles.forEach(ele => {
+            ele.checked = false
+        })
+        this.filterQuery = [];
     }
   },
 }
@@ -343,7 +398,44 @@ export default {
         <div class="flex justify-between w-[150px]">
           <div class="text-[16px] text-white">Type</div>
           <div class="flex justify-center items-center">
-            <div class="w-[16px] h-[14px] bg-[url('/filter.png')] bg-cover"></div>
+            <div class="flex w-[16px] h-[14px] bg-[url('/filter.png')] bg-cover cursor-pointer" @click="openFilterModal">
+				<div id="filterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-[24px] py-[12px] flex flex-col bg-grey" :on-focusout="closeFilterModal">
+					<div class="flex w-fit space-x-[8px]">
+						<div class="flex justify-center items-center">
+							<input type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Human')"/>
+						</div>
+						<div class="text-black text-[20px]">Human</div>
+					</div>
+					<div class="flex w-fit space-x-[8px]">
+						<div class="flex justify-center items-center">
+							<input type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Animal')"/>
+						</div>
+						<div class="text-black text-[20px]">Animal</div>
+					</div>
+					<div class="flex w-fit space-x-[8px]">
+						<div class="flex justify-center items-center">
+							<input type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'AI')"/>
+						</div>
+						<div class="text-black text-[20px]">AI</div>
+					</div>
+					<div class="flex w-fit space-x-[8px]">
+						<div class="flex justify-center items-center">
+							<input type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Other')"/>
+						</div>
+						<div class="text-black text-[20px]">Other</div>
+					</div>
+                    <div class="flex bg-black h-[1px] w-full">
+                    </div>
+                    <div class="flex space-x-[8px] justify-center w-full cursor-pointer items-center" @click="clearFilter">
+                        <p class="text-black text-[20px]">Clear</p>
+                        <div class="flex justify-center items-center">
+                            <font-awesome-icon
+                            :icon="['fas', 'trash-can']" class="cursor-pointer text-[#1D2225]"
+                            />
+                        </div>
+                    </div>
+				</div>
+			</div>
             <div class="flex flex-col ml-[8px]">
               <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover cursor-pointer" @click="sortByBTS('type')"></div>
               <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover cursor-pointer" @click="sortBySTB('type')"></div>
@@ -385,4 +477,39 @@ export default {
 </template>
 
 <style>
+	.filter_checkbox {
+	position: relative;
+	cursor: pointer;
+	}
+
+	.filter_checkbox:before {
+	content: "";
+	position: absolute;
+	width: 24px;
+	height: 24px;
+	top: 0;
+	left: 0;
+	border: 1px solid #000000;
+	border-radius: 3px;
+	padding: 1px;
+	background-color: #D9D9D9;
+	}
+
+	.filter_checkbox:checked:before {
+	background-color: #D9D9D9;
+	}
+
+	.filter_checkbox:checked:after {
+	content: "";
+	display: block;
+	width: 9px;
+	height: 22px;
+	border: solid black;
+	border-width: 0 4px 4px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+	position: absolute;
+	left: 9px;
+	}
 </style>

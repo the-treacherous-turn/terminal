@@ -190,8 +190,6 @@ export default {
         let title = area.id;
         let height = area.style.height;
         const changesObj = {};
-        console.log(title)
-        console.log(area.style.height)
         changesObj['height'] = height;
         this.$store.dispatch(dispatch, { noteID: title, changesObj})
         },
