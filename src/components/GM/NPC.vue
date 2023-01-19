@@ -166,40 +166,66 @@ export default {
         });
       }
     },
-    sortByBTS(prop){
-      let entries = Object.entries(this.sortNpcs)
-      if(prop !== 'type'){
-        let sorted = entries.sort((a, b) =>
-          a[1][prop] > b[1][prop] ? -1 : 1
-        );
-        this.sortNpcs = Object.fromEntries(sorted)
-      }else{
-        let sorted = entries.sort((a, b) =>{
-          if(a[1]['type'] > b[1]['type']){
-              return -1;
-            }else if(a[1]['type'] < b[1]['type']){
-              return 1;
-            }else {
-              if(a[1]['size'] > b[1]['size']){
-                return -1;
-              }else if(a[1]['size'] < b[1]['size']){
-                return 1;
-              }else {
-                if(a[1]['scale'] > b[1]['scale']){
-                  return -1;
-                }else if(a[1]['scale'] < b[1]['scale']){
-                  return 1;
-                }else{
-                  return 0;
-                }
-              }
-          }
+    sortByBTS(event, prop){
+        let clicked_ele_down = document.querySelector('.btn_down_clicked')
+        let clicked_ele_up = document.querySelector('.btn_up_clicked')
+        if(clicked_ele_down){
+            clicked_ele_down.classList.remove('btn_down_clicked')
+            clicked_ele_down.classList.add('btn_down_unclicked')
         }
-        );
-        this.sortNpcs = Object.fromEntries(sorted)
-      }
+        if(clicked_ele_up){
+            clicked_ele_up.classList.remove('btn_up_clicked')
+            clicked_ele_up.classList.add('btn_up_unclicked')
+        }
+        let ele = event.target;
+        ele.classList.remove('btn_up_unclicked')
+        ele.classList.add('btn_up_clicked')
+        let entries = Object.entries(this.sortNpcs)
+        if(prop !== 'type'){
+            let sorted = entries.sort((a, b) =>
+            a[1][prop] > b[1][prop] ? -1 : 1
+            );
+            this.sortNpcs = Object.fromEntries(sorted)
+        }else{
+            let sorted = entries.sort((a, b) =>{
+            if(a[1]['type'] > b[1]['type']){
+                return -1;
+                }else if(a[1]['type'] < b[1]['type']){
+                return 1;
+                }else {
+                if(a[1]['size'] > b[1]['size']){
+                    return -1;
+                }else if(a[1]['size'] < b[1]['size']){
+                    return 1;
+                }else {
+                    if(a[1]['scale'] > b[1]['scale']){
+                    return -1;
+                    }else if(a[1]['scale'] < b[1]['scale']){
+                    return 1;
+                    }else{
+                    return 0;
+                    }
+                }
+            }
+            }
+            );
+            this.sortNpcs = Object.fromEntries(sorted)
+        }
     },
-    sortBySTB(prop){
+    sortBySTB(event, prop){
+        let clicked_ele_down = document.querySelector('.btn_down_clicked')
+        let clicked_ele_up = document.querySelector('.btn_up_clicked')
+        if(clicked_ele_down){
+            clicked_ele_down.classList.remove('btn_down_clicked')
+            clicked_ele_down.classList.add('btn_down_unclicked')
+        }
+        if(clicked_ele_up){
+            clicked_ele_up.classList.remove('btn_up_clicked')
+            clicked_ele_up.classList.add('btn_up_unclicked')
+        }
+        let ele = event.target;
+        ele.classList.remove('btn_down_unclicked')
+        ele.classList.add('btn_down_clicked')
       let entries = Object.entries(this.sortNpcs)
       if(prop !== 'type'){
         let sorted = entries.sort((a, b) =>
@@ -393,14 +419,14 @@ export default {
         <div class="flex justify-between w-[140px]">
           <div class="text-[16px] text-white">Name</div>
           <div class="flex flex-col pr-1">
-            <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover cursor-pointer" @click="sortByBTS('name')"></div>
-            <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover cursor-pointer" @click="sortBySTB('name')"></div>
+            <div class="btn_up_unclicked" @click="sortByBTS($event, 'name')"></div>
+            <div class="btn_down_unclicked" @click="sortBySTB($event, 'name')"></div>
           </div>
         </div>
         <div class="flex justify-between w-[150px]">
           <div class="text-[16px] text-white">Type</div>
           <div class="flex justify-center items-center pr-1">
-            <div class="flex w-[16px] h-[14px] bg-[url('/filter.png')] bg-cover cursor-pointer" @click="openFilterModal">
+            <div :class="[isFilter ? 'filter_clicked' : 'filter_unclicked']" @click="openFilterModal">
 				<div id="filterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-[24px] py-[12px] flex flex-col bg-grey" :on-focusout="closeFilterModal">
 					<div class="flex w-fit space-x-[8px]">
 						<div class="flex justify-center items-center">
@@ -439,16 +465,16 @@ export default {
 				</div>
 			</div>
             <div class="flex flex-col ml-[8px]">
-              <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover cursor-pointer" @click="sortByBTS('type')"></div>
-              <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover cursor-pointer" @click="sortBySTB('type')"></div>
+              <div class="btn_up_unclicked" @click="sortByBTS($event, 'type')"></div>
+              <div class="btn_down_unclicked" @click="sortBySTB($event,'type')"></div>
             </div>
           </div>
         </div>
         <div class="flex justify-between w-[100px]">
           <div class="text-[16px] text-white">Status</div>
           <div class="flex flex-col pr-1">
-            <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover cursor-pointer" @click="sortByBTS('status')"></div>
-            <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover cursor-pointer" @click="sortBySTB('status')"></div>
+            <div class="btn_up_unclicked" @click="sortByBTS($event,'status')"></div>
+            <div class="btn_down_unclicked" @click="sortBySTB($event,'status')"></div>
           </div>
         </div>
 
@@ -480,6 +506,61 @@ export default {
 </template>
 
 <style>
+    .filter_clicked {
+        display: flex;
+        width: 16px;
+        height: 14px;
+        background-size: cover;
+        cursor: pointer;
+        background-image: url('/filter_clicked.svg');
+    }
+
+    .filter_unclicked {
+        display: flex;
+        width: 16px;
+        height: 14px;
+        background-size: cover;
+        cursor: pointer;
+        background-image: url('/filter_unclicked.png');
+    }
+    .btn_up_unclicked {
+        width: 12px;
+        height: 9px;
+        background-image: url('/btn_up_unclicked.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        cursor: pointer;
+    }
+
+    .btn_down_unclicked {
+        margin-top: 3px;
+        width: 12px;
+        height: 9px;
+        background-image: url('/btn_down_unclicked.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        cursor: pointer;
+    }
+
+    .btn_up_clicked {
+        width: 12px;
+        height: 9px;
+        background-image: url('/btn_up_clicked.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        cursor: pointer;
+    }
+
+    .btn_down_clicked {
+        margin-top: 3px;
+        width: 12px;
+        height: 9px;
+        background-image: url('/btn_down_clicked.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        cursor: pointer;
+    }
+
 	.filter_checkbox {
 	position: relative;
 	cursor: pointer;
