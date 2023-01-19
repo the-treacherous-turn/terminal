@@ -1,7 +1,6 @@
 <script>
 import { mapState } from 'vuex'
 import { createPopper } from "@popperjs/core";
-import { createObjectExpression } from '@vue/compiler-core';
 
 export default {
   data() {
