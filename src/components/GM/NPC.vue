@@ -458,10 +458,11 @@ export default {
     <div v-for="(data, key) in sortNpcs" class="flex flex-col mt-[16px] space-y-[12px]">
       <div :id="'divRef'+key" class="hover:bg-white hover:text-black text-white cursor-pointer flex justify-between" v-on:mouseenter="toggleTooltip(key)" v-on:mouseleave="toggleTooltip(key)" @click="onClickEdit(key)">
         <div class="text-[14px] w-[140px] font-bold flex">{{data.name}}</div>
-        <div class="w-[150px] flex">
-          <span class="text-[14px] font-bold">{{data.type+','}}</span>
-          <span class="text-[14px]">{{data.size?data.size.slice(0,3)+'.':''}}</span>
-          <span class="text-[14px]">{{'('+data.scale+')'}}</span>
+        <div class="w-[150px] flex text-[14px]">
+          <span class="font-bold">{{data.type+','}}</span>
+          <span v-if="data.size == 'Individual'">Ind.</span>
+          <span v-else>{{ data.size }}</span>
+          <span class="">{{'('+data.scale+')'}}</span>
         </div>
         <div class="text-[14px] w-[100px] font-bold flex">{{data.status}}</div>
       </div>
