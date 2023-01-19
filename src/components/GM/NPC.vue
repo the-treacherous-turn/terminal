@@ -160,7 +160,7 @@ export default {
             {
               name: 'offset',
               options: {
-                offset: [30, -10],
+                offset: [30, -3],
               },
             },
           ],
@@ -390,14 +390,14 @@ export default {
       <div class="flex justify-between">
         <div class="flex justify-between w-[140px]">
           <div class="text-[16px] text-white">Name</div>
-          <div class="flex flex-col">
+          <div class="flex flex-col pr-1">
             <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover cursor-pointer" @click="sortByBTS('name')"></div>
             <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover cursor-pointer" @click="sortBySTB('name')"></div>
           </div>
         </div>
         <div class="flex justify-between w-[150px]">
           <div class="text-[16px] text-white">Type</div>
-          <div class="flex justify-center items-center">
+          <div class="flex justify-center items-center pr-1">
             <div class="flex w-[16px] h-[14px] bg-[url('/filter.png')] bg-cover cursor-pointer" @click="openFilterModal">
 				<div id="filterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-[24px] py-[12px] flex flex-col bg-grey" :on-focusout="closeFilterModal">
 					<div class="flex w-fit space-x-[8px]">
@@ -444,7 +444,7 @@ export default {
         </div>
         <div class="flex justify-between w-[100px]">
           <div class="text-[16px] text-white">Status</div>
-          <div class="flex flex-col">
+          <div class="flex flex-col pr-1">
             <div class="w-[12px] h-[9px] bg-[url('/btn_up.png')] bg-cover cursor-pointer" @click="sortByBTS('status')"></div>
             <div class="mt-[3px] w-[12px] h-[9px] bg-[url('/btn_down.png')] bg-cover cursor-pointer" @click="sortBySTB('status')"></div>
           </div>
@@ -462,9 +462,9 @@ export default {
         </div>
         <div class="text-[14px] w-[100px] font-bold flex">{{data.status}}</div>
       </div>
-      <div :id="'tooltipRef'+key" class="hidden mt-[-120px] bg-grey border-1 border-black ml-3 z-50 w-[450px] font-normal leading-normal text-left">
+      <div :id="'tooltipRef'+key" class="hidden mt-[-120px] bg-grey border-1 border-black ml-3 z-50 w-[450px] font-normal leading-normal text-left pointer-events-none">
         <div>
-          <div class="bg-grey text-black text-[16px]">
+          <div class="bg-grey text-black text-lg">
             Description
           </div>
           <div class="text-black">
