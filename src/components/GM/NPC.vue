@@ -319,6 +319,7 @@ export default {
             <option value="Human">Human</option>
             <option value="AI">AI</option>
             <option value="Animal">Animal</option>
+            <option value="Other">Other</option>
           </select>
         </div>
         <div class="flex flex-col">
@@ -327,6 +328,7 @@ export default {
             <option value="" disabled selected hidden>[None]</option>
             <option value="Individual">Individual</option>
             <option value="Group">Group</option>
+            <option value="Other">Other</option>
           </select>
         </div>
         <div class="flex flex-col items-end">
@@ -336,6 +338,7 @@ export default {
             <option value="minor">minor</option>
             <option value="major">major</option>
             <option value="myriad">myriad</option>
+            <option value="other">other</option>
           </select>
         </div>
       </div>
