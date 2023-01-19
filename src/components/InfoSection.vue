@@ -1,7 +1,6 @@
 <template>
 <div class="relative w-full h-full md:grid md:grid-cols-2 md:gap-4">
   <div class="relative w-full h-full overflow-y-scroll pb-10">
-
     <div class="relative form-control w-full max-w-2xl p-4">
       <h1 class="text-3xl font-bold pb-2">Campaign Info</h1>
       <label class="label font-semibold">
@@ -13,13 +12,13 @@
           <label class="label font-semibold">
             <span class="label-text">Intended Function</span>
           </label>
-          <textarea id="intendedFunction" :value="intendedFunction.content" @input="updateDefaultField('intendedFunction','content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:intendedFunction.height + 'px'}"></textarea>
+          <textarea id="intendedFunction" :value="intendedFunction.content" @input="updateDefaultField('intendedFunction','content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:intendedFunction.height}"></textarea>
         </div>
         <div>
           <label class="label font-semibold">
             <span class="label-text">Terminal Goals</span>
           </label>
-          <textarea id="terminalGoals" :value="terminalGoals.content" @input="updateDefaultField('terminalGoals','content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:terminalGoals.height + 'px'}"></textarea>
+          <textarea id="terminalGoals" :value="terminalGoals.content" @input="updateDefaultField('terminalGoals','content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:terminalGoals.height}"></textarea>
         </div>
       </div>
 
@@ -28,20 +27,20 @@
           <label class="label font-semibold">
             <span class="label-text">AGI Details</span>
           </label>
-          <textarea id="agiDetails" :value="agiDetails.content" @input="updateDefaultField('agiDetails', 'content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:agiDetails.height + 'px'}"></textarea>
+          <textarea id="agiDetails" :value="agiDetails.content" @input="updateDefaultField('agiDetails', 'content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:agiDetails.height}"></textarea>
         </div>
         <div>
           <label class="label font-semibold">
             <span class="label-text">Safety Measures</span>
           </label>
-          <textarea id="safetyMeasures" :value="safetyMeasures.content" @input="updateDefaultField('safetyMeasures', 'content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:safetyMeasures.height + 'px'}"></textarea>
+          <textarea id="safetyMeasures" :value="safetyMeasures.content" @input="updateDefaultField('safetyMeasures', 'content', $event)" class="textarea textarea-bordered h-32 text-lg w-full" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:safetyMeasures.height}"></textarea>
         </div>
       </div>
 
       <label class="label font-semibold">
         <span class="label-text">Scenario Notes</span>
       </label>
-      <textarea id="scenarioNotes" :value="scenarioNotes.content" @input="updateDefaultField('scenarioNotes','content', $event)" class="textarea textarea-bordered h-32 text-lg" placeholder="For difficulty, compute scarcity, differences from modern day, etc" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:scenarioNotes.height + 'px'}"></textarea>
+      <textarea id="scenarioNotes" :value="scenarioNotes.content" @input="updateDefaultField('scenarioNotes','content', $event)" class="textarea textarea-bordered h-32 text-lg" placeholder="For difficulty, compute scarcity, differences from modern day, etc" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:scenarioNotes.height}"></textarea>
 
       <draggable :list="keysOfCampaignNotes" class="w-full" @change="keysOfCampaignNotes !== [] ? campaignMove('keysOfCampaignNotes', keysOfCampaignNotes):''" item-key="id" handle=".handle">
         <template #item="{element}" :key="key">
@@ -66,7 +65,7 @@
             @input="updateCustomCampaignNoteField(element, 'content', $event)"
             class="textarea textarea-bordered h-32 text-lg w-full"
             v-on:mouseup="resizeTextarea($event, 'updateCustomCampaignNote')"
-            :style="{height:customCampaignNotes[element].height + 'px'}"
+            :style="{height:customCampaignNotes[element].height}"
           ></textarea>
           </div>
         </template>
@@ -81,18 +80,18 @@
       <label class="label font-semibold">
         <span class="label-text">Instrumental Goals</span>
       </label>
-      <textarea id="instrumentalGoals" :value="instrumentalGoals.content" @input="updateDefaultField('instrumentalGoals','content', $event)" class="textarea textarea-bordered h-24 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:instrumentalGoals.height + 'px'}"></textarea>
+      <textarea id="instrumentalGoals" :value="instrumentalGoals.content" @input="updateDefaultField('instrumentalGoals','content', $event)" class="textarea textarea-bordered h-24 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:instrumentalGoals.height}"></textarea>
 
 
       <label class="label font-semibold">
         <span class="label-text">Assets</span>
       </label>
-      <textarea id="assets" :value="assets.content" @input="updateDefaultField('assets','content', $event)" class="textarea textarea-bordered h-32 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:assets.height + 'px'}"></textarea>
+      <textarea id="assets" :value="assets.content" @input="updateDefaultField('assets','content', $event)" class="textarea textarea-bordered h-32 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:assets.height}"></textarea>
 
       <label class="label font-semibold">
         <span class="label-text">Gathered Information</span>
       </label>
-      <textarea id="gatheredInfo" :value="gatheredInfo.content" @input="updateDefaultField('gatheredInfo','content', $event)" class="textarea textarea-bordered h-32 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:gatheredInfo.height + 'px'}"></textarea>
+      <textarea id="gatheredInfo" :value="gatheredInfo.content" @input="updateDefaultField('gatheredInfo','content', $event)" class="textarea textarea-bordered h-32 text-lg" v-on:mouseup="resizeTextarea($event, 'updateDefault')" :style="{height:gatheredInfo.height}"></textarea>
       <draggable :list="keysOfInPlayNotes" class="w-full" @change="keysOfInPlayNotes !== [] ? campaignMove('keysOfInPlayNotes', keysOfInPlayNotes):''" item-key="id"  handle=".handle">
         <template #item="{element}" :key="key">
           <div>
@@ -116,7 +115,7 @@
             @input="updateCustomInPlayNoteField(element, 'content', $event)"
             class="textarea textarea-bordered h-32 text-lg w-full"
             v-on:mouseup="resizeTextarea($event, 'updateCustomInPlayNote')"
-            :style="{height:customInPlayNotes[element].height + 'px'}"
+            :style="{height:customInPlayNotes[element].height}"
           ></textarea>
         </div>
         </template>
@@ -191,8 +190,6 @@ export default {
         let title = area.id;
         let height = area.style.height;
         const changesObj = {};
-        console.log(title)
-        console.log(area.style.height)
         changesObj['height'] = height;
         this.$store.dispatch(dispatch, { noteID: title, changesObj})
         },

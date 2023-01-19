@@ -71,6 +71,7 @@ html {
 }
 *::-webkit-scrollbar {
   width: 11px;
+  /* display: none; */
 }
 * {
   scrollbar-width: thin;

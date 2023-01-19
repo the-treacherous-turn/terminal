@@ -32,6 +32,9 @@ module.exports = {
         physical: '#954bff',
         digital: '#0090fe',
         autonomic: '#0ecbb1',
+        darkgray: '#1D2225',
+        grey: '#D9D9D9',
+        middlegrey: '#3D4451',
       },
       borderColor: {
         DEFAULT: "#e2ddd9",

@@ -7,6 +7,7 @@ import computeActionStore from './stores/computeActionStore'
 import clockStore from './stores/clockStore'
 import infoStore from './stores/infoStore'
 import specStore from './stores/specStore'
+import gmNPCStore from './stores/gmNPCStore'
 
 // HACK: use location hash to differentiate between different sessions.
 // HACK: duplicated code getting the sessionID between here and firebase.js
@@ -20,6 +21,7 @@ const store = createStore({
     clock: clockStore,
     info: infoStore,
     spec: specStore,
+    gmNPC: gmNPCStore,
   },
   state () {
     return {
@@ -40,6 +42,7 @@ store.dispatch('listenToFBComputeActions')
 store.dispatch('listenToFBClock')
 store.dispatch('listenToFBInfo')
 store.dispatch('listenToFBSpecs')
+store.dispatch('listenToFBGMNPC')
 // TODO: remember to dispatch actions for each module to listen to FB changes
 
 export default store
