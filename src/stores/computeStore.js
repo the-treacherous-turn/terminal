@@ -6,7 +6,7 @@ const computeStore = {
     computeToSpend: 0,
     computeSpent: 0,
     computeSources: {},
-    baseComputeCost: 5,
+    baseComputeCost: 10,
     recurringCosts: {},
   }),
   getters: {
