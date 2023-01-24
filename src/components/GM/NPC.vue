@@ -428,30 +428,30 @@ export default {
           <div class="flex justify-center items-center pr-1">
             <div :class="[filterQuery.length !== 0 ? 'filter_clicked' : 'filter_unclicked']" @click="openFilterModal">
 				<div id="filterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-[24px] py-[12px] flex flex-col bg-grey" :on-focusout="closeFilterModal">
-					<div class="flex w-fit space-x-[8px]">
+					<label class="flex w-fit space-x-[8px]">
 						<div class="flex justify-center items-center">
 							<input :checked="filterQuery.includes('Human')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Human')"/>
 						</div>
 						<div class="text-black text-[20px]">Human</div>
-					</div>
-					<div class="flex w-fit space-x-[8px]">
+					</label>
+					<label class="flex w-fit space-x-[8px]">
 						<div class="flex justify-center items-center">
 							<input :checked="filterQuery.includes('Animal')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Animal')"/>
 						</div>
 						<div class="text-black text-[20px]">Animal</div>
-					</div>
-					<div class="flex w-fit space-x-[8px]">
+					</label>
+					<label class="flex w-fit space-x-[8px]">
 						<div class="flex justify-center items-center">
 							<input :checked="filterQuery.includes('AI')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'AI')"/>
 						</div>
 						<div class="text-black text-[20px]">AI</div>
-					</div>
-					<div class="flex w-fit space-x-[8px]">
+					</label>
+					<label class="flex w-fit space-x-[8px]">
 						<div class="flex justify-center items-center">
 							<input :checked="filterQuery.includes('Other')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Other')"/>
 						</div>
 						<div class="text-black text-[20px]">Other</div>
-					</div>
+					</label>
                     <div class="flex bg-black h-[1px] w-full">
                     </div>
                     <div class="flex space-x-[8px] justify-center w-full cursor-pointer items-center" @click="clearFilter">
