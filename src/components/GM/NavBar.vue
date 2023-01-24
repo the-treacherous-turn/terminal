@@ -7,6 +7,7 @@ export default {
   methods: {
     onclick(e){
       this.clickedTab = e.target.innerHTML
+      this.$emit('changeTab', this.clickedTab);
     }
   },
 }
