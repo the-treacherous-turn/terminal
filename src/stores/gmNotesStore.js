@@ -5,10 +5,47 @@ const gmNotesStore = {
   state: () => ({
     notes: {},
     activeNpcID: null,
+    keysOfNotes: '',
   }),
   mutations: {
     updateNotes(state, changesObj) {
-        state.notes = changesObj
+        if(Object.hasOwnProperty.call(changesObj, 'notes')){
+            if(JSON.stringify(Object.keys(changesObj['notes'])).length > JSON.stringify(changesObj['keysOfNotes']).length){
+                state['keysOfNotes'] = [...state['keysOfNotes'], Object.keys(changesObj['notes']).slice(-1).pop()]
+                for (const key in changesObj) {
+                  if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfNotes') {
+                    const val = changesObj[key];
+                    state[key] = val
+                  }
+                }
+              }else if(JSON.stringify(Object.keys(changesObj['notes'])).length < JSON.stringify(changesObj['keysOfNotes']).length){
+                let originArray = Object.keys(changesObj['notes']);
+                changesObj['keysOfNotes'] = changesObj['keysOfNotes'].filter(item => originArray.includes(item));
+                state['keysOfNotes'] = changesObj['keysOfNotes']
+                for (const key in changesObj) {
+                  if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfNotes') {
+                    const val = changesObj[key];
+                    state[key] = val
+                  }
+                }
+              }
+              else{
+                state['keysOfNotes'] = changesObj['keysOfNotes']
+                for (const key in changesObj) {
+                  if (Object.hasOwnProperty.call(changesObj, key) && key !== 'keysOfNotes') {
+                    const val = changesObj[key];
+                    state[key] = val
+                  }
+                }
+              }
+            }else{
+                for (const key in changesObj) {
+                  if (Object.hasOwnProperty.call(changesObj, key)) {
+                    const val = changesObj[key];
+                    state[key] = val
+                  }
+                }
+            }
     },
     updateNote(state, {noteID, changesObj}) {
         for (const key in changesObj) {
@@ -24,9 +61,10 @@ const gmNotesStore = {
   },
   actions: {
     async listenToFBGMNOTES({commit}){
-        onValue(refs.gmNOTES, (snapshot) => {
-            const data = snapshot.val()
-            if (data === undefined) data = {}
+        onValue(refs.gmNotes, (snapshot) => {
+            const data = snapshot.val() === null ? {} : snapshot.val()
+            if (data.notes === undefined) data.notes = {}
+            if (data.keysOfNotes === undefined) data.keysOfNotes = []
             commit('updateNotes', data)
         })
     },
@@ -36,15 +74,19 @@ const gmNotesStore = {
             content: '',
             content_height: '',
         }
-        await push(refs.gmNOTES, note)
+        await push(refs.notes, note)
+    },
+    async updateNotes({commit}, changesObj){
+        commit('updateNotes', changesObj)
+        await update(refs.gmNotes, changesObj)
     },
     async updateNote({commit, state}, {noteID, changesObj}) {
         commit('updateNote', {noteID, changesObj})
-        await update(refs.gmNOTES, {[noteID]: state.notes[noteID]})
+        await update(refs.notes, {[noteID]: state.notes[noteID]})
     },
     async removeNote({commit}, noteID) {
         commit('removeNote', noteID)
-        await update(refs.gmNOTES, {[noteID]: null})
+        await update(refs.notes, {[noteID]: null})
     },
   },
 }

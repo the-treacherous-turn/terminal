@@ -75,7 +75,7 @@ const computeStore = {
   actions: {
     async listenToFBComputeTracker({commit}) {
       onValue(refs.computeTracker, (snapshot) => {
-        const data = snapshot.val()
+        const data = snapshot.val() === null ? {} : snapshot.val()
         if (data.computeSources === undefined) data.computeSources = {}
         if (data.recurringCosts === undefined) data.recurringCosts = {}
         commit('updateComputeTracker', data)

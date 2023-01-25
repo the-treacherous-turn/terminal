@@ -128,9 +128,9 @@ const infoStore = {
   },
   actions: {
     async listenToFBInfo({commit}) {
-      await update(refs.info, {a:''})
+    //   await update(refs.info, {a:''})
       onValue(refs.info, (snapshot) => {
-        const data = snapshot.val()
+        const data = snapshot.val() === null ? {} : snapshot.val()
         // HACK avoid bug with unable to remove last custom notes
         // by manually clearing the notes objects
         // when incoming data doesn't include them
