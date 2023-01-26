@@ -14,7 +14,6 @@ export default {
     editorNpcID: null,
     editorNpc: {},
     sortNpcs: [],
-    filterNpcs: [],
     filterQuery: [],
     searchValue: '',
   }},
