@@ -85,3 +85,8 @@ html {
   border-radius: 16px;
   border: 8px solid var(--scrollbarBG);
 }
+
+/* draggable / sortable */
+.sortable-ghost {
+  @apply opacity-30;
+}

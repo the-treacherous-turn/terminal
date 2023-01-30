@@ -47,7 +47,7 @@
           <div>
             <label class="label">
               <div>
-                <font-awesome-icon :icon="['fas', 'bars']" class="handle"/>
+                <font-awesome-icon :icon="['fas', 'bars']" class="handle cursor-move"/>
                 <input
                   :value="customCampaignNotes[element].title"
                   @input="updateCustomCampaignNoteField(element, 'title', $event)"
@@ -97,7 +97,7 @@
           <div>
             <label class="label">
             <div>
-              <font-awesome-icon :icon="['fas', 'bars']" class="handle"/>
+              <font-awesome-icon :icon="['fas', 'bars']" class="handle cursor-move"/>
               <input
                 :value="customInPlayNotes[element].title"
                 @input="updateCustomInPlayNoteField(element, 'title', $event)"
