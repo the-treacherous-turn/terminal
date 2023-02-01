@@ -38,7 +38,8 @@ const refs = {
   customInPlayNotes: ref(db, `${sessionID}/info/customInPlayNotes`),
   specs: ref(db, `${sessionID}/specs`),
   gmNPCs: ref(db, `${sessionID}/gmNPCs`),
-  gmNOTES: ref(db, `${sessionID}/gmNotes`),
+  notes: ref(db, `${sessionID}/gmNotes/notes`),
+  gmNotes: ref(db, `${sessionID}/gmNotes`),
 }
 
 export default refs
