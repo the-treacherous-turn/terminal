@@ -9,6 +9,8 @@ import infoStore from './stores/infoStore'
 import specStore from './stores/specStore'
 import gmNPCStore from './stores/gmNPCStore'
 import gmNotesStore from './stores/gmNotesStore'
+import refs from './firebase'
+import { onValue, update } from 'firebase/database'
 
 // HACK: use location hash to differentiate between different sessions.
 // HACK: duplicated code getting the sessionID between here and firebase.js
@@ -29,15 +31,33 @@ const store = createStore({
     return {
       sessionID: sessionID,
       isGM: false,
+      wholeData: [],
     }
   },
   mutations: {
     setIsGM (state, isGM) {
       state.isGM = isGM
+    },
+    updateData (state, data) {
+        state.wholeData = data
     }
   },
+  actions: {
+    async listenToFBWholeData({commit}) {
+        onValue(refs.wholeData, (snapshot) => {
+        const data = snapshot.val() === null ? {} : snapshot.val()
+        commit('updateData', data)
+        })
+    },
+    async updateWholeData({commit}, changesObj) {
+        console.log(changesObj)
+        await update(refs.wholeData, changesObj)
+    },
+  }
 })
 
+
+store.dispatch('listenToFBWholeData')
 store.dispatch('listenToFBEventLog')
 store.dispatch('listenToFBComputeTracker')
 store.dispatch('listenToFBComputeActions')

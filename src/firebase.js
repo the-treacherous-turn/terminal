@@ -27,6 +27,7 @@ window.onhashchange = () => {
 }
 
 const refs = {
+  wholeData: ref(db, `${sessionID}/`),
   actions: ref(db, `${sessionID}/actions`),
   computeActions: ref(db, `${sessionID}/computeActions`),
   computeTracker: ref(db, `${sessionID}/computeTracker`),
