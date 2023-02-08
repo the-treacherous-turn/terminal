@@ -145,6 +145,7 @@ const infoStore = {
     },
     async updateInfo({commit}, changesObj) {
       commit('updateInfo', changesObj)
+      console.log(changesObj)
       await update(refs.info, changesObj)
     },
 

@@ -5,6 +5,11 @@ import GMPanel from './components/GM/GMPanel.vue'
 import Footer from './Footer.vue'
 
 export default {
+    data() {
+        return{
+            isImport: false
+        }
+    },
   components: {
     ActionEditor,
     GMPanel,
@@ -13,10 +18,69 @@ export default {
   methods: {
     onToggleGM(e) {
       this.$store.commit('setIsGM', e.target.checked)
-    }
+    },
+    exportData() {
+        // console.log(this.wholeData)
+      const sessionID = window.location.hash.substring(1)
+      const data = JSON.stringify(this.wholeData);
+      const url = window.URL.createObjectURL(new Blob([data]))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', `CompanionApp-${sessionID}.json`)
+      document.body.appendChild(link)
+      link.click()
+    },
+    openImportModal() {
+        this.isImport = true
+        setTimeout(() => {
+            document.addEventListener('click', this.closeWhenClickedOutside);
+        }, 100);
+    },
+    closeImportModal() {
+        this.isImport = false
+        document.removeEventListener('click', this.closeWhenClickedOutside)
+    },
+    closeWhenClickedOutside(event) {
+        if(!event.target.closest('#eventImportModal')){
+            this.closeImportModal();
+        }
+    },
+    readUploadedFileAsText(inputFile){
+        console.log(inputFile)
+        const temporaryFileReader = new FileReader();
+
+        return new Promise((resolve, reject) => {
+            temporaryFileReader.onerror = () => {
+                temporaryFileReader.abort();
+                reject(new DOMException("Problem parsing input file."));
+                // console.log("Problem parsing input file.")
+            };
+
+            temporaryFileReader.onload = () => {
+                resolve(temporaryFileReader.result);
+            };
+            temporaryFileReader.readAsText(inputFile);
+        });
+    },
+    async ImportData(file){
+        let fileContents;
+        try {
+            fileContents = await this.readUploadedFileAsText(file.target.files[0])
+            const arr = JSON.parse(fileContents)
+            this.$store.dispatch("updateWholeData", arr)
+            this.closeImportModal()
+            alert('suceess')
+        } catch (e) {
+            alert('failed')
+        }
+    },
   },
   computed: {
-    ...mapState(['isGM']),
+    ...mapState({
+      isGM: state => state.isGM,
+      wholeData: state => state.wholeData,
+    })
+    // ...mapState(['isGM']),
   },
 }
 </script>
@@ -25,7 +89,7 @@ export default {
 <div class="drawer">
 <input id="app-drawer" type="checkbox" class="drawer-toggle" />
 <div class="drawer-content">
-  
+
 <div class="navbar uppercase bg-base-100 w-full col-span-2 sticky top-0 left-0 z-10">
   <div class="tooltip tooltip-bottom z-50 lowercase" data-tip="menu">
     <label for="app-drawer" class="btn btn-square btn-ghost border-none text-2xl">
@@ -89,7 +153,27 @@ export default {
           <input :checked="isGM" @change="onToggleGM" type="checkbox" class="toggle"/>
         </label>
     </li>
-  </ul>
+    <div class="flex self-center cursor-pointer my-[10px]" @click="exportData">export backup</div>
+    <div class="flex self-center text-center cursor-pointer" @click="openImportModal">
+        load backup
+    </div>
+</ul>
+<div class="absolute w-[100vw] h-[100vh] flex items-center justify-center" v-if="isImport">
+    <div id="eventImportModal" class="flex flex-col justify-center items-center bg-white py-[30px] px-[40px] rounded-[10px]" :on-focusout="closeImportModal">
+        <p class="text-center heading h3 text-black">
+            This will OVERWRITE
+            <b class="text-red-600">ALL</b>
+            local data.
+            <br />
+            This
+            <b class="text-red-600">cannot</b>
+            be undone.
+        </p>
+
+        <label class="block mb-2 text-[20px] font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
+        <input class="block w-full text-[20px] text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file" @change="ImportData">
+    </div>
+</div>
 </div>
 
 </div>

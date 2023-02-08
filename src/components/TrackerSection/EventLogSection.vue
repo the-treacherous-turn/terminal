@@ -92,6 +92,7 @@ export default {
         }
     },
     mounted() {
+        this.sortActions = {...this.logActions}
         this.$nextTick(() => {
         this.$refs.scroller.scrollTop = this.$store.state.eventLog.scrollPos
         })
