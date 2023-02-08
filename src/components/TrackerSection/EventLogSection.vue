@@ -104,7 +104,7 @@ export default {
 <div class="h-full w-full max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden">
   <div class="items-center space-x-2 flex absolute bg-base-100 z-10 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl">
     <span>
-      Event Log
+      Project Log
     </span>
     <div :class="[filterQuery.length !== 0 ? 'filter_clicked' : 'filter_unclicked']" @click="openFilterModal">
         <div id="eventFilterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-[24px] py-[12px] flex flex-col bg-grey" :on-focusout="closeFilterModal">
