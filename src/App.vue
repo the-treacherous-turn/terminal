@@ -69,7 +69,7 @@ export default {
             const arr = JSON.parse(fileContents)
             this.$store.dispatch("updateWholeData", arr)
             this.closeImportModal()
-            alert('suceess')
+            alert('success')
         } catch (e) {
             alert('failed')
         }
