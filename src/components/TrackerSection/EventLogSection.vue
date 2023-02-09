@@ -36,7 +36,7 @@ export default {
                     if(this.filterQuery.length === 0){
                         result.push(entry)
                     }else if(Object.values(this.filterQuery).includes('Committed') && Object.values(this.filterQuery).includes('Finalized')){
-                        if(entry[1].isCommitted && entry[1].isForecast)
+                        if(entry[1].isCommitted || entry[1].isForecast)
                             result.push(entry)
                     }else if(Object.values(this.filterQuery).includes('Committed')){
                         if(entry[1].isForecast)
