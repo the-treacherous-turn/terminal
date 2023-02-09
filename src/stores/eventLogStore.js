@@ -34,6 +34,11 @@ const eventLogStore = {
       state.actions[state.dirtyActionID].isDirty = true;
       state.isEditorOpen = true;
     },
+    updateAction(state, payload) {
+      if (state.dirtyActionID === null) return; // safeguard against creating null action
+      const currentAction = state.actions[state.dirtyActionID];
+      state.actions[state.dirtyActionID] = { ...currentAction, ...payload };
+    },
     updateStateAction(state, { actionState, commitTimeISO }) {
       console.log(commitTimeISO);
       state.actions[state.dirtyActionID].actionState = actionState;

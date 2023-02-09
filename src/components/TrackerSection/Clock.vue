@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="cycle !== -Infinity">
   <div class="stats float-right">
     <div class="stat px-4">
       <div>
@@ -132,7 +132,9 @@ export default {
       return this.$store.getters.nowTime.toFormat('mm')
     },
     cycle: {
-      get() { return this.$store.state.clock.cycle },
+      get() {
+        console.log(this.$store.state.clock.cycle === -Infinity)
+        return this.$store.state.clock.cycle },
       set(newVal) { this.$store.commit('setCycle', newVal) },
     },
     cycleLength: {

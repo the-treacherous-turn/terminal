@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div v-if="available !== Infinity">
     <div class="stats float-left">
       <div class="stat px-4">
         <div>
@@ -134,6 +134,7 @@ export default {
   },
   computed: {
     available() {
+        console.log(this.$store.getters.computeAvailable === Infinity)
       return this.$store.getters.computeAvailable
     },
     toSpend() {
