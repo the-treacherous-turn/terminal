@@ -59,7 +59,6 @@
                 </label>
               </td>
             </tr>
-            
           </tbody>
         </table>
         <div class="flex justify-center m-4 mt-2">
@@ -101,7 +100,6 @@
                 </label>
               </td>
             </tr>
-            
           </tbody>
         </table>
         <div class="flex justify-center m-4 mt-2">
@@ -111,7 +109,6 @@
             <font-awesome-icon icon="plus" class="text-2xl" />
           </label>
         </div>
-        
         <div class="btn-group float-right">
           <label
             for="modal-compute-tracker-setting"
@@ -134,7 +131,6 @@ export default {
   },
   computed: {
     available() {
-        console.log(this.$store.getters.computeAvailable === Infinity)
       return this.$store.getters.computeAvailable
     },
     toSpend() {

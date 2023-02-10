@@ -216,7 +216,7 @@ export default {
   <div class="flex justify-center m-4">
       <!-- <button class="btn btn-circle" @click="$store.dispatch('editNewComputeAction')"> -->
     <label for="modal-edit-compute-action" class="btn btn-circle"
-      @click="onClickPlus"
+    @click="onClickPlus"
     >
       <font-awesome-icon icon="plus" class="text-6xl" />
     </label>
@@ -231,17 +231,12 @@ export default {
     Assign Compute Points
   </button>
 </div>
-
-<input
-  type="checkbox" id="modal-edit-compute-action"
-  class="modal-toggle"
-/>
 <label
-  for="modal-edit-compute-action"
-  class="modal cursor-pointer"
-  @click.self="onClickModalOutside"
+  v-if="isEditorOpen"
+  class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center"
+  @mousedown.self="onClickModalOutside"
   >
-  <label class="modal-box relative" for>
+  <label class="modal-box relative">
     <h3 class="text-lg font-bold">Edit Compute Action</h3>
     <p>
       <form class="form-control w-full" autocomplete="off">
@@ -306,7 +301,7 @@ export default {
             <!-- <input type="range" min="0" max="100" value="40" class="range"> -->
             <input
               v-model="computeNeeded"
-              type="number" placeholder="" min="1" 
+              type="number" placeholder="" min="1"
               class="input input-bordered w-40">
           </div>
           <div>
@@ -319,10 +314,9 @@ export default {
             </label>
           </div>
         </div>
-        
         <label class="label">
           <span class="label-text">Description</span>
-        </label> 
+        </label>
         <textarea
           v-model="description"
           placeholder=""
