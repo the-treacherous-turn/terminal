@@ -46,7 +46,7 @@ export default {
         }
     },
     readUploadedFileAsText(inputFile){
-        console.log(inputFile)
+        // console.log(inputFile)
         const temporaryFileReader = new FileReader();
 
         return new Promise((resolve, reject) => {
@@ -69,7 +69,7 @@ export default {
             const arr = JSON.parse(fileContents)
             this.$store.dispatch("updateWholeData", arr)
             this.closeImportModal()
-            alert('suceess')
+            alert('success')
         } catch (e) {
             alert('failed')
         }
@@ -125,7 +125,7 @@ export default {
   </button>
   <button class="transition-all" :class="{'active':($route.path == '/eventLog')}" @click="$router.push('/eventLog')">
     <font-awesome-icon :icon="['fas', 'terminal']" />
-    <span class="btm-nav-label">Event Log</span>
+    <span class="btm-nav-label">Project Log</span>
   </button>
   <button class="transition-all" :class="{'active':($route.path == '/compute')}" @click="$router.push('/compute')">
     <font-awesome-icon :icon="['fas', 'clock']" />
