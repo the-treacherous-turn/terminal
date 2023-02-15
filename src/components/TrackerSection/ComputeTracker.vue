@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div v-if="available !== Infinity">
     <div class="stats float-left">
       <div class="stat px-4">
         <div>
@@ -59,7 +59,6 @@
                 </label>
               </td>
             </tr>
-            
           </tbody>
         </table>
         <div class="flex justify-center m-4 mt-2">
@@ -101,7 +100,6 @@
                 </label>
               </td>
             </tr>
-            
           </tbody>
         </table>
         <div class="flex justify-center m-4 mt-2">
@@ -111,7 +109,6 @@
             <font-awesome-icon icon="plus" class="text-2xl" />
           </label>
         </div>
-        
         <div class="btn-group float-right">
           <label
             for="modal-compute-tracker-setting"

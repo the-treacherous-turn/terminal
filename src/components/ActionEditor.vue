@@ -73,17 +73,16 @@
               rows="5"
               class="bg-black w-full border mb-4 px-2 py-2"
             ></textarea>
-            <div class="mb-4">
-
-              <label class="label cursor-pointer inline-flex">
-                <input v-model="isCommitted" type="checkbox" checked="checked" class="checkbox" />
-                <span class="label-text mx-4">finalized</span> 
-              </label>
-              <label class="label cursor-pointer inline-flex">
-                <input v-model="isForecast" type="checkbox" checked="checked" class="checkbox" />
-                <span class="label-text mx-4">crossed out</span> 
-              </label>
+            <div class="flex items-center mb-4">
+            <select v-model="actionState" class="bg-black w-[130px] label-text text-white placeholder-white outline-none">
+                <option value="" class="label-text" disabled selected hidden>NORMAL</option>
+                <option value="NORMAL" class="label-text">NORMAL</option>
+                <option value="FINALIZED" class="label-text">FINALIZED</option>
+                <option value="CROSSED OUT" class="label-text">CROSSED OUT</option>
+            </select>
             </div>
+
+
             <button
               class="btn uppercase"
               type="submit"
@@ -123,19 +122,13 @@ export default {
       get() {return this.$store.getters.dirtyAction.compute},
       set (value) { this.$store.commit('updateAction', {compute: value}) }
     },
-    isCommitted: {
-      get() {return this.$store.getters.dirtyAction.isCommitted},
-      set (value) {
-        this.$store.commit('updateAction', {
-          isCommitted: value,
-          commitTimeISO: this.$store.state.clock.nowTimeISO,
+    actionState: {
+        get() {return this.$store.getters.dirtyAction.actionState},
+        set (value) { this.$store.commit('updateStateAction',
+        {actionState: value, commitTimeISO: this.$store.state.clock.nowTimeISO,
         })
-      }
-    },
-    isForecast: {
-      get() {return this.$store.getters.dirtyAction.isForecast},
-      set (value) { this.$store.commit('updateAction', {isForecast: value}) }
-    },
+    }
+    }
   },
   methods: {
     submit() {
@@ -153,13 +146,16 @@ export default {
         this.submit()
       }
     },
+    setActionState(state) {
+        this.$store.commit('updateStateAction', state)
+    },
     cleanFields() {
       this.name = ''
       this.description = ''
     },
     close() {
       this.$store.commit('closeEditor')
-    }
+    },
   }
 }
 </script>

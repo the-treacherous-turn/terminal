@@ -22,34 +22,14 @@ export default {
         logActions: {
             handler(data){
                 this.sortActions = {...this.logActions}
+                this.runFilter()
             },
             deep:true
         },
         filterQuery: {
             handler(data){
                 console.log(this.filterQuery)
-                this.sortActions = {...this.logActions}
-                let entries = Object.entries(this.sortActions)
-                let result = [];
-                entries.map(entry => {
-                    // console.log(entry[1])
-                    if(this.filterQuery.length === 0){
-                        result.push(entry)
-                    }else if(Object.values(this.filterQuery).includes('Committed') && Object.values(this.filterQuery).includes('Finalized')){
-                        if(entry[1].isCommitted && entry[1].isForecast)
-                            result.push(entry)
-                    }else if(Object.values(this.filterQuery).includes('Committed')){
-                        if(entry[1].isForecast)
-                            result.push(entry)
-                    }else if(Object.values(this.filterQuery).includes('Finalized')){
-                        console.log('finalized')
-                        console.log(entry[1])
-                        if(entry[1].isCommitted)
-                            result.push(entry)
-                    }
-                })
-                this.sortActions = Object.fromEntries(result)
-
+               this.runFilter();
             },
             deep: true
         }
@@ -89,6 +69,27 @@ export default {
                 ele.checked = false
             })
             this.filterQuery = [];
+        },
+        runFilter() {
+            this.sortActions = {...this.logActions}
+                let entries = Object.entries(this.sortActions)
+                let result = [];
+                entries.map(entry => {
+                    // console.log(entry[1])
+                    if(this.filterQuery.length === 0){
+                        result.push(entry)
+                    }else if(Object.values(this.filterQuery).includes('Finalized') && Object.values(this.filterQuery).includes('Crossed Out')){
+                        if(entry[1].isCommitted || entry[1].isForecast)
+                            result.push(entry)
+                    }else if(Object.values(this.filterQuery).includes('Finalized')){
+                        if(entry[1].isCommitted && !entry[1].isForecast)
+                            result.push(entry)
+                    }else if(Object.values(this.filterQuery).includes('Crossed Out')){
+                        if(entry[1].isForecast)
+                            result.push(entry)
+                    }
+                })
+                this.sortActions = Object.fromEntries(result)
         }
     },
     mounted() {
@@ -110,15 +111,15 @@ export default {
         <div id="eventFilterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-[24px] py-[12px] flex flex-col bg-grey" :on-focusout="closeFilterModal">
             <label class="flex w-fit space-x-[8px]">
                 <div class="flex justify-center items-center">
-                    <input :checked="filterQuery.includes('Committed')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Committed')"/>
-                </div>
-                <div class="text-black text-[20px]">Committed</div>
-            </label>
-            <label class="flex w-fit space-x-[8px]">
-                <div class="flex justify-center items-center">
                     <input :checked="filterQuery.includes('Finalized')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Finalized')"/>
                 </div>
                 <div class="text-black text-[20px]">Finalized</div>
+            </label>
+            <label class="flex w-fit space-x-[8px]">
+                <div class="flex justify-center items-center">
+                    <input :checked="filterQuery.includes('Crossed Out')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Crossed Out')"/>
+                </div>
+                <div class="text-black text-[20px]">Crossed out</div>
             </label>
             <div class="flex bg-black h-[1px] w-full">
             </div>

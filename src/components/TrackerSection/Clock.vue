@@ -1,5 +1,5 @@
 <template>
-<div>
+<div v-if="cycle !== -Infinity">
   <div class="stats float-right">
     <div class="stat px-4">
       <div>
@@ -46,7 +46,6 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" />
 <label for="modal-time-setting" class="modal cursor-pointer">
   <label class="modal-box relative" for>
     <h3 class="text-lg font-bold">Time</h3>
-    
     <p class="my-4">
       <label class="inline-block w-20" for="clock-tracker-now-time">Now: </label>
       <input
@@ -84,7 +83,7 @@ v-model="isTurnSettingOpen" @change="onTurnModalToggle" />
 
     <p class="my-4">
       <label for="clock-tracker-cycle-length">Turn Length: </label>
-      <input 
+      <input
         v-model.number="cycleLength"
         id="clock-tracker-cycle-length" type="number" min="0"
         class="input input-sm input-bordered w-20"> hours
@@ -132,7 +131,8 @@ export default {
       return this.$store.getters.nowTime.toFormat('mm')
     },
     cycle: {
-      get() { return this.$store.state.clock.cycle },
+      get() {
+        return this.$store.state.clock.cycle },
       set(newVal) { this.$store.commit('setCycle', newVal) },
     },
     cycleLength: {

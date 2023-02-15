@@ -1,5 +1,11 @@
-import refs from '../firebase'
-import { onChildAdded, onChildChanged, onChildRemoved, update, push } from 'firebase/database'
+import refs from "../firebase";
+import {
+  onChildAdded,
+  onChildChanged,
+  onChildRemoved,
+  update,
+  push,
+} from "firebase/database";
 
 const eventLogStore = {
   state: () => ({
@@ -10,126 +16,152 @@ const eventLogStore = {
   }),
   getters: {
     dirtyAction(state) {
-      return state.actions[state.dirtyActionID]
+      return state.actions[state.dirtyActionID];
     },
   },
   mutations: {
-    setActionWithID(state, {actionID, actionObj}) {
-      state.actions[actionID] = actionObj
+    setActionWithID(state, { actionID, actionObj }) {
+      state.actions[actionID] = actionObj;
     },
-    editNewAction(state, {actionID}) {
+    editNewAction(state, { actionID }) {
       // create new action
-      state.dirtyActionID = actionID
+      state.dirtyActionID = actionID;
       // open the editor
-      state.isEditorOpen = true
+      state.isEditorOpen = true;
     },
     editExtantAction(state, actionID) {
-      state.dirtyActionID = actionID
-      state.actions[state.dirtyActionID].isDirty = true
-      state.isEditorOpen = true
+      state.dirtyActionID = actionID;
+      state.actions[state.dirtyActionID].isDirty = true;
+      state.isEditorOpen = true;
     },
-    updateAction (state, payload) {
-      if (state.dirtyActionID === null) return // safeguard against creating null action
-      const currentAction = state.actions[state.dirtyActionID]
-      state.actions[state.dirtyActionID] = {...currentAction, ...payload}
+    updateAction(state, payload) {
+      if (state.dirtyActionID === null) return; // safeguard against creating null action
+      const currentAction = state.actions[state.dirtyActionID];
+      state.actions[state.dirtyActionID] = { ...currentAction, ...payload };
     },
-    submitActionEdit (state) {
-      state.actions[state.dirtyActionID].isDirty = false
-      state.actions[state.dirtyActionID].isNew = false
-      state.dirtyActionID = null
+    updateStateAction(state, { actionState, commitTimeISO }) {
+      console.log(commitTimeISO);
+      state.actions[state.dirtyActionID].actionState = actionState;
+      if (actionState === "FINALIZED") {
+        state.actions[state.dirtyActionID].isCommitted = true;
+        state.actions[state.dirtyActionID].isForecast = false;
+      } else if (actionState === "CROSSED OUT") {
+        state.actions[state.dirtyActionID].isCommitted = false;
+        state.actions[state.dirtyActionID].isForecast = true;
+        state.actions[state.dirtyActionID].commitTimeISO = commitTimeISO;
+      } else {
+        state.actions[state.dirtyActionID].isCommitted = false;
+        state.actions[state.dirtyActionID].isForecast = false;
+      }
     },
-    commitAction (state, {actionID, commitTimeISO}) {
-      state.actions[actionID].isCommitted = true
-      state.actions[actionID].commitTimeISO = commitTimeISO
+    submitActionEdit(state) {
+      state.actions[state.dirtyActionID].isDirty = false;
+      state.actions[state.dirtyActionID].isNew = false;
+      state.dirtyActionID = null;
     },
-    undoCommitAction (state, actionID) {
-      state.actions[actionID].isCommitted = false
+    commitAction(state, { actionID, commitTimeISO }) {
+      state.actions[actionID].isCommitted = true;
+      state.actions[actionID].commitTimeISO = commitTimeISO;
     },
-    markAsForecast (state, actionID) {
-      state.actions[actionID].isForecast = true
+    undoCommitAction(state, actionID) {
+      state.actions[actionID].isCommitted = false;
     },
-    undoForecastAction (state, actionID) {
-      state.actions[actionID].isForecast = false
+    markAsForecast(state, actionID) {
+      state.actions[actionID].isForecast = true;
+    },
+    undoForecastAction(state, actionID) {
+      state.actions[actionID].isForecast = false;
     },
     deleteAction(state, actionID) {
-      if (!state.actions[actionID]) throw new Error(`Cannot delete action ${actionID}: action does not exist`)
-      delete state.actions[actionID]
+      if (!state.actions[actionID])
+        throw new Error(
+          `Cannot delete action ${actionID}: action does not exist`
+        );
+      delete state.actions[actionID];
     },
     openEditor(state) {
-      state.isEditorOpen = true
+      state.isEditorOpen = true;
     },
     closeEditor(state) {
-      state.isEditorOpen = false
+      state.isEditorOpen = false;
     },
     setEventLogScrollPos(state, pos) {
-      state.scrollPos = pos
+      state.scrollPos = pos;
     },
   },
   actions: {
-    async listenToFBEventLog({commit, state}) {
+    async listenToFBEventLog({ commit, state }) {
       onChildAdded(refs.actions, (snapshot) => {
-        commit('setActionWithID', {actionID: snapshot.key, actionObj: snapshot.val()})
-      })
+        commit("setActionWithID", {
+          actionID: snapshot.key,
+          actionObj: snapshot.val(),
+        });
+      });
       onChildChanged(refs.actions, (snapshot) => {
-        commit('setActionWithID', {actionID: snapshot.key, actionObj: snapshot.val()})
-      })
+        commit("setActionWithID", {
+          actionID: snapshot.key,
+          actionObj: snapshot.val(),
+        });
+      });
       onChildRemoved(refs.actions, (snapshot) => {
-        if (!state.actions[snapshot.key]) return // safeguard against unnecessary deletion
-        commit('deleteAction', snapshot.key)
-      })
+        if (!state.actions[snapshot.key]) return; // safeguard against unnecessary deletion
+        commit("deleteAction", snapshot.key);
+      });
     },
-    async editNewAction({commit}) {
+    async editNewAction({ commit }) {
       // create new action
       const actionObj = {
-        name:'',
-        description:'',
+        name: "",
+        description: "",
         isDirty: true,
         isNew: true,
         isCommitted: false,
         isForecast: false,
-      }
+        actionState: "",
+        // actionStata:
+      };
       // push a new action into the database
-      const actionID = await push(refs.actions, actionObj).key
-      commit('setActionWithID', {actionID, actionObj})
-      commit('editNewAction', {actionID})
+      const actionID = await push(refs.actions, actionObj).key;
+      commit("setActionWithID", { actionID, actionObj });
+      commit("editNewAction", { actionID });
     },
 
-    async editExtantAction({commit, state}, actionID) {
-      commit('editExtantAction', actionID)
-      await update(refs.actions, {[actionID]: state.actions[actionID]})
+    async editExtantAction({ commit, state }, actionID) {
+      commit("editExtantAction", actionID);
+      await update(refs.actions, { [actionID]: state.actions[actionID] });
     },
 
-    async submitActionEdit({commit, state}) {
-      const actionID = state.dirtyActionID
-      commit('submitActionEdit')
-      await update(refs.actions, {[actionID]: state.actions[actionID]})
+    async submitActionEdit({ commit, state }) {
+      const actionID = state.dirtyActionID;
+      commit("submitActionEdit");
+      await update(refs.actions, { [actionID]: state.actions[actionID] });
     },
 
-    async deleteAction({commit}, actionID) {
-      commit('deleteAction', actionID)
-      await update(refs.actions, {[actionID]: null})
+    async deleteAction({ commit }, actionID) {
+      commit("deleteAction", actionID);
+      await update(refs.actions, { [actionID]: null });
     },
 
-    async commitAction({commit, state, rootState}, actionID) {
-      const commitTimeISO = rootState.clock.nowTimeISO
-      commit('commitAction', {actionID, commitTimeISO})
-      await update(refs.actions, {[actionID]: state.actions[actionID]})
+    async commitAction({ commit, state, rootState }, actionID) {
+      const commitTimeISO = rootState.clock.nowTimeISO;
+      commit("commitAction", { actionID, commitTimeISO });
+      await update(refs.actions, { [actionID]: state.actions[actionID] });
     },
 
-    async undoCommitAction({commit, state}, actionID) {
-      commit('undoCommitAction', actionID)
-      await update(refs.actions, {[actionID]: state.actions[actionID]})
+    async undoCommitAction({ commit, state }, actionID) {
+      commit("undoCommitAction", actionID);
+      await update(refs.actions, { [actionID]: state.actions[actionID] });
     },
 
-    async markAsForecast({commit, state}, actionID) {
-      commit('markAsForecast', actionID)
-      await update(refs.actions, {[actionID]: state.actions[actionID]})
+    async markAsForecast({ commit, state }, actionID) {
+      commit("markAsForecast", actionID);
+      await update(refs.actions, { [actionID]: state.actions[actionID] });
     },
 
-    async undoForecastAction({commit, state}, actionID) {
-      commit('undoForecastAction', actionID)
-      await update(refs.actions, {[actionID]: state.actions[actionID]})
+    async undoForecastAction({ commit, state }, actionID) {
+      commit("undoForecastAction", actionID);
+      await update(refs.actions, { [actionID]: state.actions[actionID] });
     },
-  }
-}
-export default eventLogStore
+  },
+};
+export default eventLogStore;
