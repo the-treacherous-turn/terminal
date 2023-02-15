@@ -169,14 +169,15 @@ export default {
   </div>
 </div>
 
-<input
+<!-- <input
   type="checkbox" id="modal-edit-spec"
   class="modal-toggle"
-/>
+/> -->
 <label
+  v-if="isEditorOpen"
   for="modal-edit-spec"
-  class="modal cursor-pointer"
-  @click.self="onClickModalOutside"
+  class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
+  @mousedown.self="onClickModalOutside"
 >
   <label class="modal-box max-w-xs relative">
     <h3 class="text-lg font-bold">{{ isAddNewSpec ? 'Add' : 'Edit' }} Specialization</h3>

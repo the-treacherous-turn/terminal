@@ -126,19 +126,19 @@ export default {
   </li>
 </ul>
 <label for="modal-edit-upgrade" class="btn btn-secondary btn-xs mt-2 mb-8" @click="onClickAdd">+ Add Upgrades</label>
-<input
+<!-- <input
   type="checkbox" id="modal-edit-upgrade"
   class="modal-toggle"
-/>
+/> -->
 <label
+  v-if="isEditorOpen"
   for="modal-edit-upgrade"
-  class="modal cursor-pointer"
-  @click.self="onClickModalOutside"
+  class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
+  @mousedown.self="onClickModalOutside"
   >
   <label class="modal-box relative">
     <h3 class="text-lg font-bold">{{ isAddNewUpgrade ? 'Add' : 'Edit' }} Upgrade</h3>
     <form class="form-control w-full" autocomplete="off">
-      
       <label class="label label-text">Theory</label>
       <select v-model="editorUpgrade.theory" class="select select-bordered w-full max-w-xs capitalize">
         <option disabled selected>Pick Theory</option>

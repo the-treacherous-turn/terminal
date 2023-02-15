@@ -4,7 +4,7 @@
     <div class="stat px-4">
       <div>
         <div class="stat-title text-base inline mr-2">{{nowDate}} </div>
-        <label for="modal-time-setting">
+        <label for="modal-time-setting" @click="openModal('timesetting')">
           <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
             <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base" />
           </span>
@@ -15,7 +15,7 @@
     <div class="stat px-4">
       <div>
         <div class="stat-title text-base inline">Turn </div>
-        <label for="modal-turn-setting">
+        <label for="modal-turn-setting" @click="openModal('turnsetting')">
           <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
             <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base" />
           </span>
@@ -24,26 +24,31 @@
       <div class="stat-value text-4xl">{{cycle}}</div>
       <div class="stat-figure">
         <label v-if="isComputeUsedUp" class="btn uppercase" @click="advanceCycle">End Turn</label>
-        <label v-else for="modal-cycle-confirm" class="btn modal-button uppercase">End Turn</label>
+        <label v-else for="modal-cycle-confirm" class="btn modal-button uppercase" @click="openModal('endmodal')">End Turn</label>
       </div>
     </div>
   </div>
-
-<input type="checkbox" id="modal-cycle-confirm" class="modal-toggle">
-<label for="modal-cycle-confirm" class="modal cursor-pointer">
+  <!-- <label
+  v-if="isEditorOpen"
+  class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
+  @mousedown.self="onClickModalOutside"
+  > -->
+<label v-if="isEndModalOpen" for="modal-cycle-confirm" class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
+ @mousedown.self="onClickModalOutside('endmodal')"
+>
   <label class="modal-box relative" for="">
     <h3 class="text-lg font-bold">Confirm advancing this Turn</h3>
     <p class="py-4">Your remaining compute points will be lost.</p>
     <div class="btn-group float-right">
       <label for="modal-cycle-confirm" class="btn btn-primary" @click="advanceCycle">Confirm</label>
-      <label for="modal-cycle-confirm" class="btn">Cancel</label>
+      <label for="modal-cycle-confirm" class="btn" @click="cancel">Cancel</label>
     </div>
   </label>
 </label>
-
+<!--
 <input type="checkbox" id="modal-time-setting" class="modal-toggle"
-v-model="isTimeSettingOpen" @change="onTimeModalToggle" />
-<label for="modal-time-setting" class="modal cursor-pointer">
+v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
+<label v-if="isTimeSettingOpen" for="modal-time-setting" class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50" @mousedown.self="onClickModalOutside('timesetting')">
   <label class="modal-box relative" for>
     <h3 class="text-lg font-bold">Time</h3>
     <p class="my-4">
@@ -67,16 +72,18 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" />
     <div class="btn-group float-right">
       <label
         for="modal-time-setting"
-        class="btn btn-primary">
+        class="btn btn-primary"
+        @click="cancel"
+        >
         Close</label>
     </div>
   </label>
 </label>
 
-
+<!-- 
 <input type="checkbox" id="modal-turn-setting" class="modal-toggle"
-v-model="isTurnSettingOpen" @change="onTurnModalToggle" />
-<label for="modal-turn-setting" class="modal cursor-pointer">
+v-model="isTurnSettingOpen" @change="onTurnModalToggle" /> -->
+<label v-if="isTurnSettingOpen" for="modal-turn-setting" class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50" @mousedown.self="onClickModalOutside('turnsetting')">
   <label class="modal-box relative" for>
 
     <h3 class="text-lg font-bold">Turns</h3>
@@ -101,7 +108,9 @@ v-model="isTurnSettingOpen" @change="onTurnModalToggle" />
     <div class="btn-group float-right">
       <label
         for="modal-turn-setting"
-        class="btn btn-primary">
+        class="btn btn-primary"
+        @click="cancel"
+        >
         Close</label>
     </div>
   </label>
@@ -118,6 +127,7 @@ export default {
     return {
       isTimeSettingOpen: false,
       isTurnSettingOpen: false,
+      isEndModalOpen:false,
     }
   },
   computed: {
@@ -165,6 +175,34 @@ export default {
         this.$store.dispatch('syncClock')
       }
     },
+    onClickModalOutside(state) {
+        if(state === 'timesetting'){
+            this.isTimeSettingOpen = false;
+            this.onTimeModalToggle()
+            this.cancel()
+        }else if(state === 'endmodal'){
+            this.cancel()
+        }else if(state === 'turnsetting'){
+            this.isTurnSettingOpen = false;
+            this.onTurnModalToggle()
+            this.cancel()
+        }
+    },
+    cancel() {
+        this.isEndModalOpen = false
+        this.isTimeSettingOpen = false
+        this.isTurnSettingOpen = false
+    },
+    openModal(props){
+        if(props === 'endmodal') {
+            this.isEndModalOpen = true
+        }else if (props === 'timesetting') {
+            this.isTimeSettingOpen = true
+        }else if (props === 'turnsetting') {
+            this.isTurnSettingOpen = true
+        }
+
+    }
   }
 }
 </script>

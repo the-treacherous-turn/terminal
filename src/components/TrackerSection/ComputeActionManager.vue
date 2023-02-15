@@ -233,7 +233,7 @@ export default {
 </div>
 <label
   v-if="isEditorOpen"
-  class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center"
+  class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
   @mousedown.self="onClickModalOutside"
   >
   <label class="modal-box relative">

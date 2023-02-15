@@ -75,7 +75,6 @@ export default {
                 let entries = Object.entries(this.sortActions)
                 let result = [];
                 entries.map(entry => {
-                    // console.log(entry[1])
                     if(this.filterQuery.length === 0){
                         result.push(entry)
                     }else if(Object.values(this.filterQuery).includes('Committed') && Object.values(this.filterQuery).includes('Finalized')){
@@ -85,8 +84,6 @@ export default {
                         if(entry[1].isForecast)
                             result.push(entry)
                     }else if(Object.values(this.filterQuery).includes('Finalized')){
-                        console.log('finalized')
-                        console.log(entry[1])
                         if(entry[1].isCommitted)
                             result.push(entry)
                     }

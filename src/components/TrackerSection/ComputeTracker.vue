@@ -4,7 +4,7 @@
       <div class="stat px-4">
         <div>
           <div class="stat-title text-base inline mr-2">Compute Available</div>
-          <label for="modal-compute-tracker-setting">
+          <label for="modal-compute-tracker-setting" @click="openModal">
             <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
               <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base" />
             </span>
@@ -26,10 +26,9 @@
       </div>
     </div>
 
-    <input type="checkbox" id="modal-compute-tracker-setting" class="modal-toggle"
-    v-model="isSettingOpen" @change="onModalToggle"
-    />
-    <label for="modal-compute-tracker-setting" class="modal cursor-pointer">
+    <!-- <input type="checkbox" id="modal-compute-tracker-setting" class="modal-toggle"
+    v-model="isSettingOpen" @change="onModalToggle" -->
+    <label v-if="isSettingOpen" for="modal-compute-tracker-setting" class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50" @mousedown.self="onClickModalOutside">
       <label class="modal-box relative" for>
         <h3 class="text-lg font-bold">Configure Compute</h3>
         <h4>
@@ -112,7 +111,9 @@
         <div class="btn-group float-right">
           <label
             for="modal-compute-tracker-setting"
-            class="btn btn-primary">
+            class="btn btn-primary"
+            @click="cancel"
+            >
             Close</label>
         </div>
       </label>
@@ -175,7 +176,16 @@ export default {
       if (!this.isSettingOpen) {
         this.$store.dispatch('syncComputeTracker')
       }
-    }
+    },
+    openModal() {
+        this.isSettingOpen = true
+    },
+    cancel() {
+        this.isSettingOpen = false
+    },
+    onClickModalOutside() {
+      this.cancel()
+    },
   },
 }
 

@@ -45,6 +45,7 @@ const eventLogStore = {
       if (actionState === "FINALIZED") {
         state.actions[state.dirtyActionID].isCommitted = true;
         state.actions[state.dirtyActionID].isForecast = false;
+        state.actions[state.dirtyActionID].commitTimeISO = commitTimeISO;
       } else if (actionState === "CROSSED OUT") {
         state.actions[state.dirtyActionID].isCommitted = false;
         state.actions[state.dirtyActionID].isForecast = true;
