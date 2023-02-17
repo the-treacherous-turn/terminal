@@ -1,208 +1,295 @@
 <template>
-<div v-if="cycle !== -Infinity">
-  <div class="stats float-right">
-    <div class="stat px-4">
-      <div>
-        <div class="stat-title text-base inline mr-2">{{nowDate}} </div>
-        <label for="modal-time-setting" @click="openModal('timesetting')">
-          <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
-            <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base" />
-          </span>
-        </label>
+  <div v-if="cycle !== -Infinity">
+    <div class="stats float-right">
+      <div class="stat px-4">
+        <div class="flex justify-between items-center">
+          <div class="stat-title text-base inline mr-2">
+            {{ `day ${dayAfter}` }}
+          </div>
+          <label
+            v-if="isGM"
+            for="modal-time-setting"
+            @click="openModal('timesetting')"
+          >
+            <span
+              class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'pen-to-square']"
+                class="text-base"
+              />
+            </span>
+          </label>
+        </div>
+        <div class="stat-value text-4xl">{{ nowHour }}:{{ nowMin }}</div>
       </div>
-      <div class="stat-value text-4xl">{{nowHour}}:{{nowMin}}</div>
+      <div class="stat px-4">
+        <div>
+          <div class="stat-title text-base inline">Turn</div>
+          <label for="modal-turn-setting" @click="openModal('turnsetting')">
+            <span
+              class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'pen-to-square']"
+                class="text-base"
+              />
+            </span>
+          </label>
+        </div>
+        <div class="stat-value text-4xl">{{ cycle }}</div>
+        <div class="stat-figure">
+          <label
+            v-if="isComputeUsedUp"
+            class="btn uppercase"
+            @click="advanceCycle"
+            >End Turn</label
+          >
+          <label
+            v-else
+            for="modal-cycle-confirm"
+            class="btn modal-button uppercase"
+            @click="openModal('endmodal')"
+            >End Turn</label
+          >
+        </div>
+      </div>
     </div>
-    <div class="stat px-4">
-      <div>
-        <div class="stat-title text-base inline">Turn </div>
-        <label for="modal-turn-setting" @click="openModal('turnsetting')">
-          <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
-            <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base" />
-          </span>
-        </label>
-      </div>
-      <div class="stat-value text-4xl">{{cycle}}</div>
-      <div class="stat-figure">
-        <label v-if="isComputeUsedUp" class="btn uppercase" @click="advanceCycle">End Turn</label>
-        <label v-else for="modal-cycle-confirm" class="btn modal-button uppercase" @click="openModal('endmodal')">End Turn</label>
-      </div>
-    </div>
-  </div>
-  <!-- <label
+    <!-- <label
   v-if="isEditorOpen"
   class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
   @mousedown.self="onClickModalOutside"
   > -->
-<label v-if="isEndModalOpen" for="modal-cycle-confirm" class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
- @mousedown.self="onClickModalOutside('endmodal')"
->
-  <label class="modal-box relative" for="">
-    <h3 class="text-lg font-bold">Confirm advancing this Turn</h3>
-    <p class="py-4">Your remaining compute points will be lost.</p>
-    <div class="btn-group float-right">
-      <label for="modal-cycle-confirm" class="btn btn-primary" @click="advanceCycle">Confirm</label>
-      <label for="modal-cycle-confirm" class="btn" @click="cancel">Cancel</label>
-    </div>
-  </label>
-</label>
-<!--
+    <label
+      v-if="isEndModalOpen"
+      for="modal-cycle-confirm"
+      class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
+      @mousedown.self="onClickModalOutside('endmodal')"
+    >
+      <label class="modal-box relative" for="">
+        <h3 class="text-lg font-bold">Confirm advancing this Turn</h3>
+        <p class="py-4">Your remaining compute points will be lost.</p>
+        <div class="btn-group float-right">
+          <label
+            for="modal-cycle-confirm"
+            class="btn btn-primary"
+            @click="advanceCycle"
+            >Confirm</label
+          >
+          <label for="modal-cycle-confirm" class="btn" @click="cancel"
+            >Cancel</label
+          >
+        </div>
+      </label>
+    </label>
+    <!--
 <input type="checkbox" id="modal-time-setting" class="modal-toggle"
 v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
-<label v-if="isTimeSettingOpen" for="modal-time-setting" class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50" @mousedown.self="onClickModalOutside('timesetting')">
-  <label class="modal-box relative" for>
-    <h3 class="text-lg font-bold">Time</h3>
-    <p class="my-4">
-      <label class="inline-block w-20" for="clock-tracker-now-time">Now: </label>
-      <input
-        v-model="nowTimeISO"
-        type="datetime-local"
-        id="clock-tracker-now-time"
-        class="input input-sm input-bordered text-black bg-white">
-    </p>
+    <label
+      v-if="isTimeSettingOpen"
+      for="modal-time-setting"
+      class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
+      @mousedown.self="onClickModalOutside('timesetting')"
+    >
+      <label class="modal-box relative" for>
+        <h3 class="text-lg font-bold">Time</h3>
+        <p class="my-4">
+          <label class="inline-block w-20" for="clock-tracker-now-time"
+            >Now:
+          </label>
+          <input
+            v-model="nowTimeISO"
+            type="datetime-local"
+            id="clock-tracker-now-time"
+            class="input input-sm input-bordered text-black bg-white"
+          />
+        </p>
 
-    <p class="my-4">
-      <label class="inline-block w-20" for="clock-tracker-origin-time">Origin: </label>
-      <input
-        v-model="originTimeISO"
-        type="datetime-local"
-        id="clock-tracker-origin-time"
-        class="input input-sm input-bordered text-black bg-white">
-    </p>
+        <p class="my-4">
+          <label class="inline-block w-20" for="clock-tracker-origin-time"
+            >Origin:
+          </label>
+          <input
+            v-model="originTimeISO"
+            type="datetime-local"
+            id="clock-tracker-origin-time"
+            class="input input-sm input-bordered text-black bg-white"
+          />
+        </p>
 
-    <div class="btn-group float-right">
-      <label
-        for="modal-time-setting"
-        class="btn btn-primary"
-        @click="cancel"
-        >
-        Close</label>
-    </div>
-  </label>
-</label>
+        <div class="btn-group float-right">
+          <label
+            for="modal-time-setting"
+            class="btn btn-primary"
+            @click="cancel"
+          >
+            Close</label
+          >
+        </div>
+      </label>
+    </label>
 
-<!-- 
+    <!-- 
 <input type="checkbox" id="modal-turn-setting" class="modal-toggle"
 v-model="isTurnSettingOpen" @change="onTurnModalToggle" /> -->
-<label v-if="isTurnSettingOpen" for="modal-turn-setting" class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50" @mousedown.self="onClickModalOutside('turnsetting')">
-  <label class="modal-box relative" for>
+    <label
+      v-if="isTurnSettingOpen"
+      for="modal-turn-setting"
+      class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
+      @mousedown.self="onClickModalOutside('turnsetting')"
+    >
+      <label class="modal-box relative" for>
+        <h3 class="text-lg font-bold">Turns</h3>
 
-    <h3 class="text-lg font-bold">Turns</h3>
+        <p class="my-4">
+          <label for="clock-tracker-cycle-length">Turn Length: </label>
+          <input
+            v-model.number="cycleLength"
+            id="clock-tracker-cycle-length"
+            type="number"
+            min="0"
+            class="input input-sm input-bordered w-20"
+          />
+          hours
+        </p>
 
-    <p class="my-4">
-      <label for="clock-tracker-cycle-length">Turn Length: </label>
-      <input
-        v-model.number="cycleLength"
-        id="clock-tracker-cycle-length" type="number" min="0"
-        class="input input-sm input-bordered w-20"> hours
-    </p>
+        <p class="my-4">
+          <label for="clock-tracker-cycle" class="pr-2">Set Turn: </label>
+          <input
+            v-model.number="cycle"
+            type="number"
+            min="0"
+            id="clock-tracker-cycle"
+            class="input input-sm input-bordered w-20"
+          />
+        </p>
 
-    <p class="my-4">
-      <label for="clock-tracker-cycle" class="pr-2">Set Turn: </label>
-      <input
-        v-model.number="cycle"
-        type="number" min="0"
-        id="clock-tracker-cycle"
-        class="input input-sm input-bordered w-20">
-    </p>
-
-    <div class="btn-group float-right">
-      <label
-        for="modal-turn-setting"
-        class="btn btn-primary"
-        @click="cancel"
-        >
-        Close</label>
-    </div>
-  </label>
-</label>
-
-</div>
+        <div class="btn-group float-right">
+          <label
+            for="modal-turn-setting"
+            class="btn btn-primary"
+            @click="cancel"
+          >
+            Close</label
+          >
+        </div>
+      </label>
+    </label>
+  </div>
 </template>
 
 <script>
-import { DateTime } from 'luxon'
+import { DateTime } from "luxon";
+import { mapState } from "vuex";
 
 export default {
   data() {
     return {
       isTimeSettingOpen: false,
       isTurnSettingOpen: false,
-      isEndModalOpen:false,
-    }
+      isEndModalOpen: false,
+    };
   },
   computed: {
+    ...mapState({
+      isGM: (state) => state.isGM,
+    }),
+    dayAfter() {
+      //   return this.nowTimeISO - this.originTimeISO;
+      return parseInt(
+        DateTime.fromISO(this.nowTimeISO)
+          .diff(DateTime.fromISO(this.originTimeISO))
+          .as("days")
+      );
+    },
     nowDate() {
-      return this.$store.getters.nowTime.toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)
+      return this.$store.getters.nowTime.toLocaleString(
+        DateTime.DATE_MED_WITH_WEEKDAY
+      );
     },
     nowHour() {
-      return this.$store.getters.nowTime.toFormat('HH')
+      return this.$store.getters.nowTime.toFormat("HH");
     },
     nowMin() {
-      return this.$store.getters.nowTime.toFormat('mm')
+      return this.$store.getters.nowTime.toFormat("mm");
     },
     cycle: {
       get() {
-        return this.$store.state.clock.cycle },
-      set(newVal) { this.$store.commit('setCycle', newVal) },
+        return this.$store.state.clock.cycle;
+      },
+      set(newVal) {
+        this.$store.commit("setCycle", newVal);
+      },
     },
     cycleLength: {
-      get() { return this.$store.state.clock.cycleLength },
-      set(newVal) { this.$store.commit('setCycleLength', newVal) },
+      get() {
+        return this.$store.state.clock.cycleLength;
+      },
+      set(newVal) {
+        this.$store.commit("setCycleLength", newVal);
+      },
     },
     originTimeISO: {
-      get() { return this.$store.state.clock.originTimeISO },
-      set(newVal) { this.$store.commit('setOriginTimeISO', newVal) },
+      get() {
+        return this.$store.state.clock.originTimeISO;
+      },
+      set(newVal) {
+        this.$store.commit("setOriginTimeISO", newVal);
+      },
     },
     nowTimeISO: {
-      get() { return this.$store.state.clock.nowTimeISO },
-      set(newVal) { this.$store.commit('setNowTimeISO', newVal) },
+      get() {
+        return this.$store.state.clock.nowTimeISO;
+      },
+      set(newVal) {
+        this.$store.commit("setNowTimeISO", newVal);
+      },
     },
-    isComputeUsedUp () {
-      return this.$store.getters.computeAvailable === 0
+    isComputeUsedUp() {
+      return this.$store.getters.computeAvailable === 0;
     },
   },
   methods: {
     advanceCycle() {
-      this.$store.dispatch('advanceCycle')
+      this.$store.dispatch("advanceCycle");
     },
     onTimeModalToggle() {
       if (!this.isTimeSettingOpen) {
-        this.$store.dispatch('syncClock')
+        this.$store.dispatch("syncClock");
       }
     },
     onTurnModalToggle() {
       if (!this.isTurnSettingOpen) {
-        this.$store.dispatch('syncClock')
+        this.$store.dispatch("syncClock");
       }
     },
     onClickModalOutside(state) {
-        if(state === 'timesetting'){
-            this.isTimeSettingOpen = false;
-            this.onTimeModalToggle()
-            this.cancel()
-        }else if(state === 'endmodal'){
-            this.cancel()
-        }else if(state === 'turnsetting'){
-            this.isTurnSettingOpen = false;
-            this.onTurnModalToggle()
-            this.cancel()
-        }
+      if (state === "timesetting") {
+        this.isTimeSettingOpen = false;
+        this.onTimeModalToggle();
+        this.cancel();
+      } else if (state === "endmodal") {
+        this.cancel();
+      } else if (state === "turnsetting") {
+        this.isTurnSettingOpen = false;
+        this.onTurnModalToggle();
+        this.cancel();
+      }
     },
     cancel() {
-        this.isEndModalOpen = false
-        this.isTimeSettingOpen = false
-        this.isTurnSettingOpen = false
+      this.isEndModalOpen = false;
+      this.isTimeSettingOpen = false;
+      this.isTurnSettingOpen = false;
     },
-    openModal(props){
-        if(props === 'endmodal') {
-            this.isEndModalOpen = true
-        }else if (props === 'timesetting') {
-            this.isTimeSettingOpen = true
-        }else if (props === 'turnsetting') {
-            this.isTurnSettingOpen = true
-        }
-
-    }
-  }
-}
+    openModal(props) {
+      if (props === "endmodal") {
+        this.isEndModalOpen = true;
+      } else if (props === "timesetting") {
+        this.isTimeSettingOpen = true;
+      } else if (props === "turnsetting") {
+        this.isTurnSettingOpen = true;
+      }
+    },
+  },
+};
 </script>
