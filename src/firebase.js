@@ -3,7 +3,16 @@
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, update, push, onChildAdded, onChildChanged, onChildRemoved, onValue } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  update,
+  push,
+  onChildAdded,
+  onChildChanged,
+  onChildRemoved,
+  onValue,
+} from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCpQgKh8tRvW7IsWqy37jVCOAdFEGaP03w",
@@ -18,13 +27,13 @@ const firebaseConfig = {
 const fbApp = initializeApp(firebaseConfig);
 const db = getDatabase(fbApp);
 // HACK: use location hash to differentiate between different sessions.
-const sessionID = window.location.hash.substring(1)
-document.title = `${document.title}: ${sessionID}`
+const sessionID = window.location.hash.substring(1);
+document.title = `${document.title}: ${sessionID}`;
 // HACK: always reload the page when the hash changes
 // to ensure that the event log reloads and displays new sessions' content
 window.onhashchange = () => {
-  window.location.reload()
-}
+  window.location.reload();
+};
 
 const refs = {
   wholeData: ref(db, `${sessionID}/`),
@@ -41,6 +50,6 @@ const refs = {
   gmNPCs: ref(db, `${sessionID}/gmNPCs`),
   notes: ref(db, `${sessionID}/gmNotes/notes`),
   gmNotes: ref(db, `${sessionID}/gmNotes`),
-}
+};
 
-export default refs
+export default refs;

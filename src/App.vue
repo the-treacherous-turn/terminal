@@ -3,13 +3,17 @@ import { mapState } from "vuex";
 import ActionEditor from "./components/ActionEditor.vue";
 import GMPanel from "./components/GM/GMPanel.vue";
 import Footer from "./Footer.vue";
+import { v4 as uuidv4 } from "uuid";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+import { bottom } from "@popperjs/core";
 
 export default {
   data() {
     return {
       isImport: false,
-      isOpenAlert: false,
       isOpenGMPanel: false,
+      user_id: "",
     };
   },
   components: {
@@ -21,28 +25,26 @@ export default {
     onToggleGM(e) {
       this.$store.commit("setIsGM", e.target.checked);
       if (this.isGM) {
-        if (
-          this.wholeData["gmUsers"] === undefined ||
-          this.wholeData["gmUsers"] === 0
-        ) {
-          this.openGMpanel();
-        } else {
-          this.isOpenAlert = true;
-        }
+        this.openGMpanel();
       } else {
-        this.wholeData["gmUsers"] = this.wholeData["gmUsers"] - 1;
-        this.$store.dispatch("updateWholeData", this.wholeData);
+        const changeObj = {};
+        changeObj["gmUsers"] = this.wholeData["gmUsers"].filter(
+          (user) => user !== this.user_id
+        );
+        this.$store.dispatch("updateWholeData", changeObj);
         this.isOpenGMPanel = false;
       }
     },
     openGMpanel() {
-      this.wholeData["gmUsers"] =
+      const changeObj =
+        this.wholeData === undefined ? {} : { ...this.wholeData };
+      changeObj["gmUsers"] =
         this.wholeData["gmUsers"] === undefined
-          ? 1
-          : this.wholeData["gmUsers"] + 1;
-      this.$store.dispatch("updateWholeData", this.wholeData);
+          ? []
+          : [...this.wholeData["gmUsers"]];
+      changeObj["gmUsers"].push(this.user_id);
+      this.$store.dispatch("updateWholeData", changeObj);
       this.isOpenGMPanel = true;
-      this.isOpenAlert = false;
     },
     exportData() {
       // console.log(this.wholeData)
@@ -100,30 +102,74 @@ export default {
       }
     },
     leaving(e) {
-      //   return undefined;
-      //   e.prevent
       e.preventDefault();
       if (this.isGM) {
         this.$store.commit("setIsGM", false);
-        this.wholeData["gmUsers"] = this.wholeData["gmUsers"] - 1;
-        this.$store.dispatch("updateWholeData", this.wholeData);
+        const changeObj = {};
+        changeObj["gmUsers"] = this.wholeData["gmUsers"].filter(
+          (user) => user !== this.user_id
+        );
+        changeObj["users"] = this.wholeData["users"].filter(
+          (user) => user !== this.user_id
+        );
+        this.$store.dispatch("updateWholeData", changeObj);
+      } else {
+        const changeObj = {};
+        changeObj["users"] = this.wholeData["users"].filter(
+          (user) => user !== this.user_id
+        );
+        this.$store.dispatch("updateWholeData", changeObj);
       }
       e.returnValue = "";
     },
-    cancelAlert() {
-      this.$store.commit("setIsGM", false);
-      this.isOpenAlert = false;
+  },
+  watch: {
+    finishedLoading() {
+      if (this.finishedLoading) {
+        console.log(this.wholeData.users);
+        if (this.wholeData["users"] === undefined) {
+          const changeObj = {};
+          let id = uuidv4();
+          changeObj["users"] = [];
+          changeObj["users"].push(id);
+          this.user_id = id;
+          this.$store.dispatch("updateWholeData", changeObj);
+        } else {
+          let changeObj = { ...this.wholeData };
+          let id = uuidv4();
+          changeObj["users"].push(id);
+          this.user_id = id;
+          this.$store.dispatch("updateWholeData", changeObj);
+        }
+      }
+    },
+    wholeData(a, b) {
+      if (a.gmUsers !== undefined && b.gmUsers !== undefined)
+        if (a.gmUsers !== b.gmUsers) {
+          if (
+            a.gmUsers[a.gmUsers.length - 1] !== this.user_id &&
+            a.gmUsers.length > b.gmUsers.length
+          ) {
+            toast.error("A user has opened GM panel", {
+              autoClose: 10000,
+              position: "bottom-right",
+            });
+            // console.log("Alert A user has opened GM panel");
+          }
+          // console.log();
+        }
     },
   },
   mounted() {
-    window.addEventListener("beforeunload", this.leaving);
+    // window.addEventListener("beforeunload", this.handler);
+    window.addEventListener("unload", this.leaving);
   },
   computed: {
     ...mapState({
       isGM: (state) => state.isGM,
       wholeData: (state) => state.wholeData,
+      finishedLoading: (state) => state.finishedLoading,
     }),
-    // ...mapState(['isGM']),
   },
 };
 </script>
@@ -135,7 +181,12 @@ export default {
       <div
         class="navbar uppercase bg-base-100 w-full col-span-2 sticky top-0 left-0 z-10"
       >
-        <div class="tooltip tooltip-bottom z-50 lowercase" data-tip="menu">
+        <div
+          class="tooltip tooltip-bottom tooltip-error"
+          :data-tip="
+            wholeData.gmUsers ? `${wholeData.gmUsers.length} GM` : null
+          "
+        >
           <label
             for="app-drawer"
             class="btn btn-square btn-ghost border-none text-2xl"
@@ -248,10 +299,7 @@ export default {
               :checked="isGM"
               @change="onToggleGM"
               type="checkbox"
-              class="toggle tooltip tooltip-error"
-              :data-tip="`${
-                wholeData.gmUsers ? wholeData.gmUsers : 0
-              } people are looking GM panel`"
+              class="toggle"
             />
           </label>
         </li>
@@ -298,21 +346,6 @@ export default {
             type="file"
             @change="ImportData"
           />
-        </div>
-      </div>
-    </div>
-    <div
-      v-if="isOpenAlert"
-      class="fixed w-[100vw] h-[100vh] flex justify-center items-center z-50"
-      @mousedown.self="cancelAlert"
-    >
-      <div className="alert alert-error shadow-lg w-[500px] flex flex-col">
-        <div class="flex">
-          <span>A User has opened the GM panel</span>
-        </div>
-        <div class="flex self-end">
-          <button class="btn" @click="openGMpanel">Continue</button>
-          <button class="btn" @click="cancelAlert">Cancel</button>
         </div>
       </div>
     </div>

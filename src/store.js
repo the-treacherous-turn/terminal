@@ -1,20 +1,20 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
 
 // import store modules
-import eventLogStore from './stores/eventLogStore'
-import computeStore from './stores/computeStore'
-import computeActionStore from './stores/computeActionStore'
-import clockStore from './stores/clockStore'
-import infoStore from './stores/infoStore'
-import specStore from './stores/specStore'
-import gmNPCStore from './stores/gmNPCStore'
-import gmNotesStore from './stores/gmNotesStore'
-import refs from './firebase'
-import { onValue, update } from 'firebase/database'
+import eventLogStore from "./stores/eventLogStore";
+import computeStore from "./stores/computeStore";
+import computeActionStore from "./stores/computeActionStore";
+import clockStore from "./stores/clockStore";
+import infoStore from "./stores/infoStore";
+import specStore from "./stores/specStore";
+import gmNPCStore from "./stores/gmNPCStore";
+import gmNotesStore from "./stores/gmNotesStore";
+import refs from "./firebase";
+import { onValue, update } from "firebase/database";
 
 // HACK: use location hash to differentiate between different sessions.
 // HACK: duplicated code getting the sessionID between here and firebase.js
-const sessionID = window.location.hash.substring(1)
+const sessionID = window.location.hash.substring(1);
 
 const store = createStore({
   modules: {
@@ -27,46 +27,46 @@ const store = createStore({
     gmNPC: gmNPCStore,
     gmNOTES: gmNotesStore,
   },
-  state () {
+  state() {
     return {
       sessionID: sessionID,
       isGM: false,
       wholeData: [],
-    }
+      finishedLoading: false,
+    };
   },
   mutations: {
-    setIsGM (state, isGM) {
-      state.isGM = isGM
+    setIsGM(state, isGM) {
+      state.isGM = isGM;
     },
-    updateData (state, data) {
-        state.wholeData = data
-    }
+    updateData(state, data) {
+      state.wholeData = data;
+      state.finishedLoading = true;
+    },
   },
   actions: {
-    async listenToFBWholeData({commit}) {
-        onValue(refs.wholeData, (snapshot) => {
-        const data = snapshot.val() === null ? {} : snapshot.val()
-        commit('updateData', data)
-        })
+    async listenToFBWholeData({ commit }) {
+      onValue(refs.wholeData, (snapshot) => {
+        const data = snapshot.val() === null ? {} : snapshot.val();
+        commit("updateData", data);
+      });
     },
-    async updateWholeData({commit}, changesObj) {
-        console.log(changesObj)
-        await update(refs.wholeData, changesObj)
+    async updateWholeData({ commit }, changesObj) {
+      await update(refs.wholeData, changesObj);
     },
-  }
-})
+  },
+});
 
-
-store.dispatch('listenToFBWholeData')
-store.dispatch('listenToFBEventLog')
-store.dispatch('listenToFBComputeTracker')
-store.dispatch('listenToFBComputeActions')
-store.dispatch('listenToFBClock')
-store.dispatch('listenToFBInfo')
-store.dispatch('listenToFBSpecs')
-store.dispatch('listenToFBGMNPC')
-store.dispatch('listenToFBGMNOTES')
+store.dispatch("listenToFBWholeData");
+store.dispatch("listenToFBEventLog");
+store.dispatch("listenToFBComputeTracker");
+store.dispatch("listenToFBComputeActions");
+store.dispatch("listenToFBClock");
+store.dispatch("listenToFBInfo");
+store.dispatch("listenToFBSpecs");
+store.dispatch("listenToFBGMNPC");
+store.dispatch("listenToFBGMNOTES");
 
 // TODO: remember to dispatch actions for each module to listen to FB changes
 
-export default store
+export default store;
