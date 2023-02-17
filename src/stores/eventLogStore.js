@@ -70,6 +70,7 @@ const eventLogStore = {
     },
     markAsForecast(state, actionID) {
       state.actions[actionID].isForecast = true;
+      state.actions[actionID].isCommitted = false;
     },
     undoForecastAction(state, actionID) {
       state.actions[actionID].isForecast = false;
