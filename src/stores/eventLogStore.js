@@ -62,6 +62,7 @@ const eventLogStore = {
     },
     commitAction(state, { actionID, commitTimeISO }) {
       state.actions[actionID].isCommitted = true;
+      state.actions[actionID].isForecast = false;
       state.actions[actionID].commitTimeISO = commitTimeISO;
     },
     undoCommitAction(state, actionID) {
@@ -143,8 +144,10 @@ const eventLogStore = {
       await update(refs.actions, { [actionID]: null });
     },
 
-    async commitAction({ commit, state, rootState }, actionID) {
-      const commitTimeISO = rootState.clock.nowTimeISO;
+    async commitAction(
+      { commit, state, rootState },
+      { actionID, commitTimeISO }
+    ) {
       commit("commitAction", { actionID, commitTimeISO });
       await update(refs.actions, { [actionID]: state.actions[actionID] });
     },

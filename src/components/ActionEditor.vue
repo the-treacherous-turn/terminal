@@ -1,27 +1,25 @@
 <template>
-  <Transition
-    name="modal"
-  >
-    <div class="uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
-    v-if="$store.state.eventLog.isEditorOpen">
+  <Transition name="modal">
+    <div
+      class="uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
+      v-if="$store.state.eventLog.isEditorOpen"
+    >
       <div class="table-cell align-middle bg-transparent">
-        <div class="
-        modal-container
-        relative
-        w-3/5 m-auto p-8
-        border
-        transition-all
-        bg-base-100
-        ">
-          <button class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
+        <div
+          class="modal-container relative w-3/5 m-auto p-8 border transition-all bg-base-100"
+        >
+          <button
+            class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
             @click="cancel"
-          >x</button>
+          >
+            x
+          </button>
           <div class="uppercase relative">
             <h2 class="text-3xl pb-4">Edit Action</h2>
-            
             <textarea
               v-model="name"
-              name="name" id="name"
+              name="name"
+              id="name"
               placeholder="Name"
               rows="1"
               class="bg-black border w-full mb-2 px-2 py-2"
@@ -31,7 +29,8 @@
                 Confidence:
                 <input
                   v-model.number="confidence"
-                  name="confidence" id="confidence"
+                  name="confidence"
+                  id="confidence"
                   type="number"
                   min="0"
                   max="100"
@@ -43,7 +42,8 @@
                 Risk:
                 <select
                   v-model.number="risk"
-                  name="risk" id="risk"
+                  name="risk"
+                  id="risk"
                   class="bg-black border-b w-12 text-center"
                 >
                   <option value="2">d2</option>
@@ -59,7 +59,8 @@
                 Compute:
                 <input
                   v-model.number="compute"
-                  name="compute" id="compute"
+                  name="compute"
+                  id="compute"
                   type="number"
                   min="0"
                   class="bg-black border-b w-12 text-center"
@@ -68,27 +69,37 @@
             </div>
             <textarea
               v-model="description"
-              name="description" id="description"
+              name="description"
+              id="description"
               placeholder="Description"
               rows="5"
               class="bg-black w-full border mb-4 px-2 py-2"
             ></textarea>
             <div class="flex items-center mb-4">
-            <select v-model="actionState" class="bg-black w-[130px] label-text text-white placeholder-white outline-none">
-                <option value="" class="label-text" disabled selected hidden>NORMAL</option>
+              <select
+                v-model="actionState"
+                class="bg-black w-[130px] label-text text-white placeholder-white outline-none"
+              >
+                <option value="" class="label-text" disabled selected hidden>
+                  NORMAL
+                </option>
                 <option value="NORMAL" class="label-text">NORMAL</option>
                 <option value="FINALIZED" class="label-text">FINALIZED</option>
-                <option value="CROSSED OUT" class="label-text">CROSSED OUT</option>
-            </select>
+                <option value="CROSSED OUT" class="label-text">
+                  CROSSED OUT
+                </option>
+              </select>
+              <input v-model="commitTimeISO" class="ml-[20px]" />
             </div>
-
 
             <button
               class="btn uppercase"
               type="submit"
               :disabled="isSubmitDisabled"
               @click="submit"
-            >>> Submit</button>
+            >
+              >> Submit
+            </button>
           </div>
         </div>
       </div>
@@ -97,71 +108,112 @@
 </template>
 
 <script>
+import { DateTime } from "luxon";
+
 export default {
   computed: {
     isSubmitDisabled() {
-      return !this.name
+      return !this.name;
     },
     name: {
-      get() { return this.$store.getters.dirtyAction.name },
-      set (value) { this.$store.commit('updateAction', {name: value}) }
+      get() {
+        return this.$store.getters.dirtyAction.name;
+      },
+      set(value) {
+        this.$store.commit("updateAction", { name: value });
+      },
     },
     description: {
-      get() {return this.$store.getters.dirtyAction.description},
-      set (value) { this.$store.commit('updateAction', {description: value}) }
+      get() {
+        return this.$store.getters.dirtyAction.description;
+      },
+      set(value) {
+        this.$store.commit("updateAction", { description: value });
+      },
     },
     risk: {
-      get() {return this.$store.getters.dirtyAction.risk},
-      set (value) { this.$store.commit('updateAction', {risk: value}) }
+      get() {
+        return this.$store.getters.dirtyAction.risk;
+      },
+      set(value) {
+        this.$store.commit("updateAction", { risk: value });
+      },
     },
     confidence: {
-      get() {return this.$store.getters.dirtyAction.confidence},
-      set (value) { this.$store.commit('updateAction', {confidence: value}) }
+      get() {
+        return this.$store.getters.dirtyAction.confidence;
+      },
+      set(value) {
+        this.$store.commit("updateAction", { confidence: value });
+      },
     },
     compute: {
-      get() {return this.$store.getters.dirtyAction.compute},
-      set (value) { this.$store.commit('updateAction', {compute: value}) }
+      get() {
+        return this.$store.getters.dirtyAction.compute;
+      },
+      set(value) {
+        this.$store.commit("updateAction", { compute: value });
+      },
     },
     actionState: {
-        get() {return this.$store.getters.dirtyAction.actionState},
-        set (value) { this.$store.commit('updateStateAction',
-        {actionState: value, commitTimeISO: this.$store.state.clock.nowTimeISO,
-        })
-    }
-    }
+      get() {
+        return this.$store.getters.dirtyAction.actionState;
+      },
+      set(value) {
+        this.$store.commit("updateStateAction", {
+          actionState: value,
+          commitTimeISO: DateTime.fromISO(
+            this.$store.state.clock.nowTimeISO
+          ).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY),
+        });
+      },
+    },
+    commitTimeISO: {
+      get() {
+        return this.$store.getters.dirtyAction.commitTimeISO;
+      },
+      set(value) {
+        console.log(DateTime.fromFormat(value, "EEE, MMM d, yyyy").toJSDate());
+        this.$store.commit("updateAction", {
+          commitTimeISO: value,
+        });
+      },
+    },
   },
   methods: {
     submit() {
-      this.$store.dispatch('submitActionEdit')
-      this.cleanFields()
-      this.close()
+      this.$store.dispatch("submitActionEdit");
+      this.cleanFields();
+      this.close();
     },
     cancel() {
       if (this.$store.getters.dirtyAction.isNew) {
-        this.$store.dispatch('deleteAction', this.$store.state.eventLog.dirtyActionID)
-        this.close()
+        this.$store.dispatch(
+          "deleteAction",
+          this.$store.state.eventLog.dirtyActionID
+        );
+        this.close();
       } else {
         // HACK prevent dirty state from persisting.
         // TODO wire this up properly, so that cancel reverts changes to the card
-        this.submit()
+        this.submit();
       }
     },
     setActionState(state) {
-        this.$store.commit('updateStateAction', state)
+      this.$store.commit("updateStateAction", state);
     },
     cleanFields() {
-      this.name = ''
-      this.description = ''
+      this.name = "";
+      this.description = "";
     },
     close() {
-      this.$store.commit('closeEditor')
+      this.$store.commit("closeEditor");
     },
-  }
-}
+  },
+};
 </script>
 
 <style>
-
 .modal-enter-from {
   opacity: 0;
 }

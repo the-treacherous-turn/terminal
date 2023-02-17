@@ -102,10 +102,10 @@ export default {
 
 <template>
   <div
-    class="h-full w-full z-1 max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden"
+    class="h-full w-full max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden"
   >
     <div
-      class="items-center space-x-2 flex absolute bg-base-100 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl"
+      class="items-center z-[8] space-x-2 flex absolute bg-base-100 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl"
     >
       <span> Event Log </span>
       <div
@@ -160,7 +160,7 @@ export default {
     </div>
 
     <div
-      class="absolute h-full w-full overflow-y-scroll"
+      class="absolute h-full w-full overflow-y-scroll z-[5]"
       ref="scroller"
       @scroll.passive="saveScrollPos"
     >
@@ -183,7 +183,7 @@ export default {
     </div>
 
     <div
-      class="absolute bg-base-100 w-full bottom-0 left-0 p-4 pl-8 border-t-2"
+      class="absolute bg-base-100 w-full bottom-0 left-0 p-4 pl-8 border-t-2 z-[8]"
     >
       <button class="" type="button" @click="editNewAction">
         >> New Action
