@@ -75,8 +75,8 @@
         <table class="table table-compact w-full">
           <thead>
             <tr>
-              <th class="pl-5 w-3/5">Item</th>
-              <th class="pl-5">Cost</th>
+              <th class="pl-5 w-3/5">Cost</th>
+              <th class="pl-5">Compute</th>
               <th></th>
             </tr>
           </thead>
