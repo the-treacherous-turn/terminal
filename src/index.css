@@ -13,6 +13,9 @@
 .btn:hover {
   @apply border-primary-content
 }
+.card {
+  @apply overflow-hidden
+}
 @tailwind utilities;
 
 @layer utilities {
