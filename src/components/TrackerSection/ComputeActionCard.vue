@@ -96,7 +96,7 @@ export default {
       <div class="m-0.5 btn btn-xs btn-square btn-ghost border-0" :class="canSubtract?'':'btn-disabled'" @click="subtractComputeToApply">
         <font-awesome-icon icon="chevron-down" class="text-2xl" />
       </div>
-      <span class="text-lg w-12 text-center inline-block">+ 
+      <span class="text-lg w-12 text-center inline-block">
         <input type="number" min="0" :max="computeRemaining"
           v-model.number="computeToAddInForm"
           class="inline input text-center input-bordered input-xs px-1 w-8"
