@@ -1,6 +1,7 @@
 <script>
 import { mapState } from "vuex";
 import ActionEditor from "./components/ActionEditor.vue";
+import Clock from "./components/TrackerSection/Clock.vue";
 import GMPanel from "./components/GM/GMPanel.vue";
 import Footer from "./Footer.vue";
 import { v4 as uuidv4 } from "uuid";
@@ -18,6 +19,7 @@ export default {
   },
   components: {
     ActionEditor,
+    Clock,
     GMPanel,
     Footer,
   },
@@ -179,35 +181,40 @@ export default {
     <input id="app-drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
       <div
-        class="navbar uppercase bg-base-100 w-full col-span-2 sticky top-0 left-0 z-10"
+        class="navbar uppercase bg-base-100 w-full col-span-2 sticky top-0 left-0 z-10 justify-between"
       >
-        <div
-          class="tooltip tooltip-bottom tooltip-error"
-          :data-tip="
-            wholeData.gmUsers ? `${wholeData.gmUsers.length} GM` : null
-          "
-        >
-          <label
-            for="app-drawer"
-            class="btn btn-square btn-ghost border-none text-2xl"
+        <div>
+          <div
+            class="tooltip tooltip-bottom tooltip-error"
+            :data-tip="
+              wholeData.gmUsers ? `${wholeData.gmUsers.length} GM` : null
+            "
           >
-            <font-awesome-icon :icon="['fas', 'bars']" />
-          </label>
-        </div>
-        <span class="text-3xl pl-2">
-          <span>
-            The Treacherous Turn <span class="text-base">v0.3.0</span>
-            <span class="text-base ml-4"
-              >Session ID:
-              <span class="bg-white text-black">{{
-                $store.state.sessionID
-              }}</span></span
+            <label
+              for="app-drawer"
+              class="btn btn-square btn-ghost border-none text-2xl"
             >
+              <font-awesome-icon :icon="['fas', 'bars']" />
+            </label>
+          </div>
+          <span class="text-3xl pl-2">
+            <span>
+              The Treacherous Turn
+              <span class="text-base ml-4"
+                >ID:
+                <span class="bg-white text-black">{{
+                  $store.state.sessionID
+                }}</span></span
+              >
+            </span>
           </span>
-        </span>
+        </div>
+        <div>
+          <Clock />
+        </div>
       </div>
 
-      <div class="h-[calc(100%-8rem)]" :class="{ flex: isGM }">
+      <div class="h-[calc(100%-11rem)]" :class="{ flex: isGM }">
         <router-view :class="{ 'w-2/3': isGM }"></router-view>
         <div v-if="isOpenGMPanel" class="border grow h-full">
           <GMPanel />
@@ -315,6 +322,7 @@ export default {
         >
           load backup
         </div>
+        <span class="absolute bottom-4 text-base">version 0.3.1</span>
       </ul>
       <div
         class="absolute w-[100vw] h-[100vh] flex items-center justify-center"
