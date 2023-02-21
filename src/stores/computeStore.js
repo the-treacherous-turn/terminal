@@ -3,13 +3,25 @@ import { onValue, update, push } from "firebase/database";
 
 const computeStore = {
   state: () => ({
-    computeToSpend: 0,
-    computeSpent: 0,
+    computeSpent: 0, // how much compute's spent so far during a turn
     computeSources: {},
     baseComputeCost: Number.NEGATIVE_INFINITY,
     recurringCosts: {},
+    computeToBurn: 0, // standalone compute adjustment
   }),
   getters: {
+    /**
+     * Sum of all computes we want to add, from all compute actions, and the burner
+     */
+    computeToSpend(state, getters, rootState) {
+      return Object.values(rootState.computeAction.computeActions).reduce(
+        (a, b) => a + b.computeToAdd,
+        state.computeToBurn,
+      );
+    },
+    /**
+     * Total compute is the sum of all compute sources
+     */
     computeTotal(state) {
       let total = 0;
       for (const key in state.computeSources) {
@@ -39,7 +51,7 @@ const computeStore = {
       return getters.computeTotal - getters.recurringSum - state.computeSpent;
     },
     hasComputeBudget(state, getters) {
-      return getters.computeAvailable - state.computeToSpend > 0;
+      return getters.computeAvailable - getters.computeToSpend > 0;
     },
   },
   mutations: {
@@ -49,9 +61,6 @@ const computeStore = {
     updateComputeSpent(state, change) {
       state.computeSpent += change;
     },
-    updateComputeToSpend(state, change) {
-      state.computeToSpend += change;
-    },
     updateComputeTracker(state, changesObj) {
       for (const key in changesObj) {
         if (Object.hasOwnProperty.call(changesObj, key)) {
@@ -59,6 +68,9 @@ const computeStore = {
           state[key] = val;
         }
       }
+    },
+    modifyComputeToBurn(state, val) {
+      state.computeToBurn = val;
     },
     setBaseComputeCost(state, baseComputeCost) {
       state.baseComputeCost = baseComputeCost;
@@ -125,6 +137,13 @@ const computeStore = {
       commit("removeRecurringCost", recurringCostID);
       await update(refs.computeTracker, {
         recurringCosts: state.recurringCosts,
+      });
+    },
+    async modifyComputeToBurn({commit, state, getters}, val) {
+      if (val > getters.computeAvailable) val = getters.computeAvailable;
+      commit("modifyComputeToBurn", val);
+      await update(refs.computeTracker, {
+        computeToBurn: state.computeToBurn,
       });
     },
   },

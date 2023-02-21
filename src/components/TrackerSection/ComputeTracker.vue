@@ -14,15 +14,23 @@
           <span class="self-end">
             {{ available }}<span v-if="toSpend !== 0">(-{{toSpend}})</span>/{{ total }}
           </span>
-          <div class="inline-flex flex-col pl-2">
-            <div class="m-0.5 btn h-4 min-h-0 w-8 btn-square btn-ghost border-0" @click="">
-              <font-awesome-icon icon="chevron-up" class="text-base" />
-            </div>
-            <div class="m-0.5 btn h-4 min-h-0 w-8 btn-square btn-ghost border-0" @click="">
-              <font-awesome-icon icon="chevron-down" class="text-base" />
-            </div>
-          </div>
         </div>
+      </div>
+    </div>
+    <div class="float-left p-4">
+      <span class="uppercase text-base">Adjust compute</span>
+      <div class="flex gap-4 mt-2">
+        <input
+          type="number"
+          class="input input-sm w-12 text-center"
+          v-model.number="computeToBurn"
+        >
+        <button class="btn btn-sm btn-circle" @click="addComputeToBurn">
+          <font-awesome-icon icon="plus" class="text-2xl" />
+        </button>
+        <button class="btn btn-sm btn-circle" @click="removeComputeToBurn">
+          <font-awesome-icon icon="minus" class="text-2xl" />
+        </button>
       </div>
     </div>
 
@@ -81,7 +89,7 @@
           </thead>
           <tbody>
             <tr>
-              <th><span class="input input-sm w-full max-w-xs">Basic Cognition Cost</span></th>
+              <th><span class="w-full max-w-xs">Basic Cognition Cost</span></th>
               <td><input type="number" min="0" placeholder="Amount" v-model.number="baseComputeCost" class="input input-sm input-bordered w-full max-w-xs" /></td>
             </tr>
             <tr
@@ -135,7 +143,7 @@ export default {
       return this.$store.getters.computeAvailable
     },
     toSpend() {
-      return this.$store.state.compute.computeToSpend
+      return this.$store.getters.computeToSpend
     },
     total() {
       return this.$store.getters.computeTotal
@@ -151,6 +159,16 @@ export default {
         this.$store.commit('setBaseComputeCost', value)
       }
     },
+    computeToBurn: {
+      get () {
+        return this.$store.state.compute.computeToBurn
+      },
+      set (value) {
+        if (value === "") return // user just cleared the input. disregard.
+        const newValue = parseInt(value)
+        this.$store.dispatch('modifyComputeToBurn', newValue)
+      }
+    },
 
     ...mapState({
       computeSources: state => state.compute.computeSources,
@@ -158,6 +176,13 @@ export default {
     },)
   },
   methods: {
+    addComputeToBurn() {
+      this.$store.dispatch('modifyComputeToBurn', this.computeToBurn + 1)
+    },
+    removeComputeToBurn() {
+      if (this.computeToBurn <= 0) return
+      this.$store.dispatch('modifyComputeToBurn', this.computeToBurn - 1)
+    },
     addComputeSource() {
       this.$store.dispatch('addComputeSource')
     },

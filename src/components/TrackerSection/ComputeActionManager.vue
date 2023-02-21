@@ -11,7 +11,7 @@ export default {
   },
   computed: {
     canAssignCompute() {
-      return this.$store.getters.computeAvailable > 0 && this.$store.state.compute.computeToSpend > 0
+      return this.$store.getters.computeAvailable > 0 && this.$store.getters.computeToSpend > 0
     },
     // editor
     isSubmitDisabled() {

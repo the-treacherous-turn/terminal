@@ -84,7 +84,7 @@ const computeActionStore = {
       commit('deleteComputeAction', actionID)
       await update(refs.computeActions, {[actionID]: null})
     },
-    async modifyComputeToApply({commit, state, rootState}, {actionID, delta}) {
+    async modifyComputeToApply({commit, state}, {actionID, delta}) {
       const ca = state.computeActions[actionID]
       // if the compute action is maxed out, then back out
       if (ca.computeNeeded < ca.computeApplied + ca.computeToAdd + delta) return
@@ -95,9 +95,7 @@ const computeActionStore = {
           computeToAdd: ca.computeToAdd + delta,
         }
       })
-      commit('updateComputeToSpend', delta)
       await update(refs.computeActions, {[actionID]: state.computeActions[actionID]})
-      await update(refs.computeTracker, {computeToSpend: rootState.compute.computeToSpend})
     },
     // calculate compute point assignment
     // NOTE this is a bit of a hack. we need to figure out a better way to do this
@@ -106,7 +104,19 @@ const computeActionStore = {
     // Therefore we only commit during the loops,
     // and sync at the very end.
     async assignComputePoints({state, rootState, getters, commit, dispatch}) {
-      rootState.compute.computeToSpend = 0 // to get new computeAvailable
+      ///// 1. assign commpute to burn
+      const computeToBurn = rootState.compute.computeToBurn
+      let burnChange = 0
+      if (computeToBurn > getters.computeAvailable) {
+        burnChange = getters.computeAvailable
+      } else {
+        burnChange = computeToBurn
+      }
+      commit('updateComputeSpent', burnChange)
+      const burnToHours = rootState.clock.cycleLength * (burnChange / (getters.computeTotal - getters.recurringSum))
+      commit('advanceTime', burnToHours)
+
+      ///// 2. assign computes in compute actions
       Object.values(state.computeActions).forEach(ca => {
         const computeAvailable = getters.computeAvailable
         // if there isn't enough compute available, then add however much is left
@@ -127,12 +137,11 @@ const computeActionStore = {
         if (remainingComputeNeeded < ca.computeToAdd){
           ca.computeToAdd = remainingComputeNeeded
         }
-        commit('updateComputeToSpend', ca.computeToAdd)
       })
+      ///// 3. sync
       await dispatch('syncClock')
       await update(refs.computeActions, state.computeActions)
       await update(refs.computeTracker, {
-        computeToSpend: rootState.compute.computeToSpend,
         computeSpent: rootState.compute.computeSpent,
       })
     },

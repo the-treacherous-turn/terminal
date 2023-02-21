@@ -16,6 +16,9 @@
 .card {
   @apply overflow-hidden
 }
+.input {
+  @apply input-bordered border-white
+}
 @tailwind utilities;
 
 @layer utilities {
