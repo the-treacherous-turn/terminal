@@ -1,6 +1,11 @@
 <template>
   <div class="mx-8 my-4 p-4 relative border">
-    <div class="text-sm pb-2">
+    <div v-if="stateofDisplayMode" class="text-sm pb-2">
+      <span class="">
+        {{ `Day ${leftDate}` }}
+      </span>
+    </div>
+    <div v-else class="text-sm pb-2">
       <span class="">
         {{ commitDate }}
       </span>
@@ -55,6 +60,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import { DateTime } from "luxon";
 
 export default {
@@ -69,6 +75,7 @@ export default {
     isCommitted: Boolean,
     isForecast: Boolean,
     commitTimeISO: String,
+    dayLeft: Number,
   },
   data() {
     return {
@@ -78,9 +85,16 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      stateofDisplayMode: (state) => state.stateofDisplayMode,
+    }),
     commitDate() {
       if (!this.commitTimeISO) return "";
       return this.commitTimeISO;
+    },
+    leftDate() {
+      if (!this.dayLeft) return "";
+      return this.dayLeft;
     },
   },
   methods: {
@@ -104,6 +118,11 @@ export default {
         commitTimeISO: DateTime.fromISO(
           this.$store.state.clock.nowTimeISO
         ).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY),
+        dayLeft: parseInt(
+          DateTime.fromISO(this.$store.state.clock.nowTimeISO)
+            .diff(DateTime.fromISO(this.$store.state.clock.originTimeISO))
+            .as("days")
+        ),
       });
     },
     undoCommit() {

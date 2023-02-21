@@ -107,7 +107,7 @@ export default {
     <div
       class="items-center z-[8] space-x-2 flex absolute bg-base-100 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl"
     >
-      <span> Event Log </span>
+      <span> Project Log </span>
       <div
         :class="[
           filterQuery.length !== 0 ? 'filter_clicked' : 'filter_unclicked',
@@ -178,6 +178,7 @@ export default {
         :isCommitted="action.isCommitted"
         :isForecast="action.isForecast"
         :commitTimeISO="action.commitTimeISO"
+        :dayLeft="action.dayLeft"
       />
       <div class="h-24"></div>
     </div>

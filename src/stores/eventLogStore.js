@@ -60,10 +60,11 @@ const eventLogStore = {
       state.actions[state.dirtyActionID].isNew = false;
       state.dirtyActionID = null;
     },
-    commitAction(state, { actionID, commitTimeISO }) {
+    commitAction(state, { actionID, commitTimeISO, dayLeft }) {
       state.actions[actionID].isCommitted = true;
       state.actions[actionID].isForecast = false;
       state.actions[actionID].commitTimeISO = commitTimeISO;
+      state.actions[actionID].dayLeft = dayLeft;
     },
     undoCommitAction(state, actionID) {
       state.actions[actionID].isCommitted = false;
@@ -147,9 +148,9 @@ const eventLogStore = {
 
     async commitAction(
       { commit, state, rootState },
-      { actionID, commitTimeISO }
+      { actionID, commitTimeISO, dayLeft }
     ) {
-      commit("commitAction", { actionID, commitTimeISO });
+      commit("commitAction", { actionID, commitTimeISO, dayLeft });
       await update(refs.actions, { [actionID]: state.actions[actionID] });
     },
 

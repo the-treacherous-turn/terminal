@@ -33,6 +33,7 @@ const store = createStore({
       isGM: false,
       wholeData: [],
       finishedLoading: false,
+      stateofDisplayMode: false,
     };
   },
   mutations: {
@@ -42,6 +43,9 @@ const store = createStore({
     updateData(state, data) {
       state.wholeData = data;
       state.finishedLoading = true;
+    },
+    setIsDisplayModal(state, stateofDisplayMode) {
+      state.stateofDisplayMode = stateofDisplayMode;
     },
   },
   actions: {

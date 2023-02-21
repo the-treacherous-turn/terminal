@@ -89,7 +89,12 @@
                   CROSSED OUT
                 </option>
               </select>
-              <input v-model="commitTimeISO" class="ml-[20px]" />
+              <input
+                v-if="stateofDisplayMode"
+                v-model="dayLeft"
+                class="ml-[20px]"
+              />
+              <input v-else v-model="commitTimeISO" class="ml-[20px]" />
             </div>
 
             <button
@@ -109,9 +114,13 @@
 
 <script>
 import { DateTime } from "luxon";
+import { mapState } from "vuex";
 
 export default {
   computed: {
+    ...mapState({
+      stateofDisplayMode: (state) => state.stateofDisplayMode,
+    }),
     isSubmitDisabled() {
       return !this.name;
     },
@@ -176,6 +185,16 @@ export default {
         console.log(DateTime.fromFormat(value, "EEE, MMM d, yyyy").toJSDate());
         this.$store.commit("updateAction", {
           commitTimeISO: value,
+        });
+      },
+    },
+    dayLeft: {
+      get() {
+        return this.$store.getters.dirtyAction.dayLeft;
+      },
+      set(value) {
+        this.$store.commit("updateAction", {
+          dayLeft: value,
         });
       },
     },

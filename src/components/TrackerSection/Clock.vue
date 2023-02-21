@@ -3,8 +3,14 @@
     <div class="stats float-right">
       <div class="stat px-4">
         <div class="flex justify-between items-center">
-          <div class="stat-title text-base inline mr-2">
+          <div
+            v-if="stateofDisplayMode"
+            class="stat-title text-base inline mr-2"
+          >
             {{ `day ${dayAfter}` }}
+          </div>
+          <div v-else class="stat-title text-base inline mr-2">
+            {{ nowDate }}
           </div>
           <label
             v-if="isGM"
@@ -117,7 +123,16 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
           />
         </p>
 
-        <div class="btn-group float-right">
+        <div class="w-full flex justify-between">
+          <label class="flex cursor-pointer">
+            <span class="label-text">Display mode:</span>
+            <input
+              :checked="stateofDisplayMode"
+              @change="onToggleDisplayMode"
+              type="checkbox"
+              class="toggle ml-[10px]"
+            />
+          </label>
           <label
             for="modal-time-setting"
             class="btn btn-primary"
@@ -193,6 +208,7 @@ export default {
   computed: {
     ...mapState({
       isGM: (state) => state.isGM,
+      stateofDisplayMode: (state) => state.stateofDisplayMode,
     }),
     dayAfter() {
       //   return this.nowTimeISO - this.originTimeISO;
@@ -250,6 +266,10 @@ export default {
     },
   },
   methods: {
+    onToggleDisplayMode(e) {
+      console.log(e.target.checked);
+      this.$store.commit("setIsDisplayModal", e.target.checked);
+    },
     advanceCycle() {
       this.$store.dispatch("advanceCycle");
     },
