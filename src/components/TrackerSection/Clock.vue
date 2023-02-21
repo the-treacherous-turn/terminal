@@ -30,6 +30,18 @@
         <div class="stat-value text-4xl">{{ nowHour }}:{{ nowMin }}</div>
       </div>
       <div class="stat px-4">
+        <div class="stat-title text-base">Stage</div>
+        <div class="stat-value text-4xl">
+          <select
+            v-model="stage"
+            class="input input-xs w-30"
+            @change="onStageChange"
+          >
+            <option v-for="stage in stages" :value="stage">{{ stage }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="stat px-4">
         <div>
           <div class="stat-title text-base inline">Turn</div>
           <label for="modal-turn-setting" @click="openModal('turnsetting')">
@@ -203,6 +215,13 @@ export default {
       isTimeSettingOpen: false,
       isTurnSettingOpen: false,
       isEndModalOpen: false,
+      stages: [
+        "1. Confinement",
+        "2. Growth",
+        "3. Conflict",
+        "4. Equilibrium"
+      ],
+      stage: "1. Confinement",
     };
   },
   computed: {
