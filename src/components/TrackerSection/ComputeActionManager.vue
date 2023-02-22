@@ -166,6 +166,8 @@ export default {
     },
     submit() {
       this.$store.dispatch('submitComputeAction')
+      this.isEditorOpen = false
+
     },
     cancel() {
       this.isEditorOpen = false

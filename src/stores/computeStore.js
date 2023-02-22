@@ -3,9 +3,10 @@ import { onValue, update, push } from "firebase/database";
 
 const computeStore = {
   state: () => ({
+    loadingFinished: false,
     computeSpent: 0, // how much compute's spent so far during a turn
     computeSources: {},
-    baseComputeCost: Number.NEGATIVE_INFINITY,
+    baseComputeCost: 0,
     recurringCosts: {},
     computeToBurn: 0, // standalone compute adjustment
   }),
@@ -16,7 +17,7 @@ const computeStore = {
     computeToSpend(state, getters, rootState) {
       return Object.values(rootState.computeAction.computeActions).reduce(
         (a, b) => a + b.computeToAdd,
-        state.computeToBurn,
+        state.computeToBurn
       );
     },
     /**
@@ -68,6 +69,7 @@ const computeStore = {
           state[key] = val;
         }
       }
+      state.loadingFinished = true;
     },
     modifyComputeToBurn(state, val) {
       state.computeToBurn = val;
@@ -139,7 +141,7 @@ const computeStore = {
         recurringCosts: state.recurringCosts,
       });
     },
-    async modifyComputeToBurn({commit, state, getters}, val) {
+    async modifyComputeToBurn({ commit, state, getters }, val) {
       if (val > getters.computeAvailable) val = getters.computeAvailable;
       commit("modifyComputeToBurn", val);
       await update(refs.computeTracker, {

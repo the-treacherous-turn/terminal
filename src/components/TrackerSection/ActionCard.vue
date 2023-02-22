@@ -2,7 +2,7 @@
   <div class="mx-8 my-4 p-4 relative border">
     <div v-if="stateofDisplayMode" class="text-sm pb-2">
       <span class="">
-        {{ `Day ${leftDate}` }}
+        {{ leftDate }}
       </span>
     </div>
     <div v-else class="text-sm pb-2">
@@ -75,7 +75,7 @@ export default {
     isCommitted: Boolean,
     isForecast: Boolean,
     commitTimeISO: String,
-    dayLeft: Number,
+    dayLeft: String,
   },
   data() {
     return {
@@ -118,11 +118,11 @@ export default {
         commitTimeISO: DateTime.fromISO(
           this.$store.state.clock.nowTimeISO
         ).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY),
-        dayLeft: parseInt(
+        dayLeft: `Day ${parseInt(
           DateTime.fromISO(this.$store.state.clock.nowTimeISO)
             .diff(DateTime.fromISO(this.$store.state.clock.originTimeISO))
-            .as("days")
-        ),
+            .as("days") + 1
+        )}`,
       });
     },
     undoCommit() {

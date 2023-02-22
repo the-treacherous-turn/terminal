@@ -1,16 +1,18 @@
 <template>
-  <div v-if="cycle !== -Infinity">
+  <div>
     <div class="stats float-right">
       <div class="stat px-4">
         <div class="flex justify-between items-center">
-          <div
-            v-if="stateofDisplayMode"
-            class="stat-title text-base inline mr-2"
-          >
-            {{ `day ${dayAfter}` }}
-          </div>
-          <div v-else class="stat-title text-base inline mr-2">
-            {{ nowDate }}
+          <div v-if="loadingFinished">
+            <div
+              v-if="stateofDisplayMode"
+              class="stat-title text-base inline mr-2"
+            >
+              {{ `day ${dayAfter}` }}
+            </div>
+            <div v-else class="stat-title text-base inline mr-2">
+              {{ nowDate }}
+            </div>
           </div>
           <label
             v-if="isGM"
@@ -27,7 +29,9 @@
             </span>
           </label>
         </div>
-        <div class="stat-value text-4xl">{{ nowHour }}:{{ nowMin }}</div>
+        <div class="stat-value text-4xl" v-if="loadingFinished">
+          {{ nowHour }}:{{ nowMin }}
+        </div>
       </div>
       <div class="stat px-4">
         <div class="stat-title text-base">Stage</div>
@@ -55,7 +59,9 @@
             </span>
           </label>
         </div>
-        <div class="stat-value text-4xl">{{ cycle }}</div>
+        <div class="stat-value text-4xl" v-if="loadingFinished">
+          {{ cycle }}
+        </div>
         <div class="stat-figure">
           <label
             v-if="isComputeUsedUp"
@@ -215,12 +221,7 @@ export default {
       isTimeSettingOpen: false,
       isTurnSettingOpen: false,
       isEndModalOpen: false,
-      stages: [
-        "1. Confinement",
-        "2. Growth",
-        "3. Conflict",
-        "4. Equilibrium"
-      ],
+      stages: ["1. Confinement", "2. Growth", "3. Conflict", "4. Equilibrium"],
       stage: "1. Confinement",
     };
   },
@@ -228,13 +229,14 @@ export default {
     ...mapState({
       isGM: (state) => state.isGM,
       stateofDisplayMode: (state) => state.stateofDisplayMode,
+      loadingFinished: (state) => state.clock.loadingFinished,
     }),
     dayAfter() {
       //   return this.nowTimeISO - this.originTimeISO;
       return parseInt(
         DateTime.fromISO(this.nowTimeISO)
           .diff(DateTime.fromISO(this.originTimeISO))
-          .as("days")
+          .as("days") + 1
       );
     },
     nowDate() {
@@ -269,6 +271,7 @@ export default {
         return this.$store.state.clock.originTimeISO;
       },
       set(newVal) {
+        console.log(newVal);
         this.$store.commit("setOriginTimeISO", newVal);
       },
     },
