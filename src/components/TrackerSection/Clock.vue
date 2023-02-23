@@ -100,7 +100,10 @@
             @click="advanceCycle"
             >Confirm</label
           >
-          <label for="modal-cycle-confirm" class="btn" @click="cancel"
+          <label
+            for="modal-cycle-confirm"
+            class="btn"
+            @click="cancel('endmodal')"
             >Cancel</label
           >
         </div>
@@ -154,7 +157,7 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
           <label
             for="modal-time-setting"
             class="btn btn-primary"
-            @click="cancel"
+            @click="cancel('timesetting')"
           >
             Close</label
           >
@@ -201,7 +204,7 @@ v-model="isTurnSettingOpen" @change="onTurnModalToggle" /> -->
           <label
             for="modal-turn-setting"
             class="btn btn-primary"
-            @click="cancel"
+            @click="cancel('turnsetting')"
           >
             Close</label
           >
@@ -293,6 +296,7 @@ export default {
       this.$store.commit("setIsDisplayModal", e.target.checked);
     },
     advanceCycle() {
+      this.isEndModalOpen = false;
       this.$store.dispatch("advanceCycle");
     },
     onTimeModalToggle() {
@@ -309,19 +313,23 @@ export default {
       if (state === "timesetting") {
         this.isTimeSettingOpen = false;
         this.onTimeModalToggle();
-        this.cancel();
       } else if (state === "endmodal") {
-        this.cancel();
+        this.isEndModalOpen = false;
       } else if (state === "turnsetting") {
         this.isTurnSettingOpen = false;
         this.onTurnModalToggle();
-        this.cancel();
       }
     },
-    cancel() {
-      this.isEndModalOpen = false;
-      this.isTimeSettingOpen = false;
-      this.isTurnSettingOpen = false;
+    cancel(state) {
+      if (state === "timesetting") {
+        this.isTimeSettingOpen = false;
+        this.onTimeModalToggle();
+      } else if (state === "endmodal") {
+        this.isEndModalOpen = false;
+      } else if (state === "turnsetting") {
+        this.isTurnSettingOpen = false;
+        this.onTurnModalToggle();
+      }
     },
     openModal(props) {
       if (props === "endmodal") {

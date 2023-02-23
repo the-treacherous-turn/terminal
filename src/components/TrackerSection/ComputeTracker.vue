@@ -252,9 +252,10 @@ export default {
     },
     cancel() {
       this.isSettingOpen = false;
+      this.onModalToggle();
     },
     onClickModalOutside() {
-      this.cancel();
+      this.isSettingOpen = false;
       this.onModalToggle();
     },
   },
