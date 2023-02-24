@@ -23,7 +23,7 @@ export default {
 
 <template>
   <div class="flex">
-    <ProcessClock :size="size" :elapsed="elapsed" />
+    <ProcessClock :size="size" :elapsed="elapsed" :width="100" :height="100" />
     <div class="flex ml-[20px] w-full">
       <div class="flex flex-col w-full">
         <div class="flex justify-between items-center w-full">

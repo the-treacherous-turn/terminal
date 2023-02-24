@@ -4,6 +4,8 @@ export default {
   props: {
     size: Number,
     elapsed: Number,
+    width: Number,
+    height: Number,
   },
   data() {
     return {};
@@ -12,6 +14,10 @@ export default {
 </script>
 
 <template>
+  <component :is="'style'">
+    :root { --clock-size: {{ `${width}px` }}; --clock-disc-size:
+    {{ `${width / 2}px` }}; }
+  </component>
   <div class="clock" :style="`--n: ${size}`">
     <div class="widget">
       <div class="core">
@@ -68,7 +74,7 @@ export default {
 
 <style>
 .clock {
-  --color-orange: #f06900;
+    --color-orange: #f06900;
   --color-blue: #0f96ff;
   --color-dark: #020308;
   --color-dark-gray: #1d2225;
@@ -80,10 +86,9 @@ export default {
   --color-scrollbar-fg: var(--color-light);
   --color-clock-border: var(--color-dark);
   --clock-border-thickness: 4px;
-  --clock-size: 100px;
-  --clock-disc-size: 50px;
 
   --angle: calc(360deg / var(--n));
+
   display: flex;
   flex-direction: column;
 }
