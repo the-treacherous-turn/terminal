@@ -61,11 +61,11 @@ export default {
   </div>
   <label
     v-if="isEditorOpen"
-    class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-50 z-50"
+    class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-black z-50"
     @mousedown.self="onClickModalOutside"
   >
     <label
-      class="w-[1325px] bg-black relative flex flex-col"
+      class="w-[1325px] relative flex flex-col"
       @click="(e) => e.preventDefault()"
     >
       <div class="flex w-full justify-between items-center">
