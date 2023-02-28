@@ -7,6 +7,17 @@ export default {
     width: Number,
     height: Number,
   },
+  computed: {
+    dividerThickness() {
+      if (this.size > 100)
+        return '0px'
+      else if (this.size > 50)
+        return '1px'
+      else if (this.size > 30)
+        return '2px'
+      return '4px'
+    },
+  },
   data() {
     return {};
   },
@@ -16,7 +27,7 @@ export default {
 <template>
   <component :is="'style'">
     :root { --clock-size: {{ `${width}px` }}; --clock-disc-size:
-    {{ `${width / 2}px` }}; }
+    {{ `${width / 2}px` }}; --clock-border-thickness: {{ dividerThickness }};
   </component>
   <div class="clock" :style="`--n: ${size}`">
     <div class="widget">
@@ -85,7 +96,7 @@ export default {
   --color-scrollbar-bg: var(--color-dark);
   --color-scrollbar-fg: var(--color-light);
   --color-clock-border: var(--color-dark);
-  --clock-border-thickness: 4px;
+  /* --clock-border-thickness: 0px; */
 
   --angle: calc(360deg / var(--n));
 

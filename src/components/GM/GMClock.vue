@@ -96,10 +96,11 @@ export default {
                   class="w-[18px] h-[9px] bg-[url('/arrow_down.svg')] bg-cover bg-no-repeat cursor-pointer"
                   @click="decreaseSegments"
                 ></div>
-
-                <div class="border-[1px] border-grey px-4">
-                  <span class="text-[25px]">{{ numOfSegments }}</span>
-                </div>
+                <input
+                  class="w-16 h-8 text-center mt-1 border-1 border-grey bg-darkgray text-[26px]"
+                  type="number"
+                  v-model="numOfSegments"
+                />
                 <div
                   class="w-[18px] h-[8px] bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
                   @click="increaseSegments"
