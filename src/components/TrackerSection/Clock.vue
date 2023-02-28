@@ -37,7 +37,7 @@
         <div class="stat-title text-base">Stage</div>
         <div class="stat-value text-4xl">
           <select
-            v-model="stage"
+            :value="gameStage"
             class="input input-xs w-30"
             @change="onStageChange"
           >
@@ -224,8 +224,7 @@ export default {
       isTimeSettingOpen: false,
       isTurnSettingOpen: false,
       isEndModalOpen: false,
-      stages: ["1. Confinement", "2. Growth", "3. Conflict", "4. Equilibrium"],
-      stage: "1. Confinement",
+      stages: ["1. Confinement", "2. Growth", "3. Conquest", "4. Equilibrium"],
     };
   },
   computed: {
@@ -233,6 +232,7 @@ export default {
       isGM: (state) => state.isGM,
       stateofDisplayMode: (state) => state.stateofDisplayMode,
       loadingFinished: (state) => state.clock.loadingFinished,
+      gameStage: (state) => state.clock.gameStage,
     }),
     dayAfter() {
       //   return this.nowTimeISO - this.originTimeISO;
@@ -291,6 +291,9 @@ export default {
     },
   },
   methods: {
+    onStageChange(e) {
+      this.$store.dispatch("setGameStage", e.target.value);
+    },
     onToggleDisplayMode(e) {
       console.log(e.target.checked);
       this.$store.commit("setIsDisplayModal", e.target.checked);

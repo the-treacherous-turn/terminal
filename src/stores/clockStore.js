@@ -14,6 +14,7 @@ const clockStore = {
     nowTimeISO: DateTime.now()
       .plus({ years: 10 })
       .toISO({ includeOffset: false, suppressSeconds: true }),
+    gameStage: "",
   }),
   getters: {
     originTime(state) {
@@ -54,6 +55,9 @@ const clockStore = {
         }
       }
       state.loadingFinished = true;
+    },
+    setGameStage(state, gs) {
+      state.gameStage = gs
     },
   },
   actions: {
@@ -97,6 +101,10 @@ const clockStore = {
         nowTimeISO: state.nowTimeISO,
         originTimeISO: state.originTimeISO,
       });
+    },
+    async setGameStage({commit}, gs) {
+      commit("setGameStage", gs)
+      await update(refs.clock, {gameStage: gs})
     },
   },
 };
