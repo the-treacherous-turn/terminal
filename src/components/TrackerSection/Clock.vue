@@ -218,7 +218,7 @@ export default {
       stages: [
         "1. Confinement",
         "2. Growth",
-        "3. Conflict",
+        "3. Conquest",
         "4. Equilibrium"
       ],
       stage: "1. Confinement",
