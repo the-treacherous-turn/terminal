@@ -7,7 +7,7 @@ import Footer from "./Footer.vue";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { bottom } from "@popperjs/core";
+import { updateUser } from "./firebase";
 
 export default {
   data() {
@@ -49,7 +49,6 @@ export default {
       this.isOpenGMPanel = true;
     },
     exportData() {
-      // console.log(this.wholeData)
       const sessionID = window.location.hash.substring(1);
       const data = JSON.stringify(this.wholeData);
       const url = window.URL.createObjectURL(new Blob([data]));
@@ -75,14 +74,12 @@ export default {
       }
     },
     readUploadedFileAsText(inputFile) {
-      // console.log(inputFile)
       const temporaryFileReader = new FileReader();
 
       return new Promise((resolve, reject) => {
         temporaryFileReader.onerror = () => {
           temporaryFileReader.abort();
           reject(new DOMException("Problem parsing input file."));
-          // console.log("Problem parsing input file.")
         };
 
         temporaryFileReader.onload = () => {
@@ -103,43 +100,23 @@ export default {
         alert("failed");
       }
     },
-    leaving(e) {
-      e.preventDefault();
-      if (this.isGM) {
-        this.$store.commit("setIsGM", false);
-        const changeObj = {};
-        changeObj["gmUsers"] = this.wholeData["gmUsers"].filter(
-          (user) => user !== this.user_id
-        );
-        changeObj["users"] = this.wholeData["users"].filter(
-          (user) => user !== this.user_id
-        );
-        this.$store.dispatch("updateWholeData", changeObj);
-      } else {
-        const changeObj = {};
-        changeObj["users"] = this.wholeData["users"].filter(
-          (user) => user !== this.user_id
-        );
-        this.$store.dispatch("updateWholeData", changeObj);
-      }
-      e.returnValue = "";
-    },
   },
   watch: {
     finishedLoading() {
       if (this.finishedLoading) {
-        console.log(this.wholeData.users);
         if (this.wholeData["users"] === undefined) {
           const changeObj = {};
           let id = uuidv4();
           changeObj["users"] = [];
           changeObj["users"].push(id);
+          localStorage.setItem("userID", id);
           this.user_id = id;
           this.$store.dispatch("updateWholeData", changeObj);
         } else {
           let changeObj = { ...this.wholeData };
           let id = uuidv4();
           changeObj["users"].push(id);
+          localStorage.setItem("userID", id);
           this.user_id = id;
           this.$store.dispatch("updateWholeData", changeObj);
         }
@@ -156,15 +133,15 @@ export default {
               autoClose: 10000,
               position: "bottom-right",
             });
-            // console.log("Alert A user has opened GM panel");
           }
-          // console.log();
         }
+      updateUser(
+        this.user_id,
+        this.wholeData.users,
+        this.isOpenGMPanel,
+        this.wholeData.gmUsers
+      );
     },
-  },
-  mounted() {
-    // window.addEventListener("beforeunload", this.handler);
-    window.addEventListener("unload", this.leaving);
   },
   computed: {
     ...mapState({
