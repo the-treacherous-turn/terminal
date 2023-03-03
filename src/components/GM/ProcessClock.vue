@@ -9,14 +9,25 @@ export default {
   },
   computed: {
     dividerThickness() {
+      let thickness = 4
       if (this.size > 100)
-        return '0px'
+        thickness = 0
       else if (this.size > 50)
-        return '1px'
+        thickness = 1
       else if (this.size > 30)
-        return '2px'
-      return '4px'
+        thickness = 2
+      // adjust thickness by width
+      thickness *= this.width / 200
+      return `${thickness}px`
     },
+    clockfaceTheme() {
+      return {
+        '--clock-size': `${this.width}px`,
+        '--clock-disc-size': `${this.width / 2}px`,
+        '--clock-border-thickness': this.dividerThickness,
+        '--n': this.size,
+      }
+    }
   },
   data() {
     return {};
@@ -25,11 +36,7 @@ export default {
 </script>
 
 <template>
-  <component :is="'style'">
-    :root { --clock-size: {{ `${width}px` }}; --clock-disc-size:
-    {{ `${width / 2}px` }}; --clock-border-thickness: {{ dividerThickness }};
-  </component>
-  <div class="clock" :style="`--n: ${size}`">
+  <div class="clock" :style="clockfaceTheme">
     <div class="widget">
       <div class="core">
         <div
