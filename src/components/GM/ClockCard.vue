@@ -1,21 +1,24 @@
 <script>
 import ProcessClock from "./ProcessClock.vue";
 export default {
-  data() {
-    return {
-      size: 4,
-      elapsed: 0,
-    };
-  },
   components: {
     ProcessClock,
   },
+  props: {
+    size: Number,
+    elapsed: Number,
+    mode: String,
+    name: String,
+    tickLog: Array,
+    pc: String,
+    clockID: String,
+  },
   methods: {
     increaseElapsed() {
-      if (this.size > this.elapsed) this.elapsed++;
+      // if (this.size > this.elapsed) this.elapsed++;
     },
     decreaseElapsed() {
-      if (this.elapsed > 0) this.elapsed--;
+      // if (this.elapsed > 0) this.elapsed--;
     },
   },
 };
@@ -27,10 +30,11 @@ export default {
     <div class="flex ml-[20px] w-full">
       <div class="flex flex-col w-full">
         <div class="flex justify-between items-center w-full">
-          <span class="text-[20px] text-white uppercase">clock 1 xxx</span>
+          <span class="text-[20px] text-white uppercase">{{ name }}</span>
           <div class="flex justify-center items-center space-x-4">
             <div
               class="bg-[url('/edit.svg')] w-[24px] h-[23px] bg-cover cursor-pointer"
+              @click="$emit('edit', this.clockID)"
             ></div>
             <div
               class="w-[18px] h-[9px] bg-[url('/arrow_down.svg')] bg-cover bg-no-repeat cursor-pointer"
@@ -56,8 +60,14 @@ export default {
               @click="increaseElapsed"
             ></div>
           </div>
-          <span class="flex text-[16px] text-white uppercase text-center"
-            >automatic</span
+          <div v-if="mode=='pc'">
+            <button
+              class="border p-2 bg-gray-600"
+              @click=""
+            >ROLL PC</button>
+          </div>
+          <span v-else class="flex text-[16px] text-white uppercase text-center"
+            >{{ mode }}</span
           >
         </div>
       </div>

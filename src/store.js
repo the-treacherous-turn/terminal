@@ -9,6 +9,7 @@ import infoStore from "./stores/infoStore";
 import specStore from "./stores/specStore";
 import gmNPCStore from "./stores/gmNPCStore";
 import gmNotesStore from "./stores/gmNotesStore";
+import gmClockStore from "./stores/gmClockStore";
 import refs from "./firebase";
 import { onValue, update } from "firebase/database";
 
@@ -26,6 +27,7 @@ const store = createStore({
     spec: specStore,
     gmNPC: gmNPCStore,
     gmNOTES: gmNotesStore,
+    gmCLOCK: gmClockStore,
   },
   state() {
     return {
@@ -70,6 +72,7 @@ store.dispatch("listenToFBInfo");
 store.dispatch("listenToFBSpecs");
 store.dispatch("listenToFBGMNPC");
 store.dispatch("listenToFBGMNOTES");
+store.dispatch("listenToFBGMCLOCK");
 
 // TODO: remember to dispatch actions for each module to listen to FB changes
 

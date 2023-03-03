@@ -216,7 +216,6 @@ export default {
     @delete="onClickDeleteAction"
   />
   <div class="flex justify-center m-4">
-      <!-- <button class="btn btn-circle" @click="$store.dispatch('editNewComputeAction')"> -->
     <label for="modal-edit-compute-action" class="btn btn-circle"
     @click="onClickPlus"
     >

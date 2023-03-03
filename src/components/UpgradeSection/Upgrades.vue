@@ -42,7 +42,7 @@ export default {
       this.$store.dispatch('deleteUpgrade', key)
     },
     onClickModalOutside() {
-      if (this.isEditorOpen) this.cancel()
+      if (this.isEditorOpen) this.clear()
     },
     setEditorUpgrade(upgrade, theory, tier) {
       this.editorUpgrade = {
@@ -70,7 +70,7 @@ export default {
       this.isEditorOpen = false
       this.isAddNewUpgrade = false
     },
-    cancel() {
+    clear() {
       this.editorUpgrade = {}
       this.editorUpgradeID = null
       this.isAddNewUpgrade = false
@@ -197,7 +197,7 @@ export default {
         <label
           for="modal-edit-upgrade"
           class="btn"
-          @click="cancel">Cancel</label>
+          @click="clear">Cancel</label>
       </div>
     </form>
   </label>

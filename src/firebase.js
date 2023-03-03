@@ -6,12 +6,6 @@ import { initializeApp } from "firebase/app";
 import {
   getDatabase,
   ref,
-  update,
-  push,
-  onChildAdded,
-  onChildChanged,
-  onChildRemoved,
-  onValue,
 } from "firebase/database";
 
 const firebaseConfig = {
@@ -50,6 +44,7 @@ const refs = {
   gmNPCs: ref(db, `${sessionID}/gmNPCs`),
   notes: ref(db, `${sessionID}/gmNotes/notes`),
   gmNotes: ref(db, `${sessionID}/gmNotes`),
+  gmClock: ref(db, `${sessionID}/gmClock`),
 };
 
 export default refs;

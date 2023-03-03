@@ -1,37 +1,172 @@
 <script>
+import { mapState } from "vuex";
 import ClockCard from "./ClockCard.vue";
 import ProcessClock from "./ProcessClock.vue";
 
+function getDefaultClock() {
+  return {
+    size: 4,
+    elapsed: 0,
+    mode: "automatic",
+    pc: "p-xxxxx",
+  }
+}
+
 export default {
-  data() {
-    return {
-      isEditorOpen: false,
-      numOfSegments: 4,
-      tabState: "automatic",
-    };
-  },
   components: {
     ClockCard,
     ProcessClock,
   },
+  data() {
+    return {
+
+      // // mock data below
+      // pcInterval: 12,
+      // clocks: {
+      //   "c-xxxxx": {
+      //     size: 100,
+      //     elapsed: 1,
+      //     mode: "pc",
+      //     name: "Clock 1",
+      //     tickLog: [
+      //       {
+      //         turn: 8,
+      //         tick: 2,
+      //       },
+      //       {
+      //         turn: 9,
+      //         tick: -1,
+      //       },
+      //       {
+      //         turn: 10,
+      //         tick: 2,
+      //       },
+      //     ],
+      //     pc: "p-xxxxx",
+      //   },
+      //   "c-yyyyy": {
+      //     size: 50,
+      //     elapsed: 30,
+      //     mode: "automatic",
+      //     name: "Clock 2 (Auto)",
+      //   },
+      //   "c-zzzzz": {
+      //     size: 7,
+      //     elapsed: 3,
+      //     mode: "pc",
+      //     name: "Clock 3",
+      //     tickLog: [
+      //       {
+      //         turn: 1,
+      //         tick: 1,
+      //       },
+      //     ],
+      //     pc: "p-xxxxx",
+      //   },
+      // },
+      // pChecks: {
+      //   "p-xxxxx": {
+      //     name: "Clock 1",
+      //     die: "d4",
+      //     type: "agent",
+      //   },
+      // },
+      // // progress check interface data
+      // rollLog: {
+      //   "asdfasdf": {
+      //     die: "d6",
+      //     result: 5,
+      //     turn: 7,
+      //   },
+      //   "uyasdui": {
+      //     die: "d20",
+      //     result: 2,
+      //     turn: 8,
+      //   }
+      // },
+      // pendingPCs: {
+      //   "ppc-xxxxx": {
+      //     pcid: "p-xxxxx",
+      //     turn: 8,
+      //     time: "06:00",
+      //     clocks: [
+      //       {
+      //         cid: "c-xxxxx",
+      //         tick: 2,
+      //       },
+      //       {
+      //         cid: "c-zzzzz",
+      //         tick: 1,
+      //       },
+      //     ]
+      //   },
+      //   "ppc-yyyyy": {
+      //     pcid: "p-xxxxx",
+      //     turn: 8,
+      //     time: "18:00",
+      //     clocks: [
+      //       {
+      //         cid: "c-xxxxx",
+      //         tick: 0,
+      //       },
+      //       {
+      //         cid: "c-zzzzz",
+      //         tick: 1,
+      //       },
+      //     ]
+      //   },
+      // },
+
+      // clock editor stuff
+      editorClock: getDefaultClock(),
+      editorClockID: null,
+      isEditorOpen: false,
+      
+    };
+  },
+  computed: {
+    ...mapState({
+      pcInterval: state => state.gmCLOCK.pcInterval,
+      clocks: state => state.gmCLOCK.clocks,
+      pChecks: state => state.gmCLOCK.pChecks,
+      rollLog: state => state.gmCLOCK.rollLog,
+      pendingPCs: state => state.gmCLOCK.pendingPCs,
+    })
+  },
   methods: {
-    openEditor() {
-      this.isEditorOpen = true;
+    onClickAdd() {
+      this.isEditorOpen = true
+      this.isAddNewGMClock = true
+      this.editorClock = getDefaultClock()
+    },
+    onClickEdit(key) {
+      this.isEditorOpen = true
+      this.isAddNewGMClock = false
+      this.editorClockID = key
+      this.editorClock = this.clocks[key]
+    },
+    onClickDelete(key) {
+      this.$store.dispatch('deleteGMClock', key)
     },
     onClickModalOutside() {
-      this.cancel();
+      if (this.isEditorOpen) this.clear();
     },
-    cancel() {
-      this.isEditorOpen = false;
+    submit() {
+      if (this.isAddNewGMClock) {
+        this.$store.dispatch('addGMClock', this.editorClock)
+      } else {
+        this.$store.dispatch('editGMClock', {
+          clockID: this.editorClockID,
+          val: this.editorClock,
+        })
+      }
+      this.clear()
     },
-    increaseSegments() {
-      this.numOfSegments++;
-    },
-    decreaseSegments() {
-      if (this.numOfSegments > 0) this.numOfSegments--;
-    },
-    setTabState(state) {
-      this.tabState = state;
+    clear() {
+      this.editorClock = getDefaultClock()
+      this.editorClockID = null
+      this.isEditorOpen = false
+      this.isAddNewGMClock = false
     },
   },
 };
@@ -47,7 +182,7 @@ export default {
       </div>
       <div
         class="border-[1px] border-grey uppercase text-[16px] py-[8px] px-[12px] cursor-pointer"
-        @click="openEditor"
+        @click="onClickAdd"
       >
         add clock
       </div>
@@ -56,7 +191,15 @@ export default {
       ></div>
     </div>
     <div class="w-full mt-[24px]">
-      <ClockCard />
+      <!-- render each clock in clocks object. use their key as key -->
+      <ClockCard
+        v-for="(clock, key) in clocks"
+        v-bind="clock"
+        :key="key"
+        :clockID="key"
+        @edit="onClickEdit(key)"
+      />
+      
     </div>
   </div>
   <label
@@ -87,6 +230,7 @@ export default {
           <input
             class="mt-[4px] border-1 border-white w-full bg-darkgray text-[26px]"
             placeholder="TYPE HERE"
+            v-model="editorClock.name"
           />
           <div class="flex w-full justify-between mt-[36px]">
             <div class="flex flex-col justify-center items-center">
@@ -94,22 +238,22 @@ export default {
               <div class="flex items-center space-x-2 mt-[8px] mb-[24px]">
                 <div
                   class="w-[18px] h-[9px] bg-[url('/arrow_down.svg')] bg-cover bg-no-repeat cursor-pointer"
-                  @click="decreaseSegments"
+                  @click="editorClock.size --"
                 ></div>
                 <input
                   class="w-16 h-8 text-center mt-1 border-1 border-grey bg-darkgray text-[26px]"
                   type="number"
-                  v-model="numOfSegments"
+                  v-model="editorClock.size"
                 />
                 <div
                   class="w-[18px] h-[8px] bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
-                  @click="increaseSegments"
+                  @click="editorClock.size ++"
                 ></div>
               </div>
               <ProcessClock
                 :width="200"
                 :height="200"
-                :size="numOfSegments"
+                :size="editorClock.size"
                 :elapsed="0"
               />
             </div>
@@ -120,10 +264,10 @@ export default {
                   class="uppercase text-[20px] py-[10px] px-[13px]"
                   :style="{
                     backgroundColor:
-                      tabState === 'automatic' ? '#FFFFFF' : '#1D2225',
-                    color: tabState === 'automatic' ? '#1D2225' : '#FFFFFF',
+                      editorClock.mode === 'automatic' ? '#FFFFFF' : '#1D2225',
+                    color: editorClock.mode === 'automatic' ? '#1D2225' : '#FFFFFF',
                   }"
-                  @click="setTabState('automatic')"
+                  @click="editorClock.mode = 'automatic'"
                 >
                   automatic
                 </div>
@@ -131,10 +275,10 @@ export default {
                   class="uppercase text-[20px] py-[10px] px-[13px]"
                   :style="{
                     backgroundColor:
-                      tabState === 'progress' ? '#FFFFFF' : '#1D2225',
-                    color: tabState === 'progress' ? '#1D2225' : '#FFFFFF',
+                      editorClock.mode === 'pc' ? '#FFFFFF' : '#1D2225',
+                    color: editorClock.mode === 'pc' ? '#1D2225' : '#FFFFFF',
                   }"
-                  @click="setTabState('progress')"
+                  @click="editorClock.mode = 'pc'"
                 >
                   progress check
                 </div>
@@ -142,48 +286,37 @@ export default {
                   class="uppercase text-[20px] py-[10px] px-[13px]"
                   :style="{
                     backgroundColor:
-                      tabState === 'manual' ? '#FFFFFF' : '#1D2225',
-                    color: tabState === 'manual' ? '#1D2225' : '#FFFFFF',
+                      editorClock.mode === 'manual' ? '#FFFFFF' : '#1D2225',
+                    color: editorClock.mode === 'manual' ? '#1D2225' : '#FFFFFF',
                   }"
-                  @click="setTabState('manual')"
+                  @click="editorClock.mode = 'manual'"
                 >
                   manual
                 </div>
               </div>
               <div class="mt-[24px] w-full">
-                <div v-if="tabState === 'automatic'">
+                <div v-if="editorClock.mode === 'automatic'">
                   <span class="text-[20px] text-grey"
                     >Ticks once every interval.</span
                   >
                 </div>
-                <div v-if="tabState === 'progress'" class="flex flex-col">
+
+                <div v-if="editorClock.mode === 'pc'" class="flex flex-col">
                   <div class="flex flex-col">
                     <span class="text-[20px] text-grey"
                       >PROGRESS CHECK NAME (optional)</span
                     >
                     <div class="flex items-center mb-4">
-                      <select
+                      <!-- TODO: write special case handler for changing the pname here. -->
+                      <!-- <select
+                        v-model="pChecks[editorClock.pc].name"
                         class="bg-darkgray w-full text-[26px] text-white placeholder-white border-1 border-white p-[8px]"
                       >
-                        <option
-                          value=""
-                          class="text-[26px] text-white"
-                          disabled
-                          selected
-                          hidden
-                        >
-                          enter name
+                        <option v-for="pc in pChecks" :value="pc.name">
+                          {{ pc.name }}
                         </option>
-                        <option value="Name 1" class="text-[26px] text-white">
-                          Name 1
-                        </option>
-                        <option value="Name 2" class="text-[26px] text-white">
-                          Name 2
-                        </option>
-                        <option value="Name 3" class="text-[26px] text-white">
-                          Name 3
-                        </option>
-                      </select>
+                      </select> -->
+                      <span>{{ pChecks[editorClock.pc].name }}</span>
                     </div>
                   </div>
                   <div class="flex w-full space-x-2">
@@ -192,49 +325,19 @@ export default {
                       <div class="flex items-center mb-4">
                         <select
                           class="bg-darkgray w-full text-[26px] text-white placeholder-white border-1 border-white p-[8px]"
+                          v-model="pChecks[editorClock.pc].die"
                         >
-                          <option
-                            value=""
-                            class="text-[26px] text-white"
-                            disabled
-                            selected
-                            hidden
-                          >
-                            D4
-                          </option>
-                          <option value="D2" class="text-[26px] text-white">
-                            D2
-                          </option>
-                          <option value="D3" class="text-[26px] text-white">
-                            D3
-                          </option>
-                          <option value="D4" class="text-[26px] text-white">
-                            D4
-                          </option>
-                          <option value="D5" class="text-[26px] text-white">
-                            D5
-                          </option>
-                          <option value="D6" class="text-[26px] text-white">
-                            D6
-                          </option>
-                          <option value="D7" class="text-[26px] text-white">
-                            D7
-                          </option>
-                          <option value="D8" class="text-[26px] text-white">
-                            D8
-                          </option>
-                          <option value="D9" class="text-[26px] text-white">
-                            D9
-                          </option>
-                          <option value="D10" class="text-[26px] text-white">
-                            D10
-                          </option>
-                          <option value="D11" class="text-[26px] text-white">
-                            D11
-                          </option>
-                          <option value="D12" class="text-[26px] text-white">
-                            D12
-                          </option>
+                          <option value="d2" class="text-[26px] text-white">D2</option>
+                          <option value="d3" class="text-[26px] text-white">D3</option>
+                          <option value="d4" class="text-[26px] text-white">D4</option>
+                          <option value="d5" class="text-[26px] text-white">D5</option>
+                          <option value="d6" class="text-[26px] text-white">D6</option>
+                          <option value="d7" class="text-[26px] text-white">D7</option>
+                          <option value="d8" class="text-[26px] text-white">D8</option>
+                          <option value="d9" class="text-[26px] text-white">D9</option>
+                          <option value="d10" class="text-[26px] text-white">D10</option>
+                          <option value="d11" class="text-[26px] text-white">D11</option>
+                          <option value="d12" class="text-[26px] text-white">D12</option>
                         </select>
                       </div>
                     </div>
@@ -245,23 +348,15 @@ export default {
                       <div class="flex items-center mb-4">
                         <select
                           class="bg-darkgray w-full text-[26px] text-white placeholder-white border-1 border-white p-[8px]"
+                          v-model="pChecks[editorClock.pc].type"
                         >
                           <option
-                            value=""
-                            class="text-[26px] text-white"
-                            disabled
-                            selected
-                            hidden
-                          >
-                            Agent
-                          </option>
-                          <option
-                            value="Inanimate"
+                            value="inanimate"
                             class="text-[26px] text-white"
                           >
                             Inanimate
                           </option>
-                          <option value="Agent" class="text-[26px] text-white">
+                          <option value="agent" class="text-[26px] text-white">
                             Agent
                           </option>
                         </select>
@@ -269,7 +364,8 @@ export default {
                     </div>
                   </div>
                 </div>
-                <div v-if="tabState === 'manual'">
+
+                <div v-if="editorClock.mode === 'manual'">
                   <span class="text-[20px] text-grey"
                     >Only manual adjustments to the clock.
                   </span>
@@ -280,17 +376,20 @@ export default {
           <div class="flex mt-[100px] justify-between">
             <div
               class="border-1 border-[#DB504D] bg-middlegrey text-[#DB504D] text-[20px] py-[12px] px-[26px] uppercase cursor-pointer"
+              @click="onClickDelete"
             >
               delete
             </div>
             <div class="flex space-x-4">
               <div
                 class="border-1 border-white bg-middlegrey text-white text-[20px] py-[12px] px-[26px] uppercase cursor-pointer"
+                @click="clear"
               >
                 cancel
               </div>
               <div
                 class="border-1 border-white bg-white text-black text-[20px] py-[12px] px-[26px] uppercase cursor-pointer"
+                @click="submit"
               >
                 save
               </div>
