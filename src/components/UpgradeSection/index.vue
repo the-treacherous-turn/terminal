@@ -1,7 +1,7 @@
 <script>
-import { mapState } from 'vuex';
-import ChooseSpec from './ChooseSpec.vue'
-import OneSpecManager from './OneSpecManager.vue';
+import { mapState } from "vuex";
+import ChooseSpec from "./ChooseSpec.vue";
+import OneSpecManager from "./OneSpecManager.vue";
 
 export default {
   name: "UpgradeSection",
@@ -11,10 +11,13 @@ export default {
   },
   computed: {
     ...mapState({
-      activeSpecID: state => state.spec.activeSpecID,
-    })
+      activeSpecID: (state) => state.spec.activeSpecID,
+    }),
   },
-}
+  watch: {
+    activeSpecID() {},
+  },
+};
 </script>
 
 <template>

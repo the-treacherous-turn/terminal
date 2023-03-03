@@ -26,8 +26,6 @@ window.onhashchange = () => {
 };
 
 export const updateUser = (userId, users, openGM, gmUsers) => {
-  console.log(openGM);
-  console.log(gmUsers);
   if (openGM) {
     const index = gmUsers.indexOf(userId);
     const gnUserRef = ref(db, `${sessionID}/gmUsers/${index}`);
