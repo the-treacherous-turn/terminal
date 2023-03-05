@@ -155,43 +155,43 @@ const gmClockStore = {
       })
     },
     async setPCInterval({}, val) {
-      await update(refs.gmClock, {pcInterval: val})
+      return await update(refs.gmClock, {pcInterval: val})
     },
     async addGMClock({}, val) {
-      await push(child(refs.gmClock, "clocks"), val)
+      return await push(child(refs.gmClock, "clocks"), val)
     },
-    async editGMClock({}, {clockID, val}) {
-      await update(child(refs.gmClock, `clocks/${clockID}`), val)
+    async updateGMClock({}, {clockID, val}) {
+      return await update(child(refs.gmClock, `clocks/${clockID}`), val)
     },
     async deleteGMClock({}, clockID) {
-      await update(child(refs.gmClock, `clocks/${clockID}`), null)
+      return await update(child(refs.gmClock, `clocks/${clockID}`), null)
     },
     async addGMPCheck({}, val) {
-      await push(child(refs.gmClock, "pChecks"), val)
+      return await push(child(refs.gmClock, "pChecks"), val)
     },
-    async editGMPCheck({}, {pcID, val}) {
-      await update(child(refs.gmClock, `pChecks/${pcID}`), val)
+    async updateGMPCheck({}, {pcID, val}) {
+      return await update(child(refs.gmClock, `pChecks/${pcID}`), val)
     },
     async deleteGMPCheck({}, pcID) {
-      await update(child(refs.gmClock, `pChecks/${pcID}`), null)
+      return await update(child(refs.gmClock, `pChecks/${pcID}`), null)
     },
     async addRollLog({}, val) {
-      await push(child(refs.gmClock, "rollLog"), val)
+      return await push(child(refs.gmClock, "rollLog"), val)
     },
-    async editRollLog({}, {rollID, val}) {
-      await update(child(refs.gmClock, `rollLog/${rollID}`), val)
+    async updateRollLog({}, {rollID, val}) {
+      return await update(child(refs.gmClock, `rollLog/${rollID}`), val)
     },
     async deleteRollLog({}, rollID) {
-      await update(child(refs.gmClock, `rollLog/${rollID}`), null)
+      return await update(child(refs.gmClock, `rollLog/${rollID}`), null)
     },
     async addPendingPC({}, val) {
-      await push(child(refs.gmClock, "pendingPCs"), val)
+      return await push(child(refs.gmClock, "pendingPCs"), val)
     },
-    async editPendingPC({}, {ppcID, val}) {
-      await update(child(refs.gmClock, `pendingPCs/${ppcID}`), val)
+    async updatePendingPC({}, {ppcID, val}) {
+      return await update(child(refs.gmClock, `pendingPCs/${ppcID}`), val)
     },
     async deletePendingPC({}, ppcID) {
-      await update(child(refs.gmClock, `pendingPCs/${ppcID}`), null)
+      return await update(child(refs.gmClock, `pendingPCs/${ppcID}`), null)
     },
 
   },

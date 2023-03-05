@@ -14,12 +14,6 @@ export default {
     clockID: String,
   },
   methods: {
-    increaseElapsed() {
-      // if (this.size > this.elapsed) this.elapsed++;
-    },
-    decreaseElapsed() {
-      // if (this.elapsed > 0) this.elapsed--;
-    },
   },
 };
 </script>
@@ -48,7 +42,7 @@ export default {
           <div class="flex items-center space-x-2">
             <div
               class="w-[18px] h-[9px] bg-[url('/arrow_down.svg')] bg-cover bg-no-repeat cursor-pointer"
-              @click="decreaseElapsed"
+              @click="$emit('decreaseElapsed')"
             ></div>
 
             <div class="border-[1px] border-grey px-4">
@@ -57,7 +51,7 @@ export default {
             </div>
             <div
               class="w-[18px] h-[8px] bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
-              @click="increaseElapsed"
+              @click="$emit('increaseElapsed')"
             ></div>
           </div>
           <div v-if="mode=='pc'">

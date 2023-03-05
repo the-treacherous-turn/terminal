@@ -8,7 +8,6 @@ function getDefaultClock() {
     size: 4,
     elapsed: 0,
     mode: "automatic",
-    pc: "p-xxxxx",
   }
 }
 
@@ -151,11 +150,47 @@ export default {
     onClickModalOutside() {
       if (this.isEditorOpen) this.clear();
     },
+    increaseElapsed(key) {
+      const tc = this.clocks[key]
+      if (!tc) throw new Error(`clock ${key} not found`)
+      if (tc.size > tc.elapsed) {
+        const val = tc.elapsed + 1
+        this.$store.dispatch('updateGMClock', {
+          clockID: key,
+          val: {elapsed: val},
+        })
+      }
+    },
+    decreaseElapsed(key) {
+      const tc = this.clocks[key]
+      if (!tc) throw new Error(`clock ${key} not found`)
+      if (tc.elapsed > 0) {
+        const val = tc.elapsed - 1
+        this.$store.dispatch('updateGMClock', {
+          clockID: key,
+          val: {elapsed: val},
+        })
+      }
+    },
+    onClickPC() {
+      // if the clock in editor doesn't have a pc, add one
+      if (!this.editorClock.pc) {
+        // push a pc with the name of the clock
+        this.$store.dispatch('addGMPCheck', {
+          name: this.editorClock.name,
+          die: 'd4',
+          type: 'agent',
+        }).then((res) => {
+          this.editorClock.pc = res.key
+        })
+      }
+      this.editorClock.mode = 'pc'
+    },
     submit() {
       if (this.isAddNewGMClock) {
         this.$store.dispatch('addGMClock', this.editorClock)
       } else {
-        this.$store.dispatch('editGMClock', {
+        this.$store.dispatch('updateGMClock', {
           clockID: this.editorClockID,
           val: this.editorClock,
         })
@@ -198,6 +233,8 @@ export default {
         :key="key"
         :clockID="key"
         @edit="onClickEdit(key)"
+        @increaseElapsed="increaseElapsed(key)"
+        @decreaseElapsed="decreaseElapsed(key)"
       />
       
     </div>
@@ -215,7 +252,7 @@ export default {
         <h3 class="text-lg font-bold uppercase text-[28px]">clock editor</h3>
         <button
           class="lowercase decoration-transparent m-2 mt-0 text-[30px]"
-          @click="cancel"
+          @click="clear"
         >
           x
         </button>
@@ -278,7 +315,7 @@ export default {
                       editorClock.mode === 'pc' ? '#FFFFFF' : '#1D2225',
                     color: editorClock.mode === 'pc' ? '#1D2225' : '#FFFFFF',
                   }"
-                  @click="editorClock.mode = 'pc'"
+                  @click="onClickPC"
                 >
                   progress check
                 </div>
@@ -316,10 +353,11 @@ export default {
                           {{ pc.name }}
                         </option>
                       </select> -->
-                      <span>{{ pChecks[editorClock.pc].name }}</span>
+                      <span v-if="!editorClock.pc">loading...</span>
+                      <span v-else>{{ pChecks[editorClock.pc].name }}</span>
                     </div>
                   </div>
-                  <div class="flex w-full space-x-2">
+                  <div v-if="editorClock.pc" class="flex w-full space-x-2">
                     <div class="flex flex-col w-1/2">
                       <span class="uppercase text-[20px] text-grey">die</span>
                       <div class="flex items-center mb-4">
