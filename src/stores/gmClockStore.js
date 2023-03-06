@@ -104,40 +104,12 @@ const gmClockStore = {
     pcInterval: 12,
     clocks: {},
     pChecks: {},
-    rollLog: {},
     pendingPCs: {},
   }),
   getters: {
 
   },
   mutations: {
-    // setPCInterval(state, val) {
-    //   state.pcInterval = val
-    // },
-    // setGMClock(state, {clockID, val}) {
-    //   state.clocks[clockID] = val
-    // },
-    // deleteClock(state, clockID) {
-    //   delete state.clocks[clockID]
-    // },
-    // setGMPCheck(state, {pcID, val}) {
-    //   state.pChecks[pcID] = val
-    // },
-    // deleteGMPCheck(state, pcID) {
-    //   delete state.pChecks[pcID]
-    // },
-    // setRollLog(state, {rollID, val}) {
-    //   state.rollLog[rollID] = val
-    // },
-    // deleteRollLog(state, rollID) {
-    //   delete state.rollLog[rollID]
-    // },
-    // setPendingPC(state, {ppcID, val}) {
-    //   state.pendingPCs[ppcID] = val
-    // },
-    // deletePendingPC(state, ppcID) {
-    //   delete state.pendingPCs[ppcID]
-    // },
     updateGMClock(state, changesObj) {
       for (const key in changesObj) {
         if (Object.hasOwnProperty.call(changesObj, key)) {
@@ -174,15 +146,6 @@ const gmClockStore = {
     },
     async deleteGMPCheck({}, pcID) {
       return await update(child(refs.gmClock, `pChecks/${pcID}`), null)
-    },
-    async addRollLog({}, val) {
-      return await push(child(refs.gmClock, "rollLog"), val)
-    },
-    async updateRollLog({}, {rollID, val}) {
-      return await update(child(refs.gmClock, `rollLog/${rollID}`), val)
-    },
-    async deleteRollLog({}, rollID) {
-      return await update(child(refs.gmClock, `rollLog/${rollID}`), null)
     },
     async addPendingPC({}, val) {
       return await push(child(refs.gmClock, "pendingPCs"), val)

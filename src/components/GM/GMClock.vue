@@ -2,6 +2,7 @@
 import { mapState } from "vuex";
 import ClockCard from "./ClockCard.vue";
 import ProcessClock from "./ProcessClock.vue";
+import PCRoller from "./PCRoller.vue"
 
 function getDefaultClock() {
   return {
@@ -15,6 +16,7 @@ export default {
   components: {
     ClockCard,
     ProcessClock,
+    PCRoller,
   },
   data() {
     return {
@@ -120,7 +122,8 @@ export default {
       editorClock: getDefaultClock(),
       editorClockID: null,
       isEditorOpen: false,
-      
+      isRollerOpen: false,
+      pcsToRoll: [],
     };
   },
   computed: {
@@ -130,7 +133,7 @@ export default {
       pChecks: state => state.gmCLOCK.pChecks,
       rollLog: state => state.gmCLOCK.rollLog,
       pendingPCs: state => state.gmCLOCK.pendingPCs,
-    })
+    }),
   },
   methods: {
     onClickAdd() {
@@ -147,7 +150,7 @@ export default {
     onClickDelete(key) {
       this.$store.dispatch('deleteGMClock', key)
     },
-    onClickModalOutside() {
+    onClickEditorOutside() {
       if (this.isEditorOpen) this.clear();
     },
     increaseElapsed(key) {
@@ -203,6 +206,20 @@ export default {
       this.isEditorOpen = false
       this.isAddNewGMClock = false
     },
+    openRollerForAll() {
+      this.pcsToRoll = Object.keys(this.pChecks)
+      this.isRollerOpen = true
+    },
+    openRollerForPC(key) {
+      this.pcsToRoll = [key]
+      this.isRollerOpen = true
+    },
+    onClickRollerOutside() {
+      throw new Error("not implemented")
+    },
+    closeRoller() {
+      this.isRollerOpen = false
+    },
   },
 };
 </script>
@@ -212,6 +229,7 @@ export default {
     <div class="flex justify-center items-center space-x-8 self-end">
       <div
         class="border-[1px] border-grey uppercase text-[16px] py-[8px] px-[12px] cursor-pointer"
+        @click="openRollerForAll"
       >
         Roll all
       </div>
@@ -235,6 +253,7 @@ export default {
         @edit="onClickEdit(key)"
         @increaseElapsed="increaseElapsed(key)"
         @decreaseElapsed="decreaseElapsed(key)"
+        @roll="openRollerForPC(clock.pc)"
       />
       
     </div>
@@ -242,7 +261,7 @@ export default {
   <label
     v-if="isEditorOpen"
     class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-black z-50"
-    @mousedown.self="onClickModalOutside"
+    @mousedown.self="onClickEditorOutside"
   >
     <label
       class="w-[1325px] relative flex flex-col"
@@ -435,6 +454,32 @@ export default {
           </div>
         </div>
         <div class="w-1/3"></div>
+      </div>
+    </label>
+  </label>
+
+  <label
+    v-if="isRollerOpen"
+    class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-black z-50"
+    @mousedown.self="onClickRollerOutside"
+  >
+    <label
+      class="w-[1325px] relative flex flex-col"
+      @click="(e) => e.preventDefault()"
+    >
+      <div class="flex w-full justify-between items-center">
+        <h3 class="text-lg font-bold uppercase text-[28px]">Clocks - Progress Check</h3>
+        <button
+          class="lowercase decoration-transparent m-2 mt-0 text-[30px]"
+          @click="closeRoller"
+        >
+          x
+        </button>
+      </div>
+      <div class="w-full flex border-1 border-white bg-darkgray">
+        <PCRoller
+          :allPCID="pcsToRoll"
+        />
       </div>
     </label>
   </label>

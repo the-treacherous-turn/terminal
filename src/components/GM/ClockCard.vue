@@ -57,7 +57,7 @@ export default {
           <div v-if="mode=='pc'">
             <button
               class="border p-2 bg-gray-600"
-              @click=""
+              @click="$emit('roll')"
             >ROLL PC</button>
           </div>
           <span v-else class="flex text-[16px] text-white uppercase text-center"
