@@ -69,15 +69,10 @@ export default {
         <div>
           <select v-model="pChecks[ppc.pcid].die" @change="updatePCheckDieSize(ppc.pcid, $event.target.value)">
             <option value="d2" class="text-[26px] text-white">D2</option>
-            <option value="d3" class="text-[26px] text-white">D3</option>
             <option value="d4" class="text-[26px] text-white">D4</option>
-            <option value="d5" class="text-[26px] text-white">D5</option>
             <option value="d6" class="text-[26px] text-white">D6</option>
-            <option value="d7" class="text-[26px] text-white">D7</option>
             <option value="d8" class="text-[26px] text-white">D8</option>
-            <option value="d9" class="text-[26px] text-white">D9</option>
             <option value="d10" class="text-[26px] text-white">D10</option>
-            <option value="d11" class="text-[26px] text-white">D11</option>
             <option value="d12" class="text-[26px] text-white">D12</option>
           </select>
           <button @click="roll(pChecks[ppc.pcid].die)">Roll</button>
