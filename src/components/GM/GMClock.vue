@@ -215,9 +215,6 @@ export default {
       this.pcsToRoll = [key]
       this.isRollerOpen = true
     },
-    onClickRollerOutside() {
-      throw new Error("not implemented")
-    },
     closeRoller() {
       this.isRollerOpen = false
     },
@@ -472,7 +469,6 @@ export default {
   <label
     v-if="isRollerOpen"
     class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-black z-50"
-    @mousedown.self="onClickRollerOutside"
   >
     <label
       class="w-[1325px] relative flex flex-col"
