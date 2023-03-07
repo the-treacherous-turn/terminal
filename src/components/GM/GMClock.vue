@@ -123,6 +123,7 @@ export default {
       editorClockID: null,
       isEditorOpen: false,
       isRollerOpen: false,
+      isClockSettingOpen: false,
       pcsToRoll: [],
     };
   },
@@ -220,6 +221,15 @@ export default {
     closeRoller() {
       this.isRollerOpen = false
     },
+    openClockSetting() {
+      this.isClockSettingOpen = true
+    },
+    updatePCInterval(val) {
+      this.$store.dispatch('setPCInterval', val)
+    },
+    closeClockSetting() {
+      this.isClockSettingOpen = false
+    },
   },
 };
 </script>
@@ -241,6 +251,7 @@ export default {
       </div>
       <div
         class="w-[30px] h-[31px] bg-[url('/setting.svg')] bg-cover bg-no-repeat cursor-pointer"
+        @click="openClockSetting"
       ></div>
     </div>
     <div class="w-full mt-[24px]">
@@ -480,6 +491,40 @@ export default {
         <PCRoller
           :allPCID="pcsToRoll"
         />
+      </div>
+    </label>
+  </label>
+
+  <label
+    v-if="isClockSettingOpen"
+    class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-black z-50"
+  >
+    <label
+      class="w-[1325px] relative flex flex-col"
+      @click="(e) => e.preventDefault()"
+    >
+      <div class="flex w-full justify-between items-center">
+        <h3 class="text-lg font-bold uppercase text-[28px]">Clock Settings</h3>
+        <button
+          class="lowercase decoration-transparent m-2 mt-0 text-[30px]"
+          @click="closeClockSetting"
+        >
+          x
+        </button>
+      </div>
+      <div class="w-full flex border-1 border-white bg-darkgray">
+        <div class="m-auto">
+          <div class="">
+            Progress Check Interval Length (hours)
+          </div>
+          <input
+            type="number"
+            min="1"
+            max="24"
+            :value="pcInterval"
+            @change="updatePCInterval($event.target.value)"
+          />
+        </div>
       </div>
     </label>
   </label>
