@@ -32,17 +32,17 @@ export default {
     },
   },
   methods: {
-    updatePCheckDieSize(pcID, dieSize) {
+    updatePCheckDieSize(pcid, dieSize) {
       this.$store.dispatch('updateGMPCheck', {
-        pcID,
+        pcid,
         val: {die: dieSize},
       })
     },
-    getClocksWithMatchingPCID(pcID) {
+    getClocksWithMatchingPCID(pcid) {
       return {
         ...Object.fromEntries(
           Object.entries(this.clocks).filter(
-            ([key, value]) => value.pc === pcID
+            ([key, value]) => value.pc === pcid
           )
         ),}
     },

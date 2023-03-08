@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import refs from "../firebase";
-import { onValue, update, push } from "firebase/database";
+import { onValue, update } from "firebase/database";
 
 const clockStore = {
   state: () => ({
@@ -54,7 +54,10 @@ const clockStore = {
           state[key] = val;
         }
       }
-      state.loadingFinished = true;
+      if (!state.loadingFinished) {
+        // first connection
+        state.loadingFinished = true
+      }
     },
     setGameStage(state, gs) {
       state.gameStage = gs
@@ -71,18 +74,25 @@ const clockStore = {
       });
     },
     async advanceCycle({ commit, state, rootState, getters }) {
-      const remainingCycleTime =
+      let remainingCycleTime =
         state.cycleLength *
         (1 -
           rootState.compute.computeSpent /
             (getters.computeTotal - getters.recurringSum));
+      if (isNaN(remainingCycleTime)) {
+        console.warn(`[clockStore] remainingCycleTime is NaN. Possibly due to having no compute sources? Setting it to cycleLength ${state.cycleLength}`)
+        remainingCycleTime = state.cycleLength
+      }
+      // HACK handle other abnormalities
+      if (remainingCycleTime > state.cycleLength) remainingCycleTime = state.cycleLength
+      if (remainingCycleTime < 0) remainingCycleTime = 0
       commit("advanceTime", remainingCycleTime);
       state.cycle++;
       commit("refillCompute");
       await update(refs.computeTracker, {
         computeSpent: rootState.compute.computeSpent,
       });
-      await update(refs.clock, {
+      return await update(refs.clock, {
         nowTimeISO: state.nowTimeISO,
         cycle: state.cycle,
       });

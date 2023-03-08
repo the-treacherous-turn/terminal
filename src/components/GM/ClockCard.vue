@@ -59,6 +59,7 @@ export default {
               class="border p-2 bg-gray-600"
               @click="$emit('roll')"
             >ROLL PC</button>
+            <div>PC to roll: {{ $store.getters.amtPendingPCForClock(clockID) }}</div>
           </div>
           <span v-else class="flex text-[16px] text-white uppercase text-center"
             >{{ mode }}</span

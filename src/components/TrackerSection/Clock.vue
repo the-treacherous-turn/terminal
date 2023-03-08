@@ -295,12 +295,13 @@ export default {
       this.$store.dispatch("setGameStage", e.target.value);
     },
     onToggleDisplayMode(e) {
-      console.log(e.target.checked);
       this.$store.commit("setIsDisplayModal", e.target.checked);
     },
     advanceCycle() {
       this.isEndModalOpen = false;
-      this.$store.dispatch("advanceCycle");
+      this.$store.dispatch("advanceCycle").then(
+        this.$store.dispatch("advanceGMClock")
+      )
     },
     onTimeModalToggle() {
       if (!this.isTimeSettingOpen) {

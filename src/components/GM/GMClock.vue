@@ -134,6 +134,7 @@ export default {
       pChecks: state => state.gmCLOCK.pChecks,
       rollLog: state => state.gmCLOCK.rollLog,
       pendingPCs: state => state.gmCLOCK.pendingPCs,
+      lastCheckTimeISO: state => state.gmCLOCK.lastCheckTimeISO,
     }),
   },
   methods: {
@@ -149,7 +150,9 @@ export default {
       this.editorClock = this.clocks[key]
     },
     onClickDelete(key) {
-      this.$store.dispatch('deleteGMClock', key)
+      this.$store.dispatch('deleteGMClock', key).then(() => {
+        this.clear()
+      })
     },
     onClickEditorOutside() {
       if (this.isEditorOpen) this.clear();
@@ -179,12 +182,19 @@ export default {
     onClickPC() {
       // if the clock in editor doesn't have a pc, add one
       if (!this.editorClock.pc) {
+        // if it's the first time any PC gets created,
+        // then initialize a lastCheckTime
+        if (!Object.keys(this.pChecks).length) {
+          this.$store.dispatch('initLastCheckTime')
+        }
         // push a pc with the name of the clock
         this.$store.dispatch('addGMPCheck', {
-          name: this.editorClock.name,
+          name: this.editorClock.name || "",
           die: 'd4',
           type: 'agent',
+          lastCheckTimeISO: this.lastCheckTimeISO,
         }).then((res) => {
+          // update editor
           this.editorClock.pc = res.key
         })
       }
@@ -436,7 +446,7 @@ export default {
           <div class="flex mt-[100px] justify-between">
             <div
               class="border-1 border-[#DB504D] bg-middlegrey text-[#DB504D] text-[20px] py-[12px] px-[26px] uppercase cursor-pointer"
-              @click="onClickDelete"
+              @click="onClickDelete(editorClockID)"
             >
               delete
             </div>
