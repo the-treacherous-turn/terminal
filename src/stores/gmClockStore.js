@@ -1,113 +1,26 @@
-import refs from '../firebase'
+import { DateTime } from 'luxon'
 import { update, push, onValue, child } from 'firebase/database'
+import refs from '../firebase'
 
-// mock data for gm clock section:
-/*
-pcInterval: 12,
-clocks: {
-  "c-xxxxx": {
-    size: 100,
-    elapsed: 1,
-    mode: "pc",
-    name: "Clock 1",
-    tickLog: [
-      {
-        turn: 8,
-        tick: 2,
-      },
-      {
-        turn: 9,
-        tick: -1,
-      },
-      {
-        turn: 10,
-        tick: 2,
-      },
-    ],
-    pc: "p-xxxxx",
-  },
-  "c-yyyyy": {
-    size: 50,
-    elapsed: 30,
-    mode: "automatic",
-    name: "Clock 2 (Auto)",
-  },
-  "c-zzzzz": {
-    size: 7,
-    elapsed: 3,
-    mode: "pc",
-    name: "Clock 3",
-    tickLog: [
-      {
-        turn: 1,
-        tick: 1,
-      },
-    ],
-    pc: "p-xxxxx",
-  },
-},
-pChecks: {
-  "p-xxxxx": {
-    name: "Clock 1",
-    die: "d4",
-    type: "agent",
-  },
-},
-// progress check interface data
-rollLog: {
-  "asdfasdf": {
-    die: "d6",
-    result: 5,
-    turn: 7,
-  },
-  "uyasdui": {
-    die: "d20",
-    result: 2,
-    turn: 8,
-  }
-},
-pendingPCs: {
-  "ppc-xxxxx": {
-    pcid: "p-xxxxx",
-    turn: 8,
-    time: "06:00",
-    clocks: [
-      {
-        cid: "c-xxxxx",
-        tick: 2,
-      },
-      {
-        cid: "c-zzzzz",
-        tick: 1,
-      },
-    ]
-  },
-  "ppc-yyyyy": {
-    pcid: "p-xxxxx",
-    turn: 8,
-    time: "18:00",
-    clocks: [
-      {
-        cid: "c-xxxxx",
-        tick: 0,
-      },
-      {
-        cid: "c-zzzzz",
-        tick: 1,
-      },
-    ]
-  },
-},
-*/
 const gmClockStore = {
   state: () => ({
-    pcInterval: 12,
+    pcInterval: 6,
     clocks: {},
     pChecks: {},
     pendingPCs: {},
+    lastCheckTimeISO: null, // records time of the last progress check
   }),
   getters: {
-
+    lastCheckTime(state) {
+      return DateTime.fromISO(state.lastCheckTimeISO)
+    },
+    // get the number of pending PCs for a given clock
+    amtPendingPCForClock: (state) => (clockID) => {
+      const ppcs = Object.values(state.pendingPCs)
+      if (!ppcs) return 0
+      const clock = state.clocks[clockID]
+      return ppcs.filter(val => val.pc == clock.pc).length
+    },
   },
   mutations: {
     updateGMClock(state, changesObj) {
@@ -117,6 +30,9 @@ const gmClockStore = {
           state[key] = val;
         }
       }
+    },
+    setLastCheckTimeISO(state, val) {
+      state.lastCheckTimeISO = val
     },
   },
   actions: {
@@ -129,6 +45,33 @@ const gmClockStore = {
     async setPCInterval({}, val) {
       return await update(refs.gmClock, {pcInterval: val})
     },
+    async initLastCheckTime({state, commit, rootGetters}) {
+      let lastCheckTime
+      const { nowTime } = rootGetters
+      const { pcInterval } = state
+      // if it's too close to midnight, 
+      // then we set it up so that the next midnight is 1st pCheck
+      if (nowTime.plus({hours: pcInterval}).day > nowTime.day) {
+        lastCheckTime = nowTime.plus({day: 1}).startOf('day').minus({hours: pcInterval})
+      } else {
+        // otherwise, we find the first PC using 00:00 as origin point
+        lastCheckTime = nowTime.startOf('day') // 00:00
+        while (
+          pcInterval < nowTime.diff(lastCheckTime, 'hours').toObject().hours
+        ){
+          lastCheckTime = lastCheckTime.plus({hours: pcInterval})
+        }
+      }
+      // convert the DateTime object to ISO without timezone
+      if (!lastCheckTime) throw new Error('Could not compute lastCheckTime.')
+      const lastCheckTimeISO = lastCheckTime.toISO({ includeOffset: false, suppressSeconds: true })
+      commit('setLastCheckTimeISO', lastCheckTimeISO)
+      // send lastCheckTimeISO to firebase
+      return await update(refs.gmClock, {lastCheckTimeISO})
+    },
+    async setLastCheckTimeISO({}, val) {
+      return await update(refs.gmClock, {lastCheckTimeISO: val})
+    },
     async addGMClock({}, val) {
       return await push(child(refs.gmClock, "clocks"), val)
     },
@@ -136,16 +79,16 @@ const gmClockStore = {
       return await update(child(refs.gmClock, `clocks/${clockID}`), val)
     },
     async deleteGMClock({}, clockID) {
-      return await update(child(refs.gmClock, `clocks/${clockID}`), null)
+      return await update(child(refs.gmClock, 'clocks'), {[clockID]: null})
     },
     async addGMPCheck({}, val) {
       return await push(child(refs.gmClock, "pChecks"), val)
     },
-    async updateGMPCheck({}, {pcID, val}) {
-      return await update(child(refs.gmClock, `pChecks/${pcID}`), val)
+    async updateGMPCheck({}, {pcid, val}) {
+      return await update(child(refs.gmClock, `pChecks/${pcid}`), val)
     },
-    async deleteGMPCheck({}, pcID) {
-      return await update(child(refs.gmClock, `pChecks/${pcID}`), null)
+    async deleteGMPCheck({}, pcid) {
+      return await update(child(refs.gmClock, `pChecks`), {[pcid]: null})
     },
     async addPendingPC({}, val) {
       return await push(child(refs.gmClock, "pendingPCs"), val)
@@ -154,7 +97,48 @@ const gmClockStore = {
       return await update(child(refs.gmClock, `pendingPCs/${ppcID}`), val)
     },
     async deletePendingPC({}, ppcID) {
-      return await update(child(refs.gmClock, `pendingPCs/${ppcID}`), null)
+      return await update(child(refs.gmClock, `pendingPCs`), {[ppcID]: null})
+    },
+
+    /**
+     * update lastCheckTime and
+     * calculate pending PCs
+     * TODO: instead of adding PPC one by one,
+     * and updating the lastCheckTime slowly,
+     * we do the calculation locally and 
+     * batch-update to firebase.
+     */
+    async advanceGMClock({ commit, dispatch, state, rootState, getters, rootGetters }) {
+      const { pcInterval } = state
+      const { cycle } = rootState.clock
+      // TODO: is there a less risky way to make this, 
+      // that does not require a while loop?
+      while (rootGetters.nowTime > getters.lastCheckTime.plus({hours: pcInterval})){
+        // make new pc time
+        const newCheckTime = getters.lastCheckTime.plus({hours: pcInterval})
+        const newCheckTimeISO = newCheckTime.toISO({ includeOffset: false, suppressSeconds: true })
+        // find PCs that qualify for this check
+        const pcAsArray = Object.entries(state.pChecks)
+        for (const [pcid, pc] of pcAsArray) {
+          const pcLastCheckTime = DateTime.fromISO(pc.lastCheckTimeISO)
+          if (pcLastCheckTime < newCheckTime) {
+            // make pending pcs for them
+            await dispatch('addPendingPC', {
+              time: newCheckTimeISO,
+              turn: cycle,
+              pc: pcid,
+            })
+            // update the pc's lastCheckTime
+            await dispatch('updateGMPCheck', {
+              pcid: pcid,
+              val: {lastCheckTimeISO: newCheckTimeISO}
+            })
+          }
+        }
+        // update GMClockStore's lastCheckTime
+        commit('setLastCheckTimeISO', newCheckTimeISO)
+        await dispatch('setLastCheckTimeISO', newCheckTimeISO)
+      }
     },
 
   },

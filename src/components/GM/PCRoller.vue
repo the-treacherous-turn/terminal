@@ -38,11 +38,11 @@ export default {
         val: { die: dieSize },
       });
     },
-    getClocksWithMatchingPCID(pcID) {
+    getClocksWithMatchingPCID(pcid) {
       return {
         ...Object.fromEntries(
           Object.entries(this.clocks).filter(
-            ([key, value]) => value.pc === pcID
+            ([key, value]) => value.pc === pcid
           )
         ),
       };
