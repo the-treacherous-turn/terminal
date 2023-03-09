@@ -7,7 +7,7 @@ import Footer from "./Footer.vue";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { bottom } from "@popperjs/core";
+import { updateUser } from "./firebase";
 
 export default {
   data() {
@@ -49,7 +49,6 @@ export default {
       this.isOpenGMPanel = true;
     },
     exportData() {
-      // console.log(this.wholeData)
       const sessionID = window.location.hash.substring(1);
       const data = JSON.stringify(this.wholeData);
       const url = window.URL.createObjectURL(new Blob([data]));
@@ -75,14 +74,12 @@ export default {
       }
     },
     readUploadedFileAsText(inputFile) {
-      // console.log(inputFile)
       const temporaryFileReader = new FileReader();
 
       return new Promise((resolve, reject) => {
         temporaryFileReader.onerror = () => {
           temporaryFileReader.abort();
           reject(new DOMException("Problem parsing input file."));
-          // console.log("Problem parsing input file.")
         };
 
         temporaryFileReader.onload = () => {
@@ -103,43 +100,23 @@ export default {
         alert("failed");
       }
     },
-    leaving(e) {
-      e.preventDefault();
-      if (this.isGM) {
-        this.$store.commit("setIsGM", false);
-        const changeObj = {};
-        changeObj["gmUsers"] = this.wholeData["gmUsers"].filter(
-          (user) => user !== this.user_id
-        );
-        changeObj["users"] = this.wholeData["users"].filter(
-          (user) => user !== this.user_id
-        );
-        this.$store.dispatch("updateWholeData", changeObj);
-      } else {
-        const changeObj = {};
-        changeObj["users"] = this.wholeData["users"].filter(
-          (user) => user !== this.user_id
-        );
-        this.$store.dispatch("updateWholeData", changeObj);
-      }
-      e.returnValue = "";
-    },
   },
   watch: {
     finishedLoading() {
       if (this.finishedLoading) {
-        console.log(this.wholeData.users);
         if (this.wholeData["users"] === undefined) {
           const changeObj = {};
           let id = uuidv4();
           changeObj["users"] = [];
           changeObj["users"].push(id);
+          localStorage.setItem("userID", id);
           this.user_id = id;
           this.$store.dispatch("updateWholeData", changeObj);
         } else {
           let changeObj = { ...this.wholeData };
           let id = uuidv4();
           changeObj["users"].push(id);
+          localStorage.setItem("userID", id);
           this.user_id = id;
           this.$store.dispatch("updateWholeData", changeObj);
         }
@@ -156,15 +133,15 @@ export default {
               autoClose: 10000,
               position: "bottom-right",
             });
-            // console.log("Alert A user has opened GM panel");
           }
-          // console.log();
         }
+      updateUser(
+        this.user_id,
+        this.wholeData.users,
+        this.isOpenGMPanel,
+        this.wholeData.gmUsers
+      );
     },
-  },
-  mounted() {
-    // window.addEventListener("beforeunload", this.handler);
-    window.addEventListener("unload", this.leaving);
   },
   computed: {
     ...mapState({
@@ -222,10 +199,6 @@ export default {
       </div>
 
       <div class="btm-nav col-span-2">
-        <!-- <button class="transition-all" :class="{'active':($route.path == '/')}" @click="$router.push('/')">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-    <span class="btm-nav-label">Long Mode Tracker</span>
-  </button> -->
         <button
           class="transition-all"
           :class="{ active: $route.path == '/info' }"

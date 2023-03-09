@@ -4,7 +4,8 @@ import { onValue, update, push } from "firebase/database";
 
 const clockStore = {
   state: () => ({
-    cycle: Number.NEGATIVE_INFINITY,
+    loadingFinished: false,
+    cycle: 0,
     cycleLength: 12, // in hours
     hoursPassed: 0,
     originTimeISO: DateTime.now()
@@ -42,6 +43,7 @@ const clockStore = {
       state.nowTimeISO = nowTimeISO;
     },
     setOriginTimeISO(state, originTimeISO) {
+      console.log(originTimeISO);
       state.originTimeISO = originTimeISO;
     },
     updateClock(state, changesObj) {
@@ -51,12 +53,17 @@ const clockStore = {
           state[key] = val;
         }
       }
+      state.loadingFinished = true;
     },
   },
   actions: {
     async listenToFBClock({ commit }) {
       onValue(refs.clock, (snapshot) => {
-        commit("updateClock", snapshot.val());
+        const data = snapshot.val() === null ? {} : snapshot.val();
+        // if(data.cycle)
+        // if(data.cycleLength)
+
+        commit("updateClock", data);
       });
     },
     async advanceCycle({ commit, state, rootState, getters }) {
@@ -83,6 +90,7 @@ const clockStore = {
       });
     },
     async syncClock({ state }) {
+      console.log(state);
       await update(refs.clock, {
         cycle: state.cycle,
         cycleLength: state.cycleLength,

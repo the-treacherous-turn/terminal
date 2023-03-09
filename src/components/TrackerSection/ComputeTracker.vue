@@ -1,18 +1,25 @@
 <template>
-  <div v-if="available !== Infinity">
+  <div>
     <div class="stats float-left">
       <div class="stat px-4">
         <div>
           <div class="stat-title text-base inline mr-2">Compute Available</div>
           <label for="modal-compute-tracker-setting" @click="openModal">
-            <span class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary">
-              <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-base" />
+            <span
+              class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'pen-to-square']"
+                class="text-base"
+              />
             </span>
           </label>
         </div>
-        <div class="stat-value text-4xl flex">
+        <div class="stat-value text-4xl flex" v-if="loadingFinished">
           <span class="self-end">
-            {{ available }}<span v-if="toSpend !== 0">(-{{toSpend}})</span>/{{ total }}
+            {{ available }}<span v-if="toSpend !== 0">(-{{ toSpend }})</span>/{{
+              total
+            }}
           </span>
         </div>
       </div>
@@ -24,7 +31,7 @@
           type="number"
           class="input input-sm w-12 text-center"
           v-model.number="computeToBurn"
-        >
+        />
         <button class="btn btn-sm btn-circle" @click="addComputeToBurn">
           <font-awesome-icon icon="plus" class="text-2xl" />
         </button>
@@ -36,11 +43,18 @@
 
     <!-- <input type="checkbox" id="modal-compute-tracker-setting" class="modal-toggle"
     v-model="isSettingOpen" @change="onModalToggle" -->
-    <label v-if="isSettingOpen" for="modal-compute-tracker-setting" class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50" @mousedown.self="onClickModalOutside">
+    <label
+      v-if="isSettingOpen"
+      for="modal-compute-tracker-setting"
+      class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
+      @mousedown.self="onClickModalOutside"
+    >
       <label class="modal-box relative" for>
         <h3 class="text-lg font-bold">Configure Compute</h3>
         <h4>
-          <label for="compute-tracker-total" class="text-3xl">Total Compute: <span class="font-bold">{{total}}</span></label>
+          <label for="compute-tracker-total" class="text-3xl"
+            >Total Compute: <span class="font-bold">{{ total }}</span></label
+          >
         </h4>
         <table class="table table-compact w-full">
           <thead>
@@ -51,12 +65,23 @@
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="(source, key) in computeSources"
-              :key="key"
-            >
-              <th><input type="text" placeholder="Name" v-model="source.name" class="input input-sm input-bordered w-full max-w-xs" /></th>
-              <td><input type="number" placeholder="Amount" v-model="source.val" class="input input-sm input-bordered w-full max-w-xs" /></td>
+            <tr v-for="(source, key) in computeSources" :key="key">
+              <th>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  v-model="source.name"
+                  class="input input-sm input-bordered w-full max-w-xs"
+                />
+              </th>
+              <td>
+                <input
+                  type="number"
+                  placeholder="Amount"
+                  v-model="source.val"
+                  class="input input-sm input-bordered w-full max-w-xs"
+                />
+              </td>
               <td class="text-right">
                 <label
                   @click="removeComputeSource(key)"
@@ -69,15 +94,16 @@
           </tbody>
         </table>
         <div class="flex justify-center m-4 mt-2">
-          <label class="btn btn-circle btn-xs"
-            @click="addComputeSource"
-          >
+          <label class="btn btn-circle btn-xs" @click="addComputeSource">
             <font-awesome-icon icon="plus" class="text-2xl" />
           </label>
         </div>
 
         <h4>
-          <label class="text-3xl">Recurring Costs: <span class="font-bold">{{recurringSum}}</span></label>
+          <label class="text-3xl"
+            >Recurring Costs:
+            <span class="font-bold">{{ recurringSum }}</span></label
+          >
         </h4>
         <table class="table table-compact w-full">
           <thead>
@@ -90,14 +116,33 @@
           <tbody>
             <tr>
               <th><span class="w-full max-w-xs">Basic Cognition Cost</span></th>
-              <td><input type="number" min="0" placeholder="Amount" v-model.number="baseComputeCost" class="input input-sm input-bordered w-full max-w-xs" /></td>
+              <td>
+                <input
+                  type="number"
+                  min="0"
+                  placeholder="Amount"
+                  v-model.number="baseComputeCost"
+                  class="input input-sm input-bordered w-full max-w-xs"
+                />
+              </td>
             </tr>
-            <tr
-              v-for="(source, key) in recurringCosts"
-              :key="key"
-            >
-              <th><input type="text" placeholder="Name" v-model="source.name" class="input input-sm input-bordered w-full max-w-xs" /></th>
-              <td><input type="number" placeholder="Amount" v-model="source.val" class="input input-sm input-bordered w-full max-w-xs" /></td>
+            <tr v-for="(source, key) in recurringCosts" :key="key">
+              <th>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  v-model="source.name"
+                  class="input input-sm input-bordered w-full max-w-xs"
+                />
+              </th>
+              <td>
+                <input
+                  type="number"
+                  placeholder="Amount"
+                  v-model="source.val"
+                  class="input input-sm input-bordered w-full max-w-xs"
+                />
+              </td>
               <td class="text-right">
                 <label
                   @click="removeRecurringCost(key)"
@@ -110,9 +155,7 @@
           </tbody>
         </table>
         <div class="flex justify-center m-4 mt-2">
-          <label class="btn btn-circle btn-xs"
-            @click="addRecurringCost"
-          >
+          <label class="btn btn-circle btn-xs" @click="addRecurringCost">
             <font-awesome-icon icon="plus" class="text-2xl" />
           </label>
         </div>
@@ -121,8 +164,9 @@
             for="modal-compute-tracker-setting"
             class="btn btn-primary"
             @click="cancel"
-            >
-            Close</label>
+          >
+            Close</label
+          >
         </div>
       </label>
     </label>
@@ -130,88 +174,90 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   data() {
     return {
       isSettingOpen: false,
-    }
+    };
   },
   computed: {
     available() {
-      return this.$store.getters.computeAvailable
+      return this.$store.getters.computeAvailable;
     },
     toSpend() {
-      return this.$store.getters.computeToSpend
+      return this.$store.getters.computeToSpend;
     },
     total() {
-      return this.$store.getters.computeTotal
+      return this.$store.getters.computeTotal;
     },
     recurringSum() {
-      return this.$store.getters.recurringSum
+      return this.$store.getters.recurringSum;
     },
     baseComputeCost: {
-      get () {
-        return this.$store.state.compute.baseComputeCost
+      get() {
+        return this.$store.state.compute.baseComputeCost;
       },
-      set (value) {
-        this.$store.commit('setBaseComputeCost', value)
-      }
+      set(value) {
+        this.$store.commit("setBaseComputeCost", value);
+      },
     },
     computeToBurn: {
-      get () {
-        return this.$store.state.compute.computeToBurn
+      get() {
+        return this.$store.state.compute.computeToBurn;
       },
-      set (value) {
-        if (value === "") return // user just cleared the input. disregard.
-        const newValue = parseInt(value)
-        this.$store.dispatch('modifyComputeToBurn', newValue)
-      }
+      set(value) {
+        if (value === "") return; // user just cleared the input. disregard.
+        const newValue = parseInt(value);
+        this.$store.dispatch("modifyComputeToBurn", newValue);
+      },
     },
 
     ...mapState({
-      computeSources: state => state.compute.computeSources,
-      recurringCosts: state => state.compute.recurringCosts,
-    },)
+      computeSources: (state) => state.compute.computeSources,
+      recurringCosts: (state) => state.compute.recurringCosts,
+      loadingFinished: (state) => state.compute.loadingFinished,
+    }),
   },
   methods: {
     addComputeToBurn() {
-      this.$store.dispatch('modifyComputeToBurn', this.computeToBurn + 1)
+      this.$store.dispatch("modifyComputeToBurn", this.computeToBurn + 1);
     },
     removeComputeToBurn() {
-      if (this.computeToBurn <= 0) return
-      this.$store.dispatch('modifyComputeToBurn', this.computeToBurn - 1)
+      if (this.computeToBurn <= 0) return;
+      this.$store.dispatch("modifyComputeToBurn", this.computeToBurn - 1);
     },
     addComputeSource() {
-      this.$store.dispatch('addComputeSource')
+      this.$store.dispatch("addComputeSource");
     },
     removeComputeSource(key) {
-      this.$store.dispatch('removeComputeSource', key)
+      this.$store.dispatch("removeComputeSource", key);
     },
     addRecurringCost() {
-      this.$store.dispatch('addRecurringCost')
+      this.$store.dispatch("addRecurringCost");
     },
     removeRecurringCost(key) {
-      this.$store.dispatch('removeRecurringCost', key)
+      this.$store.dispatch("removeRecurringCost", key);
     },
     onModalToggle() {
       // if the setting page's getting closed,
       // sync the compute tracker
       if (!this.isSettingOpen) {
-        this.$store.dispatch('syncComputeTracker')
+        this.$store.dispatch("syncComputeTracker");
       }
     },
     openModal() {
-        this.isSettingOpen = true
+      this.isSettingOpen = true;
     },
     cancel() {
-        this.isSettingOpen = false
+      this.isSettingOpen = false;
+      this.onModalToggle();
     },
     onClickModalOutside() {
-      this.cancel()
+      this.isSettingOpen = false;
+      this.onModalToggle();
     },
   },
-}
-
+};
 </script>
