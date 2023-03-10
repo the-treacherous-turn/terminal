@@ -177,6 +177,7 @@ export default {
         :isDirty="action.isDirty"
         :isCommitted="action.isCommitted"
         :isForecast="action.isForecast"
+        :isNormal="action.isNormal"
         :commitTimeISO="action.commitTimeISO"
         :dayLeft="action.dayLeft"
       />
