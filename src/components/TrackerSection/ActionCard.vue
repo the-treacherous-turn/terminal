@@ -23,8 +23,8 @@
       />
     </div>
     <span
-      id="actionName"
       class="text-2xl cursor-pointer"
+      ref="actionName"
       :class="{
         '': !isCommitted && !isForecast,
         'badge badge-success inline': isCommitted && !isForecast,
@@ -146,7 +146,8 @@ export default {
       this.$store.dispatch("deleteAction", this.actionID);
     },
     addHoverEffect() {
-      let ele = document.getElementById("actionName");
+      const ele = this.$refs.actionName;
+
       if (!this.isCommitted && !this.isForecast) {
         ele.classList.add(
           "hover:text-success-content",
