@@ -128,7 +128,7 @@ export default {
   watch: {
     finishedLoading() {
       if (this.finishedLoading) {
-        console.log(this.wholeData.users);
+        // console.log(this.wholeData.users);
         if (this.wholeData["users"] === undefined) {
           const changeObj = {};
           let id = uuidv4();
@@ -181,7 +181,7 @@ export default {
     <input id="app-drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
       <div
-        class="sticky top-0 left-0 z-10 justify-between w-full uppercase navbar bg-base-100 col-span-2"
+        class="sticky top-0 left-0 z-10 justify-between w-full col-span-2 uppercase navbar bg-base-100"
       >
         <div>
           <div
@@ -221,7 +221,7 @@ export default {
         </div>
       </div>
 
-      <div class="btm-nav col-span-2">
+      <div class="col-span-2 btm-nav">
         <button
           class="transition-all"
           :class="{ active: $route.path == '/info' }"

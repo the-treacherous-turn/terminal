@@ -226,6 +226,7 @@ export default {
       this.isRollerOpen = true
     },
     closeRoller() {
+      this.$refs.pcRoller.submit()
       this.isRollerOpen = false
     },
     openClockSetting() {
@@ -491,6 +492,7 @@ export default {
       </div>
       <div class="flex w-full border-white border-1 bg-darkgray">
         <PCRoller
+          ref="pcRoller"
           :allPCID="pcsToRoll"
         />
       </div>

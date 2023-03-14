@@ -39,6 +39,10 @@ const gmClockStore = {
     async listenToFBGMCLOCK({commit, state}) {
       onValue(refs.gmClock, (snapshot) => {
         const data = snapshot.val() === null ? {} : snapshot.val()
+        // detect when firebase removes root objects once they are empty
+        if (data.clocks === undefined) data.clocks = {}
+        if (data.pChecks === undefined) data.pChecks = {}
+        if (data.pendingPCs === undefined) data.pendingPCs = {}
         commit("updateGMClock", data)
       })
     },
