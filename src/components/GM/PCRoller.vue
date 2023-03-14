@@ -8,6 +8,7 @@ export default {
   data() {
     return {
       rollLog: [], // die size and result
+      lastResults: {}, // last roll result for each ppc
     }
   },
   computed: {
@@ -46,12 +47,17 @@ export default {
           )
         ),}
     },
-    roll(die) {
+    rollDie(die, key) {
       // TODO improve the roll function
       // with true randomness
       const dieSize = die.slice(1)
       const result = Math.floor(Math.random() * dieSize) + 1
       this.rollLog.unshift({die, result})
+      this.lastResults[key] = result
+    },
+    close() {
+      this.lastResults = {}
+      // TODO update results
     },
   },
 }
@@ -75,7 +81,8 @@ export default {
             <option value="d10" class="text-[26px] text-white">D10</option>
             <option value="d12" class="text-[26px] text-white">D12</option>
           </select>
-          <button @click="roll(pChecks[ppc.pc].die)">Roll</button>
+          <button v-if="lastResults[key]" @click="rollDie(pChecks[ppc.pc].die, key)">{{ lastResults[key] }}</button>
+          <button v-else @click="rollDie(pChecks[ppc.pc].die, key)">Roll</button>
         </div>
       </div>
       <div v-for="(clock, key) in getClocksWithMatchingPCID(ppc.pc)" :key="key">
