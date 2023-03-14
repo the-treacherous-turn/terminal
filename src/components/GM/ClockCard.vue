@@ -60,6 +60,7 @@ export default {
               @click="$emit('roll')"
             >
               ROLL PC
+              <div class="notification" v-if="$store.getters.amtPendingPCForClock(clockID) > 0">{{ $store.getters.amtPendingPCForClock(clockID) }}</div>
             </button>
           </div>
           <span v-else class="flex text-[16px] text-white uppercase text-center"

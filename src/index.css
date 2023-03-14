@@ -6,9 +6,15 @@
   }
 }
 
+@layer components {
+  .notification {
+    @apply absolute flex items-center justify-center w-5 h-5 text-2xl text-center rounded-full bg-accent text-neutral -top-3 -left-3
+  }
+}
+
 @tailwind components;
 .btn {
-  @apply border-1 border-primary-content font-normal capitalize transition-none;
+  @apply font-normal capitalize transition-none border-1 border-primary-content;
 }
 .btn:hover {
   @apply border-primary-content

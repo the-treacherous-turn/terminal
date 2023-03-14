@@ -26,7 +26,7 @@ export default {
       // and then reconstruct the object
       return Object.fromEntries(
         Object.entries(this.pendingPCs).filter(
-          ([key, value]) => this.allPCID.includes(value.pcid)
+          ([_key, value]) => this.allPCID.includes(value.pc)
         )
       )
     },
@@ -60,14 +60,14 @@ export default {
 <template>
   <div class="flex w-full">
     <div class="w-2/3">
-    <!-- <pre class="text-green-500">{{ allPCsToRoll }}</pre> -->
+    <!-- <pre class="text-green-500">{{ allPendingPCs }}</pre> -->
     <!-- it should display all PCs to roll, sorted by the PC. -->
     <template v-for="(ppc, key) in allPendingPCs" :key="key">
       <div>{{ ppc.time }}</div>
       <div class="flex justify-between">
-        <div>{{ pChecks[ppc.pcid].name }} - {{ pChecks[ppc.pcid].type }}</div>
+        <div>{{ pChecks[ppc.pc].name }} - {{ pChecks[ppc.pc].type }}</div>
         <div>
-          <select v-model="pChecks[ppc.pcid].die" @change="updatePCheckDieSize(ppc.pcid, $event.target.value)">
+          <select v-model="pChecks[ppc.pc].die" @change="updatePCheckDieSize(ppc.pc, $event.target.value)">
             <option value="d2" class="text-[26px] text-white">D2</option>
             <option value="d4" class="text-[26px] text-white">D4</option>
             <option value="d6" class="text-[26px] text-white">D6</option>
@@ -75,10 +75,10 @@ export default {
             <option value="d10" class="text-[26px] text-white">D10</option>
             <option value="d12" class="text-[26px] text-white">D12</option>
           </select>
-          <button @click="roll(pChecks[ppc.pcid].die)">Roll</button>
+          <button @click="roll(pChecks[ppc.pc].die)">Roll</button>
         </div>
       </div>
-      <div v-for="(clock, key) in getClocksWithMatchingPCID(ppc.pcid)" :key="key">
+      <div v-for="(clock, key) in getClocksWithMatchingPCID(ppc.pc)" :key="key">
         <div>{{ clock.name }}</div>
         <div>{{ clock.elapsed }}/{{ clock.size }}</div>
         <div>

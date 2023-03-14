@@ -245,10 +245,11 @@ export default {
   <div class="flex flex-col px-[40px] pt-[16px]">
     <div class="flex items-center self-end justify-center space-x-8">
       <div
-        class="border-[1px] border-grey uppercase text-[16px] py-[8px] px-[12px] cursor-pointer"
+        class="border-[1px] border-grey uppercase text-[16px] py-[8px] px-[12px] cursor-pointer relative"
         @click="openRollerForAll"
       >
         Roll all
+        <div class="notification" v-if="Object.entries($store.state.gmCLOCK.pendingPCs).length">{{ Object.entries($store.state.gmCLOCK.pendingPCs).length }}</div>
       </div>
       <div
         class="border-[1px] border-grey uppercase text-[16px] py-[8px] px-[12px] cursor-pointer"
