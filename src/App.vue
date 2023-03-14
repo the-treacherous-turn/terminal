@@ -181,7 +181,7 @@ export default {
     <input id="app-drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
       <div
-        class="navbar uppercase bg-base-100 w-full col-span-2 sticky top-0 left-0 z-10 justify-between"
+        class="sticky top-0 left-0 z-10 justify-between w-full uppercase navbar bg-base-100 col-span-2"
       >
         <div>
           <div
@@ -192,17 +192,17 @@ export default {
           >
             <label
               for="app-drawer"
-              class="btn btn-square btn-ghost border-none text-2xl"
+              class="text-2xl border-none btn btn-square btn-ghost"
             >
               <font-awesome-icon :icon="['fas', 'bars']" />
             </label>
           </div>
-          <span class="text-3xl pl-2">
+          <span class="pl-2 text-3xl">
             <span>
               The Treacherous Turn
-              <span class="text-base ml-4"
+              <span class="ml-4 text-base"
                 >ID:
-                <span class="bg-white text-black">{{
+                <span class="text-black bg-white">{{
                   $store.state.sessionID
                 }}</span></span
               >
@@ -216,7 +216,7 @@ export default {
 
       <div class="h-[calc(100%-11rem)]" :class="{ flex: isGM }">
         <router-view :class="{ 'w-2/3': isGM }"></router-view>
-        <div v-if="isOpenGMPanel" class="border grow h-full">
+        <div v-if="isOpenGMPanel" class="h-full border grow">
           <GMPanel />
         </div>
       </div>
@@ -229,7 +229,7 @@ export default {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
+            class="w-5 h-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -250,7 +250,7 @@ export default {
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
+            class="w-5 h-5"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -291,12 +291,12 @@ export default {
 
     <div class="drawer-side">
       <label for="app-drawer" class="drawer-overlay"></label>
-      <ul class="menu p-4 w-80 bg-base-100 text-base-content">
+      <ul class="p-4 menu w-80 bg-base-100 text-base-content">
         <!-- Sidebar content here -->
         <!-- TODO: button to bring up About page, with info and links -->
         <!-- <li><a><font-awesome-icon :icon="['fas', 'circle-question']" /> About</a></li> -->
         <li class="form-control">
-          <label class="label cursor-pointer">
+          <label class="cursor-pointer label">
             <span class="label-text">GM mode</span>
             <input
               :checked="isGM"
@@ -318,7 +318,7 @@ export default {
         >
           load backup
         </div>
-        <span class="absolute bottom-4 text-base">version 0.3.1</span>
+        <span class="absolute text-base bottom-4">version 0.3.1</span>
       </ul>
       <div
         class="absolute w-[100vw] h-[100vh] flex items-center justify-center"
@@ -329,7 +329,7 @@ export default {
           class="flex flex-col justify-center items-center bg-white py-[30px] px-[40px] rounded-[10px]"
           :on-focusout="closeImportModal"
         >
-          <p class="text-center heading h3 text-black">
+          <p class="text-center text-black heading h3">
             This will OVERWRITE
             <b class="text-red-600">ALL</b>
             local data.

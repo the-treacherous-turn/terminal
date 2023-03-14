@@ -23,9 +23,9 @@ export default {
     <ProcessClock :size="size" :elapsed="elapsed" :width="100" :height="100" />
     <div class="flex ml-[20px] w-full">
       <div class="flex flex-col w-full">
-        <div class="flex justify-between items-center w-full">
+        <div class="flex items-center justify-between w-full">
           <span class="text-[20px] text-white uppercase">{{ name }}</span>
-          <div class="flex justify-center items-center space-x-4">
+          <div class="flex items-center justify-center space-x-4">
             <div
               class="bg-[url('/edit.svg')] w-[24px] h-[23px] bg-cover cursor-pointer"
               @click="$emit('edit', this.clockID)"
@@ -56,10 +56,11 @@ export default {
           </div>
           <div v-if="mode=='pc'">
             <button
-              class="border p-2 bg-gray-600"
+              class="relative p-2 bg-gray-600 border"
               @click="$emit('roll')"
-            >ROLL PC</button>
-            <div>PC to roll: {{ $store.getters.amtPendingPCForClock(clockID) }}</div>
+            >
+              ROLL PC
+            </button>
           </div>
           <span v-else class="flex text-[16px] text-white uppercase text-center"
             >{{ mode }}</span

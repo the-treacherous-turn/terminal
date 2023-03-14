@@ -289,7 +289,7 @@ export default {
 </script>
 
 <template>
-  <div class="uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
+  <div class="fixed top-0 left-0 z-50 table w-full h-full uppercase bg-black/50 transition-opacity"
     v-if="isDeleteFlag">
     <div class="table-cell align-middle bg-transparent">
       <div class="
@@ -315,7 +315,7 @@ export default {
 
   <div v-if="isOpenEditor" class="flex flex-col w-full h-[calc(100%-63px)]">
     <div class="flex justify-between items-center w-full mt-[9px] px-[23px]">
-      <div class="flex justify-center items-center cursor-pointer" @click="close">
+      <div class="flex items-center justify-center cursor-pointer" @click="close">
         <div class="w-[14px] h-[24px] bg-[url('/back_icon.svg')] bg-cover"></div>
         <div class="ml-[15px] text-[20px] text-grey">back</div>
       </div>
@@ -370,11 +370,11 @@ export default {
       <div class="py-[4px] px-[16px] border-b-3 border-b-white border-b">
         <textarea v-model="editorNpc.description" ref="textarea_des" placeholder="Type description here" @input="resize('textarea_des')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_des}"></textarea>
       </div>
-      <div class="flex border-b-3 border-b-white border-b">
+      <div class="flex border-b border-b-3 border-b-white">
         <div class="flex justify-center -rotate-180 text-white text-[20px] border-l-3 border-l-white border-l px-[12px]" :style="{writingMode:'vertical-lr'}">
           CHARACTERISTICS
         </div>
-        <div class="flex flex-col px-1 w-full">
+        <div class="flex flex-col w-full px-1">
           <div class="flex flex-col px-[12px] py-[5px] border-b-1 border-b-white first-letter:border-b ">
             <div class="text-[14px] text-white font-bold">Trust</div>
             <textarea v-model="editorNpc.trust" id="textarea_trust" ref="textarea_trust" placeholder="[None]" v-on:keyup.enter="process('textarea_trust')" @input="resize('textarea_trust')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_trust}"></textarea>
@@ -425,29 +425,29 @@ export default {
         </div>
         <div class="flex justify-between w-[150px]">
           <div class="text-[16px] text-white">Type</div>
-          <div class="flex justify-center items-center pr-1">
+          <div class="flex items-center justify-center pr-1">
             <div :class="[filterQuery.length !== 0 ? 'filter_clicked' : 'filter_unclicked']" @click="openFilterModal">
 				<div id="filterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-[24px] py-[12px] flex flex-col bg-grey" :on-focusout="closeFilterModal">
 					<label class="flex w-fit space-x-[8px]">
-						<div class="flex justify-center items-center">
+						<div class="flex items-center justify-center">
 							<input :checked="filterQuery.includes('Human')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Human')"/>
 						</div>
 						<div class="text-black text-[20px]">Human</div>
 					</label>
 					<label class="flex w-fit space-x-[8px]">
-						<div class="flex justify-center items-center">
+						<div class="flex items-center justify-center">
 							<input :checked="filterQuery.includes('Animal')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Animal')"/>
 						</div>
 						<div class="text-black text-[20px]">Animal</div>
 					</label>
 					<label class="flex w-fit space-x-[8px]">
-						<div class="flex justify-center items-center">
+						<div class="flex items-center justify-center">
 							<input :checked="filterQuery.includes('AI')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'AI')"/>
 						</div>
 						<div class="text-black text-[20px]">AI</div>
 					</label>
 					<label class="flex w-fit space-x-[8px]">
-						<div class="flex justify-center items-center">
+						<div class="flex items-center justify-center">
 							<input :checked="filterQuery.includes('Other')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Other')"/>
 						</div>
 						<div class="text-black text-[20px]">Other</div>
@@ -456,7 +456,7 @@ export default {
                     </div>
                     <div class="flex space-x-[8px] justify-center w-full cursor-pointer items-center" @click="clearFilter">
                         <p class="text-black text-[20px]">Clear</p>
-                        <div class="flex justify-center items-center">
+                        <div class="flex items-center justify-center">
                             <font-awesome-icon
                             :icon="['fas', 'trash-can']" class="cursor-pointer text-[#1D2225]"
                             />
@@ -481,7 +481,7 @@ export default {
       </div>
     </div>
     <div v-for="(data, key) in sortNpcs" class="flex flex-col mt-[16px] space-y-[12px]">
-      <div :id="'divRef'+key" class="hover:bg-white hover:text-black text-white cursor-pointer flex justify-between" v-on:mouseenter="toggleTooltip(key)" v-on:mouseleave="toggleTooltip(key)" @click="onClickEdit(key)">
+      <div :id="'divRef'+key" class="flex justify-between text-white cursor-pointer hover:bg-white hover:text-black" v-on:mouseenter="toggleTooltip(key)" v-on:mouseleave="toggleTooltip(key)" @click="onClickEdit(key)">
         <div class="text-[14px] w-[140px] font-bold flex">{{data.name}}</div>
         <div class="w-[150px] flex text-[14px]">
           <span class="font-bold">{{data.type+','}}</span>
@@ -493,7 +493,7 @@ export default {
       </div>
       <div :id="'tooltipRef'+key" class="hidden mt-[-120px] bg-grey border-1 border-black ml-3 z-50 w-[450px] font-normal leading-normal text-left pointer-events-none">
         <div>
-          <div class="bg-grey text-black text-lg">
+          <div class="text-lg text-black bg-grey">
             Description
           </div>
           <div class="text-black">

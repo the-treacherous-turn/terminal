@@ -72,34 +72,34 @@ export default {
 </script>
 
 <template>
-<h2 class="text-2xl font-bold pb-2">Insights</h2>
+<h2 class="pb-2 text-2xl font-bold">Insights</h2>
 <ul>
   <!-- a list item for each insight -->
   <li v-for="(insight, key) in activeSpec.insights" :key="key" class="group">
-    <h3 class="text-xl font-bold badge mr-2">
-      <span v-if="insight.range && typeAbbr(insight.type)" class="whitespace-pre capitalize">{{ insight.range }} {{ typeAbbr(insight.type) }}: </span>
-      <span v-else-if="insight.range" class="whitespace-pre capitalize">{{ insight.range }}: </span>
-      <span v-else-if="typeAbbr(insight.type)" class="whitespace-pre capitalize">{{ typeAbbr(insight.type) }}: </span>
+    <h3 class="mr-2 text-xl font-bold badge">
+      <span v-if="insight.range && typeAbbr(insight.type)" class="capitalize whitespace-pre">{{ insight.range }} {{ typeAbbr(insight.type) }}: </span>
+      <span v-else-if="insight.range" class="capitalize whitespace-pre">{{ insight.range }}: </span>
+      <span v-else-if="typeAbbr(insight.type)" class="capitalize whitespace-pre">{{ typeAbbr(insight.type) }}: </span>
       {{ insight.name }}
     </h3>
     <div class="hidden group-hover:inline">
       <label for="modal-edit-insight">
         <font-awesome-icon
           :icon="['fas', 'pen-to-square']"
-          class="text-base text-primary-content mr-4 my-1 cursor-pointer hover:text-white"
+          class="my-1 mr-4 text-base cursor-pointer text-primary-content hover:text-white"
           @click="onClickEdit(key)"
         />
       </label>
       <font-awesome-icon
         :icon="['fas', 'trash-can']"
-        class="text-base text-primary-content mr-1 my-1 cursor-pointer hover:text-white"
+        class="my-1 mr-1 text-base cursor-pointer text-primary-content hover:text-white"
         @click="onClickDelete(key)"
       />
     </div>
 
   </li>
 </ul>
-<label for="modal-edit-insight" class="btn btn-secondary btn-xs mt-2" @click="onClickAdd">+ Add Insights</label>
+<label for="modal-edit-insight" class="mt-2 btn btn-secondary btn-xs" @click="onClickAdd">+ Add Insights</label>
 <!-- <input
   type="checkbox" id="modal-edit-insight"
   class="modal-toggle"
@@ -110,25 +110,25 @@ export default {
   class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
   @mousedown.self="onClickModalOutside"
 >
-  <label class="modal-box relative">
+  <label class="relative modal-box">
     <h3 class="text-lg font-bold">{{ isAddNewInsight ? 'Add' : 'Edit' }} Insight</h3>
-    <form class="form-control w-full" autocomplete="off">
+    <form class="w-full form-control" autocomplete="off">
       <label class="label label-text">Name</label>
       <input
         v-model="editorInsight.name"
         type="text" placeholder="" autocomplete="off"
-        class="input input-bordered w-full max-w-xs">
+        class="w-full max-w-xs input input-bordered">
       <div class="grid grid-cols-2 gap-8">
         <div>
           <label class="label label-text">Range</label>
-          <select v-model="editorInsight.range" class="select select-bordered w-full capitalize">
+          <select v-model="editorInsight.range" class="w-full capitalize select select-bordered">
             <option>narrow</option>
             <option>broad</option>
           </select>
         </div>
         <div>
           <label class="label label-text">Type</label>
-          <select v-model="editorInsight.type" class="select select-bordered w-full capitalize">
+          <select v-model="editorInsight.type" class="w-full capitalize select select-bordered">
             <option selected>standard</option>
             <option>technological</option>
             <option>linguistic</option>
@@ -137,7 +137,7 @@ export default {
       </div>
       
 
-      <div class="btn-group flex justify-end mt-4">
+      <div class="flex justify-end mt-4 btn-group">
         <label
           for="modal-edit-insight"
           class="btn btn-primary"

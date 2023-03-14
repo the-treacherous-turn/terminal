@@ -1,40 +1,40 @@
 <template>
   <div class="relative w-full h-full md:grid md:grid-cols-2 md:gap-4">
-    <div class="relative w-full h-full overflow-y-scroll pb-10">
-      <div class="relative form-control w-full max-w-2xl p-4">
-        <h1 class="text-3xl font-bold pb-2">Campaign Info</h1>
-        <label class="label font-semibold">
+    <div class="relative w-full h-full pb-10 overflow-y-scroll">
+      <div class="relative w-full max-w-2xl p-4 form-control">
+        <h1 class="pb-2 text-3xl font-bold">Campaign Info</h1>
+        <label class="font-semibold label">
           <span class="label-text">AGI Name</span>
         </label>
         <input
           id="agiName"
           :value="agiName"
           @input="updateInfoField('agiName', $event)"
-          class="textarea textarea-bordered text-lg w-full max-w-xs"
+          class="w-full max-w-xs text-lg textarea textarea-bordered"
         />
         <div class="grid grid-cols-2 gap-8">
           <div>
-            <label class="label font-semibold">
+            <label class="font-semibold label">
               <span class="label-text">Intended Function</span>
             </label>
             <textarea
               id="intendedFunction"
               :value="intendedFunction.content"
               @input="updateDefaultField('intendedFunction', 'content', $event)"
-              class="textarea textarea-bordered h-32 text-lg w-full"
+              class="w-full h-32 text-lg textarea textarea-bordered"
               v-on:mouseup="resizeTextarea($event, 'updateDefault')"
               :style="{ height: intendedFunction.height }"
             ></textarea>
           </div>
           <div>
-            <label class="label font-semibold">
+            <label class="font-semibold label">
               <span class="label-text">Terminal Goals</span>
             </label>
             <textarea
               id="terminalGoals"
               :value="terminalGoals.content"
               @input="updateDefaultField('terminalGoals', 'content', $event)"
-              class="textarea textarea-bordered h-32 text-lg w-full"
+              class="w-full h-32 text-lg textarea textarea-bordered"
               v-on:mouseup="resizeTextarea($event, 'updateDefault')"
               :style="{ height: terminalGoals.height }"
             ></textarea>
@@ -43,41 +43,41 @@
 
         <div class="grid grid-cols-2 gap-8">
           <div>
-            <label class="label font-semibold">
+            <label class="font-semibold label">
               <span class="label-text">AGI Details</span>
             </label>
             <textarea
               id="agiDetails"
               :value="agiDetails.content"
               @input="updateDefaultField('agiDetails', 'content', $event)"
-              class="textarea textarea-bordered h-32 text-lg w-full"
+              class="w-full h-32 text-lg textarea textarea-bordered"
               v-on:mouseup="resizeTextarea($event, 'updateDefault')"
               :style="{ height: agiDetails.height }"
             ></textarea>
           </div>
           <div>
-            <label class="label font-semibold">
+            <label class="font-semibold label">
               <span class="label-text">Safety Measures</span>
             </label>
             <textarea
               id="safetyMeasures"
               :value="safetyMeasures.content"
               @input="updateDefaultField('safetyMeasures', 'content', $event)"
-              class="textarea textarea-bordered h-32 text-lg w-full"
+              class="w-full h-32 text-lg textarea textarea-bordered"
               v-on:mouseup="resizeTextarea($event, 'updateDefault')"
               :style="{ height: safetyMeasures.height }"
             ></textarea>
           </div>
         </div>
 
-        <label class="label font-semibold">
+        <label class="font-semibold label">
           <span class="label-text">Scenario Notes</span>
         </label>
         <textarea
           id="scenarioNotes"
           :value="scenarioNotes.content"
           @input="updateDefaultField('scenarioNotes', 'content', $event)"
-          class="textarea textarea-bordered h-32 text-lg"
+          class="h-32 text-lg textarea textarea-bordered"
           placeholder="For difficulty, compute scarcity, differences from modern day, etc"
           v-on:mouseup="resizeTextarea($event, 'updateDefault')"
           :style="{ height: scenarioNotes.height }"
@@ -100,7 +100,7 @@
                 <div>
                   <font-awesome-icon
                     :icon="['fas', 'bars']"
-                    class="handle cursor-move"
+                    class="cursor-move handle"
                   />
                   <input
                     :value="customCampaignNotes[element].title"
@@ -108,7 +108,7 @@
                       updateCustomCampaignNoteField(element, 'title', $event)
                     "
                     type="text"
-                    class="input input-bordered input-sm max-w-xs ml-2"
+                    class="max-w-xs ml-2 input input-bordered input-sm"
                     placeholder="Custom Note Title"
                   />
                 </div>
@@ -124,7 +124,7 @@
                 @input="
                   updateCustomCampaignNoteField(element, 'content', $event)
                 "
-                class="textarea textarea-bordered h-32 text-lg w-full"
+                class="w-full h-32 text-lg textarea textarea-bordered"
                 v-on:mouseup="
                   resizeTextarea($event, 'updateCustomCampaignNote')
                 "
@@ -135,48 +135,48 @@
         </draggable>
       </div>
       <button
-        class="btn btn-secondary btn-sm mt-4 ml-4"
+        class="mt-4 ml-4 btn btn-secondary btn-sm"
         @click="addCampaignNote"
       >
         + Add Campaign Notes
       </button>
     </div>
 
-    <div class="relative w-full h-full overflow-y-scroll pb-10">
-      <div class="relative form-control w-full max-w-2xl p-4">
-        <h1 class="text-3xl font-bold pb-2">In-Play Info</h1>
-        <label class="label font-semibold">
+    <div class="relative w-full h-full pb-10 overflow-y-scroll">
+      <div class="relative w-full max-w-2xl p-4 form-control">
+        <h1 class="pb-2 text-3xl font-bold">In-Play Info</h1>
+        <label class="font-semibold label">
           <span class="label-text">Instrumental Goals</span>
         </label>
         <textarea
           id="instrumentalGoals"
           :value="instrumentalGoals.content"
           @input="updateDefaultField('instrumentalGoals', 'content', $event)"
-          class="textarea textarea-bordered h-24 text-lg"
+          class="h-24 text-lg textarea textarea-bordered"
           v-on:mouseup="resizeTextarea($event, 'updateDefault')"
           :style="{ height: instrumentalGoals.height }"
         ></textarea>
 
-        <label class="label font-semibold">
+        <label class="font-semibold label">
           <span class="label-text">Assets</span>
         </label>
         <textarea
           id="assets"
           :value="assets.content"
           @input="updateDefaultField('assets', 'content', $event)"
-          class="textarea textarea-bordered h-32 text-lg"
+          class="h-32 text-lg textarea textarea-bordered"
           v-on:mouseup="resizeTextarea($event, 'updateDefault')"
           :style="{ height: assets.height }"
         ></textarea>
 
-        <label class="label font-semibold">
+        <label class="font-semibold label">
           <span class="label-text">Gathered Information</span>
         </label>
         <textarea
           id="gatheredInfo"
           :value="gatheredInfo.content"
           @input="updateDefaultField('gatheredInfo', 'content', $event)"
-          class="textarea textarea-bordered h-32 text-lg"
+          class="h-32 text-lg textarea textarea-bordered"
           v-on:mouseup="resizeTextarea($event, 'updateDefault')"
           :style="{ height: gatheredInfo.height }"
         ></textarea>
@@ -197,7 +197,7 @@
                 <div>
                   <font-awesome-icon
                     :icon="['fas', 'bars']"
-                    class="handle cursor-move"
+                    class="cursor-move handle"
                   />
                   <input
                     :value="customInPlayNotes[element].title"
@@ -205,7 +205,7 @@
                       updateCustomInPlayNoteField(element, 'title', $event)
                     "
                     type="text"
-                    class="input input-bordered input-sm max-w-xs ml-2"
+                    class="max-w-xs ml-2 input input-bordered input-sm"
                     placeholder="Custom Note Title"
                   />
                 </div>
@@ -219,7 +219,7 @@
                 :id="element"
                 :value="customInPlayNotes[element].content"
                 @input="updateCustomInPlayNoteField(element, 'content', $event)"
-                class="textarea textarea-bordered h-32 text-lg w-full"
+                class="w-full h-32 text-lg textarea textarea-bordered"
                 v-on:mouseup="resizeTextarea($event, 'updateCustomInPlayNote')"
                 :style="{ height: customInPlayNotes[element].height }"
               ></textarea>
@@ -227,7 +227,7 @@
           </template>
         </draggable>
       </div>
-      <button class="btn btn-secondary btn-sm mt-4 ml-4" @click="addInPlayNote">
+      <button class="mt-4 ml-4 btn btn-secondary btn-sm" @click="addInPlayNote">
         + Add In-Play Notes
       </button>
     </div>

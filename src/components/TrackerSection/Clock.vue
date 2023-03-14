@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div class="stats float-right">
-      <div class="stat px-4">
-        <div class="flex justify-between items-center">
+    <div class="float-right stats">
+      <div class="px-4 stat">
+        <div class="flex items-center justify-between">
           <div v-if="loadingFinished">
             <div
               v-if="stateofDisplayMode"
-              class="stat-title text-base inline mr-2"
+              class="inline mr-2 text-base stat-title"
             >
               {{ `day ${dayAfter}` }}
             </div>
-            <div v-else class="stat-title text-base inline mr-2">
+            <div v-else class="inline mr-2 text-base stat-title">
               {{ nowDate }}
             </div>
           </div>
@@ -20,7 +20,7 @@
             @click="openModal('timesetting')"
           >
             <span
-              class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary"
+              class="p-1 indicator-item indicator-bottom indicator-center badge badge-secondary"
             >
               <font-awesome-icon
                 :icon="['fas', 'pen-to-square']"
@@ -29,13 +29,13 @@
             </span>
           </label>
         </div>
-        <div class="stat-value text-4xl" v-if="loadingFinished">
+        <div class="text-4xl stat-value" v-if="loadingFinished">
           {{ nowHour }}:{{ nowMin }}
         </div>
       </div>
-      <div class="stat px-4">
-        <div class="stat-title text-base">Stage</div>
-        <div class="stat-value text-4xl">
+      <div class="px-4 stat">
+        <div class="text-base stat-title">Stage</div>
+        <div class="text-4xl stat-value">
           <select
             :value="gameStage"
             class="input input-xs w-30"
@@ -45,12 +45,12 @@
           </select>
         </div>
       </div>
-      <div class="stat px-4">
+      <div class="px-4 stat">
         <div>
-          <div class="stat-title text-base inline">Turn</div>
+          <div class="inline text-base stat-title">Turn</div>
           <label for="modal-turn-setting" @click="openModal('turnsetting')">
             <span
-              class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary"
+              class="p-1 indicator-item indicator-bottom indicator-center badge badge-secondary"
             >
               <font-awesome-icon
                 :icon="['fas', 'pen-to-square']"
@@ -59,20 +59,20 @@
             </span>
           </label>
         </div>
-        <div class="stat-value text-4xl" v-if="loadingFinished">
+        <div class="text-4xl stat-value" v-if="loadingFinished">
           {{ cycle }}
         </div>
         <div class="stat-figure">
           <label
             v-if="isComputeUsedUp"
-            class="btn uppercase"
+            class="uppercase btn"
             @click="advanceCycle"
             >End Turn</label
           >
           <label
             v-else
             for="modal-cycle-confirm"
-            class="btn modal-button uppercase"
+            class="uppercase btn modal-button"
             @click="openModal('endmodal')"
             >End Turn</label
           >
@@ -90,10 +90,10 @@
       class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
       @mousedown.self="onClickModalOutside('endmodal')"
     >
-      <label class="modal-box relative" for="">
+      <label class="relative modal-box" for="">
         <h3 class="text-lg font-bold">Confirm advancing this Turn</h3>
         <p class="py-4">Your remaining compute points will be lost.</p>
-        <div class="btn-group float-right">
+        <div class="float-right btn-group">
           <label
             for="modal-cycle-confirm"
             class="btn btn-primary"
@@ -118,7 +118,7 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
       class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
       @mousedown.self="onClickModalOutside('timesetting')"
     >
-      <label class="modal-box relative" for>
+      <label class="relative modal-box" for>
         <h3 class="text-lg font-bold">Time</h3>
         <p class="my-4">
           <label class="inline-block w-20" for="clock-tracker-now-time"
@@ -128,7 +128,7 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
             v-model="nowTimeISO"
             type="datetime-local"
             id="clock-tracker-now-time"
-            class="input input-sm input-bordered text-black bg-white"
+            class="text-black bg-white input input-sm input-bordered"
           />
         </p>
 
@@ -140,11 +140,11 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
             v-model="originTimeISO"
             type="datetime-local"
             id="clock-tracker-origin-time"
-            class="input input-sm input-bordered text-black bg-white"
+            class="text-black bg-white input input-sm input-bordered"
           />
         </p>
 
-        <div class="w-full flex justify-between">
+        <div class="flex justify-between w-full">
           <label class="flex cursor-pointer">
             <span class="label-text">Display mode:</span>
             <input
@@ -174,7 +174,7 @@ v-model="isTurnSettingOpen" @change="onTurnModalToggle" /> -->
       class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
       @mousedown.self="onClickModalOutside('turnsetting')"
     >
-      <label class="modal-box relative" for>
+      <label class="relative modal-box" for>
         <h3 class="text-lg font-bold">Turns</h3>
 
         <p class="my-4">
@@ -184,7 +184,7 @@ v-model="isTurnSettingOpen" @change="onTurnModalToggle" /> -->
             id="clock-tracker-cycle-length"
             type="number"
             min="0"
-            class="input input-sm input-bordered w-20"
+            class="w-20 input input-sm input-bordered"
           />
           hours
         </p>
@@ -196,11 +196,11 @@ v-model="isTurnSettingOpen" @change="onTurnModalToggle" /> -->
             type="number"
             min="0"
             id="clock-tracker-cycle"
-            class="input input-sm input-bordered w-20"
+            class="w-20 input input-sm input-bordered"
           />
         </p>
 
-        <div class="btn-group float-right">
+        <div class="float-right btn-group">
           <label
             for="modal-turn-setting"
             class="btn btn-primary"

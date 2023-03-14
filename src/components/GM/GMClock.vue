@@ -243,7 +243,7 @@ export default {
 
 <template>
   <div class="flex flex-col px-[40px] pt-[16px]">
-    <div class="flex justify-center items-center space-x-8 self-end">
+    <div class="flex items-center self-end justify-center space-x-8">
       <div
         class="border-[1px] border-grey uppercase text-[16px] py-[8px] px-[12px] cursor-pointer"
         @click="openRollerForAll"
@@ -285,7 +285,7 @@ export default {
       class="w-[1325px] relative flex flex-col"
       @click="(e) => e.preventDefault()"
     >
-      <div class="flex w-full justify-between items-center">
+      <div class="flex items-center justify-between w-full">
         <h3 class="text-lg font-bold uppercase text-[28px]">clock editor</h3>
         <button
           class="lowercase decoration-transparent m-2 mt-0 text-[30px]"
@@ -294,7 +294,7 @@ export default {
           x
         </button>
       </div>
-      <div class="w-full flex border-1 border-white bg-darkgray">
+      <div class="flex w-full border-white border-1 bg-darkgray">
         <div
           class="w-2/3 flex border-1 border-white flex-col px-[48px] pb-[40px]"
         >
@@ -307,7 +307,7 @@ export default {
             v-model="editorClock.name"
           />
           <div class="flex w-full justify-between mt-[36px]">
-            <div class="flex flex-col justify-center items-center">
+            <div class="flex flex-col items-center justify-center">
               <span class="uppercase text-[20px] self-start">segments</span>
               <div class="flex items-center space-x-2 mt-[8px] mb-[24px]">
                 <div
@@ -479,7 +479,7 @@ export default {
       class="w-[1325px] relative flex flex-col"
       @click="(e) => e.preventDefault()"
     >
-      <div class="flex w-full justify-between items-center">
+      <div class="flex items-center justify-between w-full">
         <h3 class="text-lg font-bold uppercase text-[28px]">Clocks - Progress Check</h3>
         <button
           class="lowercase decoration-transparent m-2 mt-0 text-[30px]"
@@ -488,7 +488,7 @@ export default {
           x
         </button>
       </div>
-      <div class="w-full flex border-1 border-white bg-darkgray">
+      <div class="flex w-full border-white border-1 bg-darkgray">
         <PCRoller
           :allPCID="pcsToRoll"
         />
@@ -504,7 +504,7 @@ export default {
       class="w-[1325px] relative flex flex-col"
       @click="(e) => e.preventDefault()"
     >
-      <div class="flex w-full justify-between items-center">
+      <div class="flex items-center justify-between w-full">
         <h3 class="text-lg font-bold uppercase text-[28px]">Clock Settings</h3>
         <button
           class="lowercase decoration-transparent m-2 mt-0 text-[30px]"
@@ -513,7 +513,7 @@ export default {
           x
         </button>
       </div>
-      <div class="w-full flex border-1 border-white bg-darkgray">
+      <div class="flex w-full border-white border-1 bg-darkgray">
         <div class="m-auto">
           <div class="">
             Progress Check Interval Length (hours)

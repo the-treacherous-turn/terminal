@@ -133,24 +133,24 @@ export default {
 
 <template>
 <div class="relative pb-1/10">
-  <h1 class="text-3xl pl-4 pb-2">Specializations</h1>
+  <h1 class="pb-2 pl-4 text-3xl">Specializations</h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-    <li class="card max-w-lg m-4 p-4 shadow-xl group flex flex-col justify-between bg-primary relative" v-for="(spec, key) in specs" :key="key">
-      <img :src="`high_res_${spec.focus}.png`" class="absolute m-auto top-0 bottom-32 -right-32 scale-150 pointer-events-none" alt="">
+    <li class="relative flex flex-col justify-between max-w-lg p-4 m-4 shadow-xl card group bg-primary" v-for="(spec, key) in specs" :key="key">
+      <img :src="`high_res_${spec.focus}.png`" class="absolute top-0 m-auto pointer-events-none bottom-32 -right-32 scale-150" alt="">
       <div class="bg-inherit">
         <div class="flex justify-between bg-inherit">
-          <h2 class="text-3xl capitalize font-bold px-2 mb-2 text-primary" :class="getTheoryTextStyle(spec.focus)">{{ spec.focus }}</h2>
-          <div class="bg-inherit z-10 h-min hidden group-hover:inline-block">
+          <h2 class="px-2 mb-2 text-3xl font-bold capitalize text-primary" :class="getTheoryTextStyle(spec.focus)">{{ spec.focus }}</h2>
+          <div class="z-10 hidden bg-inherit h-min group-hover:inline-block">
             <label for="modal-edit-spec">
               <font-awesome-icon
                 :icon="['fas', 'pen-to-square']"
-                class="text-base text-secondary-content mr-4 my-1 cursor-pointer hover:text-white"
+                class="my-1 mr-4 text-base cursor-pointer text-secondary-content hover:text-white"
                 @click="onClickEdit(key)"
               />
             </label>
             <font-awesome-icon
               :icon="['fas', 'trash-can']"
-              class="text-base text-secondary-content mr-1 my-1 cursor-pointer hover:text-white"
+              class="my-1 mr-1 text-base cursor-pointer text-secondary-content hover:text-white"
               @click="onClickDelete(key)"
             />
           </div>
@@ -159,10 +159,10 @@ export default {
         <p v-if="spec.upgrades">Upgrades: {{ Object.keys(spec.upgrades).length }}</p>
         <p v-if="spec.insights">Insights: {{ Object.keys(spec.insights).length }}</p>
       </div>
-      <button class="btn w-1/2 mx-auto mt-4 z-10 text-3xl" :class="getTheoryButtonClass(spec.focus)" @click="selectSpec(key)">Enter</button>
+      <button class="z-10 w-1/2 mx-auto mt-4 text-3xl btn" :class="getTheoryButtonClass(spec.focus)" @click="selectSpec(key)">Enter</button>
     </li>
     <label for="modal-edit-spec"
-      class="card btn btn-ghost hover:btn-secondary h-20 max-w-lg m-4 p-4 shadow-xl flex justify-center items-center cursor-pointer border-dashed border-4 border-neutral group"
+      class="flex items-center justify-center h-20 max-w-lg p-4 m-4 border-4 border-dashed shadow-xl cursor-pointer card btn btn-ghost hover:btn-secondary border-neutral group"
       @click="onClickAdd">
       <font-awesome-icon icon="plus" class="text-6xl" />
     </label>
@@ -179,16 +179,16 @@ export default {
   class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
   @mousedown.self="onClickModalOutside"
 >
-  <label class="modal-box max-w-xs relative">
+  <label class="relative max-w-xs modal-box">
     <h3 class="text-lg font-bold">{{ isAddNewSpec ? 'Add' : 'Edit' }} Specialization</h3>
-    <form class="form-control w-full" autocomplete="off">
+    <form class="w-full form-control" autocomplete="off">
       <label class="label label-text">Player</label>
       <input
         v-model="editorSpec.name"
         type="text" placeholder="" autocomplete="off"
         class="input input-bordered">
       <label class="label label-text">Focus</label>
-      <select v-model="editorSpec.focus" class="select select-bordered capitalize">
+      <select v-model="editorSpec.focus" class="capitalize select select-bordered">
         <option>autonomic</option>
         <option>digital</option>
         <option>physical</option>
@@ -198,7 +198,7 @@ export default {
         <option>constellation</option>
         <option>epistemic</option>
       </select>
-      <div class="btn-group flex justify-end mt-4">
+      <div class="flex justify-end mt-4 btn-group">
         <label
           for="modal-edit-spec"
           class="btn btn-primary"

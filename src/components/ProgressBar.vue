@@ -9,8 +9,8 @@ export default {
 </script>
 
 <template>
-<div class="border-2 h-4 w-full flex">
-  <div class="bg-error h-full" :style="`width: ${value/max*100}%;`"></div>
-  <div class="bg-success h-full" :style="`width: ${addition/max*100}%`"></div>
+<div class="flex w-full h-4 border-2">
+  <div class="h-full bg-error" :style="`width: ${value/max*100}%;`"></div>
+  <div class="h-full bg-success" :style="`width: ${addition/max*100}%`"></div>
 </div>
 </template>

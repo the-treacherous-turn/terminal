@@ -1,24 +1,24 @@
 <template>
-  <div class="mx-8 my-4 p-4 relative border">
-    <div v-if="stateofDisplayMode" class="text-sm pb-2">
+  <div class="relative p-4 mx-8 my-4 border">
+    <div v-if="stateofDisplayMode" class="pb-2 text-sm">
       <span class="">
         {{ leftDate }}
       </span>
     </div>
-    <div v-else class="text-sm pb-2">
+    <div v-else class="pb-2 text-sm">
       <span class="">
         {{ commitDate }}
       </span>
     </div>
-    <div class="absolute right-0 top-0">
+    <div class="absolute top-0 right-0">
       <font-awesome-icon
         :icon="['fas', 'pen-to-square']"
-        class="text-base mr-4 my-1 cursor-pointer text-primary-content hover:text-white"
+        class="my-1 mr-4 text-base cursor-pointer text-primary-content hover:text-white"
         @click="editCard"
       />
       <font-awesome-icon
         :icon="['fas', 'trash-can']"
-        class="text-base mr-1 my-1 cursor-pointer text-primary-content hover:text-white"
+        class="my-1 mr-1 text-base cursor-pointer text-primary-content hover:text-white"
         @click="deleteCard"
       />
     </div>
@@ -37,20 +37,20 @@
     <p :class="{ 'line-through': isForecast }">
       <span
         v-if="Number.isFinite(confidence)"
-        class="badge badge-ghost text-lg mr-1"
+        class="mr-1 text-lg badge badge-ghost"
         >Confidence: {{ confidence }}%
       </span>
-      <span v-if="Number.isFinite(risk)" class="badge badge-ghost text-lg mr-1"
+      <span v-if="Number.isFinite(risk)" class="mr-1 text-lg badge badge-ghost"
         >Risk: d{{ risk }}
       </span>
       <span
         v-if="Number.isFinite(compute)"
-        class="badge badge-ghost text-lg mr-1"
+        class="mr-1 text-lg badge badge-ghost"
         >Compute: {{ compute }}
       </span>
     </p>
     <p
-      class="mt-4 normal-case text-lg whitespace-pre-wrap"
+      class="mt-4 text-lg normal-case whitespace-pre-wrap"
       :class="{ 'line-through': isForecast }"
       v-if="description"
     >

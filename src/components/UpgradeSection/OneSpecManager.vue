@@ -37,9 +37,9 @@ export default {
 
 <template>
   <div class="relative h-full p-4 pb-[10vh]">
-    <button class="btn btn-xs my-4" @click="exitSpec">&lt; Select Spec</button>
+    <button class="my-4 btn btn-xs" @click="exitSpec">&lt; Select Spec</button>
     <div>
-      <h2 class="inline-block text-3xl capitalize font-bold px-2 mb-2 text-primary" :class="`bg-${activeSpec.focus}`">{{ activeSpec.focus }}</h2>
+      <h2 class="inline-block px-2 mb-2 text-3xl font-bold capitalize text-primary" :class="`bg-${activeSpec.focus}`">{{ activeSpec.focus }}</h2>
     </div>
     <p v-if="activeSpec.focus" class="pb-8 text-primary-content">Player: {{ activeSpec.name }}</p>
     <Upgrades />

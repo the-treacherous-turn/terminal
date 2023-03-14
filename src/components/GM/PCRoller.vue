@@ -58,7 +58,7 @@ export default {
 </script>
 
 <template>
-  <div class="w-full flex">
+  <div class="flex w-full">
     <div class="w-2/3">
     <!-- <pre class="text-green-500">{{ allPCsToRoll }}</pre> -->
     <!-- it should display all PCs to roll, sorted by the PC. -->
@@ -88,7 +88,7 @@ export default {
       </div>
     </template>
   </div>
-  <div class="border w-1/3">
+  <div class="w-1/3 border">
     <div class="text-4xl">Roll Log</div>
     <ul>
       <li v-for="(roll, i) in rollLog" :key="i">{{ roll.die }}: {{ roll.result }}</li>

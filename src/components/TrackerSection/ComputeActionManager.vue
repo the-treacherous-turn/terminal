@@ -226,7 +226,7 @@ export default {
 <div class="flex justify-center m-4">
   <button
     :disabled="!canAssignCompute"
-    class="btn btn-primary btn-wide uppercase"
+    class="uppercase btn btn-primary btn-wide"
     @click="$store.dispatch('assignComputePoints')"
     >
     Assign Compute Points
@@ -237,14 +237,14 @@ export default {
   class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
   @mousedown.self="onClickModalOutside"
   >
-  <label class="modal-box relative">
+  <label class="relative modal-box">
     <h3 class="text-lg font-bold">Edit Compute Action</h3>
     <p>
-      <form class="form-control w-full" autocomplete="off">
+      <form class="w-full form-control" autocomplete="off">
         <label class="label">
           <span class="label-text">Type</span>
         </label>
-        <select v-model="actionType" class="select select-bordered capitalize" @change="calculateCompute">
+        <select v-model="actionType" class="capitalize select select-bordered" @change="calculateCompute">
           <option selected>custom</option>
           <option>research</option>
           <option>improve</option>
@@ -256,7 +256,7 @@ export default {
         <input
           v-model="name"
           type="text" name="compute action name" placeholder="" autocomplete="off"
-          class="input input-bordered w-full">
+          class="w-full input input-bordered">
 
         <div v-if="actionType === 'improve'" class="inline-flex">
           <div class="pr-8">
@@ -275,7 +275,7 @@ export default {
             <label class="label">
               <span class="label-text">Upgrade Compatibility</span>
             </label>
-            <select v-model="upgradeTheoryType" class="select select-bordered capitalize" @change="calculateCompute">
+            <select v-model="upgradeTheoryType" class="capitalize select select-bordered" @change="calculateCompute">
               <option value="same">same theory</option>
               <option value="adjacent">adjacent theory</option>
               <option value="other">other theory</option>
@@ -291,7 +291,7 @@ export default {
             v-model.number="existingUpgradeCount"
             @input="calculateCompute"
             type="number" min="0" name="allocation" placeholder="" autocomplete="off"
-            class="input input-bordered w-40">
+            class="w-40 input input-bordered">
         </div>
 
         <div class="inline-flex">
@@ -303,14 +303,14 @@ export default {
             <input
               v-model="computeNeeded"
               type="number" placeholder="" min="1"
-              class="input input-bordered w-40">
+              class="w-40 input input-bordered">
           </div>
           <div>
             <label class="label" v-if="!isMakingNewCompute">
               <span class="label-text">Override Completion</span>
             </label>
             <label class="input-group" v-if="!isMakingNewCompute">
-              <input type="number" v-model.number="computeApplied" class="input input-bordered w-20">
+              <input type="number" v-model.number="computeApplied" class="w-20 input input-bordered">
               <span>/{{computeNeeded}}</span>
             </label>
           </div>
@@ -321,11 +321,11 @@ export default {
         <textarea
           v-model="description"
           placeholder=""
-          class="textarea textarea-bordered h-24">
+          class="h-24 textarea textarea-bordered">
         </textarea>
       </form>
     </p>
-    <div class="btn-group float-right mt-4">
+    <div class="float-right mt-4 btn-group">
       <label
         for="modal-edit-compute-action"
         class="btn btn-primary"

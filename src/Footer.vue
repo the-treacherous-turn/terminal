@@ -1,5 +1,5 @@
 <template>
-<footer class="footer items-center text-neutral-content h-1/10">
+<footer class="items-center footer text-neutral-content h-1/10">
   <div class="items-center grid-flow-col">
     <img src="/logo.png" width="50" height="50" alt="logo">
     <p>

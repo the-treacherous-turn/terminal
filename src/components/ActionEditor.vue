@@ -1,28 +1,28 @@
 <template>
   <Transition name="modal">
     <div
-      class="uppercase fixed z-50 top-0 left-0 w-full h-full bg-black/50 table transition-opacity"
+      class="fixed top-0 left-0 z-50 table w-full h-full uppercase bg-black/50 transition-opacity"
       v-if="$store.state.eventLog.isEditorOpen"
     >
       <div class="table-cell align-middle bg-transparent">
         <div
-          class="modal-container relative w-3/5 m-auto p-8 border transition-all bg-base-100"
+          class="relative w-3/5 p-8 m-auto border modal-container transition-all bg-base-100"
         >
           <button
-            class="absolute lowercase decoration-transparent top-0 right-0 m-2 mt-0 text-2xl"
+            class="absolute top-0 right-0 m-2 mt-0 text-2xl lowercase decoration-transparent"
             @click="cancel"
           >
             x
           </button>
-          <div class="uppercase relative">
-            <h2 class="text-3xl pb-4">Edit Action</h2>
+          <div class="relative uppercase">
+            <h2 class="pb-4 text-3xl">Edit Action</h2>
             <textarea
               v-model="name"
               name="name"
               id="name"
               placeholder="Name"
               rows="1"
-              class="bg-black border w-full mb-2 px-2 py-2"
+              class="w-full px-2 py-2 mb-2 bg-black border"
             ></textarea>
             <div class="mb-2">
               <label for="confidence" class="inline-block mb-2 mr-4">
@@ -34,7 +34,7 @@
                   type="number"
                   min="0"
                   max="100"
-                  class="bg-black border-b w-12 text-center"
+                  class="w-12 text-center bg-black border-b"
                 />
                 <span>%</span>
               </label>
@@ -44,7 +44,7 @@
                   v-model.number="risk"
                   name="risk"
                   id="risk"
-                  class="bg-black border-b w-12 text-center"
+                  class="w-12 text-center bg-black border-b"
                 >
                   <option value="2">d2</option>
                   <option value="4">d4</option>
@@ -63,7 +63,7 @@
                   id="compute"
                   type="number"
                   min="0"
-                  class="bg-black border-b w-12 text-center"
+                  class="w-12 text-center bg-black border-b"
                 />
               </label>
             </div>
@@ -73,7 +73,7 @@
               id="description"
               placeholder="Description"
               rows="5"
-              class="bg-black w-full border mb-4 px-2 py-2"
+              class="w-full px-2 py-2 mb-4 bg-black border"
             ></textarea>
             <div class="flex items-center mb-4">
               <select
@@ -98,7 +98,7 @@
             </div>
 
             <button
-              class="btn uppercase"
+              class="uppercase btn"
               type="submit"
               :disabled="isSubmitDisabled"
               @click="submit"

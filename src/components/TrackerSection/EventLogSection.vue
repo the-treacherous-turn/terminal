@@ -102,7 +102,7 @@ export default {
 
 <template>
   <div
-    class="h-full w-full max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden"
+    class="relative flex flex-col w-full h-full mx-auto overflow-hidden uppercase border max-w-screen-lg"
   >
     <div
       class="items-center z-[8] space-x-2 flex absolute bg-base-100 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl"
@@ -121,7 +121,7 @@ export default {
           :on-focusout="closeFilterModal"
         >
           <label class="flex w-fit space-x-[8px]">
-            <div class="flex justify-center items-center">
+            <div class="flex items-center justify-center">
               <input
                 :checked="filterQuery.includes('Finalized')"
                 type="checkbox"
@@ -132,7 +132,7 @@ export default {
             <div class="text-black text-[20px]">Finalized</div>
           </label>
           <label class="flex w-fit space-x-[8px]">
-            <div class="flex justify-center items-center">
+            <div class="flex items-center justify-center">
               <input
                 :checked="filterQuery.includes('Crossed Out')"
                 type="checkbox"
@@ -148,7 +148,7 @@ export default {
             @click="clearFilter"
           >
             <p class="text-black text-[20px]">Clear</p>
-            <div class="flex justify-center items-center">
+            <div class="flex items-center justify-center">
               <font-awesome-icon
                 :icon="['fas', 'trash-can']"
                 class="cursor-pointer text-[#1D2225]"

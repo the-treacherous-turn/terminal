@@ -20,7 +20,7 @@ export default {
 </script>
 
 <template>
-  <div class="bg-darkgray h-full">
+  <div class="h-full bg-darkgray">
     <NavBar
       @changeTab="
         (payload) => {

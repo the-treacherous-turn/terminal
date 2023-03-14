@@ -16,15 +16,15 @@ export default {
 <template>
   <div class="flex flex-col items-center justify-center h-full">
     <img src="/logo.png" alt="logo" class="w-80" />
-    <h1 class="text-6xl pb-4 highlighter text-white">The Treacherous Turn_</h1>
+    <h1 class="pb-4 text-6xl text-white highlighter">The Treacherous Turn_</h1>
     <p class="pb-4 text-white">To start, enter your session ID:</p>
     <input
       v-model="sessionID"
       type="text"
-      class="input input-sm input-bordered text-center"
+      class="text-center input input-sm input-bordered"
     />
     <button
-      class="btn btn-wide mt-8"
+      class="mt-8 btn btn-wide"
       :disabled="!sessionID"
       @click="openSession"
     >

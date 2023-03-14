@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="stats float-left">
-      <div class="stat px-4">
+    <div class="float-left stats">
+      <div class="px-4 stat">
         <div>
-          <div class="stat-title text-base inline mr-2">Compute Available</div>
+          <div class="inline mr-2 text-base stat-title">Compute Available</div>
           <label for="modal-compute-tracker-setting" @click="openModal">
             <span
-              class="indicator-item indicator-bottom indicator-center p-1 badge badge-secondary"
+              class="p-1 indicator-item indicator-bottom indicator-center badge badge-secondary"
             >
               <font-awesome-icon
                 :icon="['fas', 'pen-to-square']"
@@ -15,7 +15,7 @@
             </span>
           </label>
         </div>
-        <div class="stat-value text-4xl flex" v-if="loadingFinished">
+        <div class="flex text-4xl stat-value" v-if="loadingFinished">
           <span class="self-end">
             {{ available }}<span v-if="toSpend !== 0">(-{{ toSpend }})</span>/{{
               total
@@ -25,11 +25,11 @@
       </div>
     </div>
     <div class="float-left p-4">
-      <span class="uppercase text-base">Adjust compute</span>
-      <div class="flex gap-4 mt-2">
+      <span class="text-base uppercase">Adjust compute</span>
+      <div class="flex mt-2 gap-4">
         <input
           type="number"
-          class="input input-sm w-12 text-center"
+          class="w-12 text-center input input-sm"
           v-model.number="computeToBurn"
         />
         <button class="btn btn-sm btn-circle" @click="addComputeToBurn">
@@ -49,17 +49,17 @@
       class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
       @mousedown.self="onClickModalOutside"
     >
-      <label class="modal-box relative" for>
+      <label class="relative modal-box" for>
         <h3 class="text-lg font-bold">Configure Compute</h3>
         <h4>
           <label for="compute-tracker-total" class="text-3xl"
             >Total Compute: <span class="font-bold">{{ total }}</span></label
           >
         </h4>
-        <table class="table table-compact w-full">
+        <table class="table w-full table-compact">
           <thead>
             <tr>
-              <th class="pl-5 w-3/5">Source</th>
+              <th class="w-3/5 pl-5">Source</th>
               <th class="pl-5">Compute</th>
               <th></th>
             </tr>
@@ -71,7 +71,7 @@
                   type="text"
                   placeholder="Name"
                   v-model="source.name"
-                  class="input input-sm input-bordered w-full max-w-xs"
+                  class="w-full max-w-xs input input-sm input-bordered"
                 />
               </th>
               <td>
@@ -79,7 +79,7 @@
                   type="number"
                   placeholder="Amount"
                   v-model="source.val"
-                  class="input input-sm input-bordered w-full max-w-xs"
+                  class="w-full max-w-xs input input-sm input-bordered"
                 />
               </td>
               <td class="text-right">
@@ -105,10 +105,10 @@
             <span class="font-bold">{{ recurringSum }}</span></label
           >
         </h4>
-        <table class="table table-compact w-full">
+        <table class="table w-full table-compact">
           <thead>
             <tr>
-              <th class="pl-5 w-3/5">Cost</th>
+              <th class="w-3/5 pl-5">Cost</th>
               <th class="pl-5">Compute</th>
               <th></th>
             </tr>
@@ -122,7 +122,7 @@
                   min="0"
                   placeholder="Amount"
                   v-model.number="baseComputeCost"
-                  class="input input-sm input-bordered w-full max-w-xs"
+                  class="w-full max-w-xs input input-sm input-bordered"
                 />
               </td>
             </tr>
@@ -132,7 +132,7 @@
                   type="text"
                   placeholder="Name"
                   v-model="source.name"
-                  class="input input-sm input-bordered w-full max-w-xs"
+                  class="w-full max-w-xs input input-sm input-bordered"
                 />
               </th>
               <td>
@@ -140,7 +140,7 @@
                   type="number"
                   placeholder="Amount"
                   v-model="source.val"
-                  class="input input-sm input-bordered w-full max-w-xs"
+                  class="w-full max-w-xs input input-sm input-bordered"
                 />
               </td>
               <td class="text-right">
@@ -159,7 +159,7 @@
             <font-awesome-icon icon="plus" class="text-2xl" />
           </label>
         </div>
-        <div class="btn-group float-right">
+        <div class="float-right btn-group">
           <label
             for="modal-compute-tracker-setting"
             class="btn btn-primary"

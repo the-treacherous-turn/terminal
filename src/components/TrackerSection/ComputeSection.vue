@@ -11,7 +11,7 @@ export default {
 </script>
 
 <template>
-<div class="h-full w-full max-w-screen-lg mx-auto relative uppercase border flex flex-col overflow-hidden">
+<div class="relative flex flex-col w-full h-full mx-auto overflow-hidden uppercase border max-w-screen-lg">
   <div>
     <ComputeTracker />
   </div>
