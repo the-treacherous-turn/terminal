@@ -1,5 +1,5 @@
 <script>
-import { mapState } from "vuex"
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -25,14 +25,14 @@ export default {
   },
   computed: {
     ...mapState({
-      clocks: state => state.gmCLOCK.clocks,
-      pChecks: state => state.gmCLOCK.pChecks,
-      pendingPCs: state => state.gmCLOCK.pendingPCs,
+      clocks: (state) => state.gmCLOCK.clocks,
+      pChecks: (state) => state.gmCLOCK.pChecks,
+      pendingPCs: (state) => state.gmCLOCK.pendingPCs,
     }),
     allPCsToRoll() {
       // get the pcs with key that match the id in allPCID
-      const arr = this.allPCID.map(id => [id, this.pChecks[id]])
-      return Object.fromEntries(arr)
+      const arr = this.allPCID.map((id) => [id, this.pChecks[id]]);
+      return Object.fromEntries(arr);
     },
     allPendingPCs() {
       // filter out the ones that don't match the id in allPCID
@@ -41,15 +41,15 @@ export default {
         Object.entries(this.pendingPCs).filter(
           ([_key, value]) => this.allPCID.includes(value.pc)
         )
-      )
+      );
     },
   },
   methods: {
-    updatePCheckDieSize(pcid, dieSize) {
-      this.$store.dispatch('updateGMPCheck', {
-        pcid,
-        val: {die: dieSize},
-      })
+    updatePCheckDieSize(pcID, dieSize) {
+      this.$store.dispatch("updateGMPCheck", {
+        pcID,
+        val: { die: dieSize },
+      });
     },
     getClocksWithMatchingPCID(pcid) {
       return {
@@ -57,7 +57,8 @@ export default {
           Object.entries(this.clocks).filter(
             ([_clockID, clock]) => clock.pc === pcid && clock.elapsed < clock.size
           )
-        ),}
+        ),
+      };
     },
     rollDie(die, key) {
       // TODO improve the roll function
@@ -102,46 +103,105 @@ export default {
       this.lastResults = {};
     },
   },
-}
+};
 </script>
 
 <template>
-  <div class="flex w-full max-h-[90vh]">
-    <div class="w-2/3 overflow-y-scroll">
-    <!-- <pre class="text-green-500">{{ allPendingPCs }}</pre> -->
-    <!-- it should display all PCs to roll, sorted by the PC. -->
-    <template v-for="(ppc, key) in allPendingPCs" :key="key">
-      <div>{{ ppc.time }}</div>
-      <div class="flex justify-between">
-        <div>{{ pChecks[ppc.pc].name }} - {{ pChecks[ppc.pc].type }}</div>
-        <div>
-          <select v-model="pChecks[ppc.pc].die" @change="updatePCheckDieSize(ppc.pc, $event.target.value)">
-            <option value="d2" class="text-[26px] text-white">D2</option>
-            <option value="d4" class="text-[26px] text-white">D4</option>
-            <option value="d6" class="text-[26px] text-white">D6</option>
-            <option value="d8" class="text-[26px] text-white">D8</option>
-            <option value="d10" class="text-[26px] text-white">D10</option>
-            <option value="d12" class="text-[26px] text-white">D12</option>
-          </select>
-          <button v-if="lastResults[key]" @click="rollDie(pChecks[ppc.pc].die, key)">{{ lastResults[key] }}</button>
-          <button v-else @click="rollDie(pChecks[ppc.pc].die, key)">Roll</button>
+  <div class="w-full flex h-[600px]">
+    <div class="w-2/3 pt-[48px] px-[46px] overflow-y-scroll">
+      <!-- <pre class="text-green-500">{{ allPCsToRoll }}</pre> -->
+      <!-- it should display all PCs to roll, sorted by the PC. -->
+      <template v-for="(ppc, key) in allPendingPCs" :key="key">
+        <div class="text-[20px]">{{ ppc.time }}</div>
+        <div class="flex items-center justify-between">
+          <div class="font-bold text-[20px]">
+            {{ pChecks[ppc.pc].name }} - {{ pChecks[ppc.pc].type }}
+          </div>
+          <div class="flex space-x-[24px]">
+            <div
+              class="flex bg-[url('/select_arrow_down.svg')] w-[58px] overflow-hidden bg-no-repeat bg-right"
+            >
+              <select
+                v-model="pChecks[ppc.pc].die"
+                @change="updatePCheckDieSize(ppc.pc, $event.target.value)"
+                style="
+                  appearance: none;
+                  background: transparent;
+                  size: 20px;
+                  width: 58px;
+                "
+              >
+                <option value="d2" class="text-[26px] bg-[#1D2225] text-white">
+                  D2
+                </option>
+                <option value="d4" class="text-[26px] bg-[#1D2225] text-white">
+                  D4
+                </option>
+                <option value="d6" class="text-[26px] bg-[#1D2225] text-white">
+                  D6
+                </option>
+                <option value="d8" class="text-[26px] bg-[#1D2225] text-white">
+                  D8
+                </option>
+                <option value="d10" class="text-[26px] bg-[#1D2225] text-white">
+                  D10
+                </option>
+                <option value="d12" class="text-[26px] bg-[#1D2225] text-white">
+                  D12
+                </option>
+              </select>
+            </div>
+            <button
+              v-if="lastResults[key]"
+              @click="rollDie(pChecks[ppc.pc].die, key)"
+              class="py-[16px] px-[38px] bg-white text-center text-[20px] leading-[14px] text-black"
+            >{{ lastResults[key] }}</button>
+            <button
+              v-else
+              @click="rollDie(pChecks[ppc.pc].die, key)"
+              class="py-[16px] px-[38px] bg-white text-center text-[20px] leading-[14px] text-black"
+            >Roll</button>
+
+          </div>
         </div>
-      </div>
-      <div v-for="(clock, clockID) in getClocksWithMatchingPCID(ppc.pc)" :key="clockID">
-        <div>{{ clock.name }}</div>
-        <div>{{ clock.elapsed }}/{{ clock.size }}</div>
-        <div>
-          <button @click="recordTick(0, clockID, key)" class="border" :class="{ 'bg-white text-darkgray': clockTickResult(clockID, key) === 0 }">DON'T TICK</button>
-          <button @click="recordTick(1, clockID, key)" class="border" :class="{ 'bg-white text-darkgray': clockTickResult(clockID, key) > 0 }">TICK</button>
+        <div
+          v-for="(clock, clockID) in getClocksWithMatchingPCID(ppc.pc)"
+          :key="clockID"
+          class="flex w-full justify-between mt-[48px] items-center"
+        >
+          <div class="uppercase text-[20px]">{{ clock.name }}</div>
+          <div class="uppercase">
+            <span class="text-[32px] font-bold">{{ clock.elapsed }}</span>
+            <span class="text-[20px]">/{{ clock.size }}</span>
+          </div>
+          <div class="flex">
+            <button
+              @click="recordTick(0, clockID, key)"
+              class="border py-[16px] px-[24px] text-[20px] leading-[14px]"
+              :class="{
+                'bg-white text-darkgray': clockTickResult(clockID, key) === 0,
+              }"
+            >
+              DON'T TICK
+            </button>
+            <button
+              @click="recordTick(1, clockID, key)"
+              class="border py-[16px] px-[24px] text-[20px] leading-[14px]"
+              :class="{
+                'bg-white text-darkgray': clockTickResult(clockID, key) > 0,
+              }"
+            >
+              TICK
+            </button>
+          </div>
         </div>
-      </div>
-    </template>
+      </template>
+    </div>
   </div>
-  <div class="w-1/3 overflow-y-scroll border">
-    <div class="text-4xl">Roll Log</div>
+  <div class="w-1/3 px-4 overflow-y-scroll border">
+    <div class="text-5xl">Roll Log</div>
     <ul>
       <li v-for="(roll, i) in rollLog" :key="i">{{ roll.die }}: {{ roll.result }}</li>
     </ul>
   </div>
-</div>
 </template>
