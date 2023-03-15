@@ -23,7 +23,7 @@ const gmClockStore = {
     },
   },
   mutations: {
-    updateGMClock(state, changesObj) {
+    updateGMClockData(state, changesObj) {
       for (const key in changesObj) {
         if (Object.hasOwnProperty.call(changesObj, key)) {
           const val = changesObj[key];
@@ -43,7 +43,7 @@ const gmClockStore = {
         if (data.clocks === undefined) data.clocks = {}
         if (data.pChecks === undefined) data.pChecks = {}
         if (data.pendingPCs === undefined) data.pendingPCs = {}
-        commit("updateGMClock", data)
+        commit("updateGMClockData", data)
       })
     },
     async setPCInterval({}, val) {
@@ -115,6 +115,22 @@ const gmClockStore = {
     async advanceGMClock({ commit, dispatch, state, rootState, getters, rootGetters }) {
       const { pcInterval } = state
       const { cycle } = rootState.clock
+
+      //////////// AUTOMATIC CLOCKS //////////
+      const clocksAsArray = Object.entries(state.clocks);
+      for (const [clockID, clock] of clocksAsArray) {
+        if (clock.mode === 'automatic') {
+          const updatedElapsed = clock.elapsed + 1;
+          if (updatedElapsed <= clock.size) {
+            dispatch('updateGMClock', {
+              clockID: clockID,
+              val: { elapsed: updatedElapsed },
+            });
+          }
+        }
+      }
+
+      //////////// PROGRESS CHECKS ///////////
       // TODO: is there a less risky way to make this, 
       // that does not require a while loop?
       while (rootGetters.nowTime > getters.lastCheckTime.plus({hours: pcInterval})){
@@ -126,12 +142,19 @@ const gmClockStore = {
         for (const [pcid, pc] of pcAsArray) {
           const pcLastCheckTime = DateTime.fromISO(pc.lastCheckTimeISO)
           if (pcLastCheckTime < newCheckTime) {
-            // make pending pcs for them
-            await dispatch('addPendingPC', {
-              time: newCheckTimeISO,
-              turn: cycle,
-              pc: pcid,
-            })
+            // Get all the clocks attached to this pc
+            const attachedClocks = Object.values(state.clocks).filter((clock) => clock.pc === pcid);
+            // Check if all attached clocks are complete
+            const allClocksComplete = attachedClocks.every((clock) => clock.elapsed >= clock.size);
+            // If all attached clocks are not complete, generate a pendingPC
+            if (!allClocksComplete) {
+              // make pending pcs for them
+              await dispatch('addPendingPC', {
+                time: newCheckTimeISO,
+                turn: cycle,
+                pc: pcid,
+              })
+            }
             // update the pc's lastCheckTime
             await dispatch('updateGMPCheck', {
               pcid: pcid,

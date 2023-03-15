@@ -55,7 +55,7 @@ export default {
       return {
         ...Object.fromEntries(
           Object.entries(this.clocks).filter(
-            ([key, value]) => value.pc === pcid
+            ([_clockID, clock]) => clock.pc === pcid && clock.elapsed < clock.size
           )
         ),}
     },

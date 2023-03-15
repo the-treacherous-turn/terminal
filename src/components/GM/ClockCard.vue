@@ -20,7 +20,7 @@ export default {
 
 <template>
   <div class="flex">
-    <ProcessClock :size="size" :elapsed="elapsed" :width="100" :height="100" />
+    <ProcessClock :size="size" :elapsed="elapsed < size ? elapsed : size" :width="100" :height="100" />
     <div class="flex ml-[20px] w-full">
       <div class="flex flex-col w-full">
         <div class="flex items-center justify-between w-full">
@@ -46,7 +46,7 @@ export default {
             ></div>
 
             <div class="border-[1px] border-grey px-4">
-              <span class="text-[25px]">{{ elapsed }}</span>
+              <span class="text-[25px]">{{ elapsed < size ? elapsed : size }}</span>
               <span class="text-[12px]">{{ `/${size}` }}</span>
             </div>
             <div
