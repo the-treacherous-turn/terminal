@@ -1,5 +1,6 @@
 <script>
-import { mapState } from "vuex";
+import { DateTime } from "luxon"
+import { mapState } from "vuex"
 
 export default {
   props: {
@@ -60,6 +61,9 @@ export default {
         ),
       };
     },
+    renderPPCTime(time) {
+      return DateTime.fromISO(time).toFormat('MM-dd HH:mm')
+    },
     rollDie(die, key) {
       // TODO improve the roll function
       // with true randomness
@@ -111,8 +115,9 @@ export default {
     <div class="w-2/3 pt-[48px] px-[46px] overflow-y-scroll">
       <!-- <pre class="text-green-500">{{ allPCsToRoll }}</pre> -->
       <!-- it should display all PCs to roll, sorted by the PC. -->
-      <template v-for="(ppc, key) in allPendingPCs" :key="key">
-        <div class="text-[20px]">{{ ppc.time }}</div>
+      <template v-for="(ppc, key, index) in allPendingPCs" :key="key">
+        <hr v-if="index !== 0" class="my-6" />
+        <div class="text-[20px]">{{ renderPPCTime(ppc.time) }}</div>
         <div class="flex items-center justify-between">
           <div class="font-bold text-[20px]">
             {{ pChecks[ppc.pc].name }} - {{ pChecks[ppc.pc].type }}
@@ -154,13 +159,13 @@ export default {
             <button
               v-if="lastResults[key]"
               @click="rollDie(pChecks[ppc.pc].die, key)"
-              class="py-[16px] px-[38px] bg-white text-center text-[20px] leading-[14px] text-black"
+              class="w-24 px-0 py-4 text-3xl leading-3 text-center text-black bg-white"
             >{{ lastResults[key] }}</button>
             <button
               v-else
               @click="rollDie(pChecks[ppc.pc].die, key)"
-              class="py-[16px] px-[38px] bg-white text-center text-[20px] leading-[14px] text-black"
-            >Roll</button>
+              class="w-24 px-0 py-4 text-3xl leading-3 text-center text-black bg-white"
+            >ROLL</button>
 
           </div>
         </div>
