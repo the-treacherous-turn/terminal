@@ -38,12 +38,47 @@ const store = createStore({
       stateofDisplayMode: false,
     };
   },
+  getters: {
+    keysOfComputeActions(state) {
+      //   console.log(state.specs[state.activeSpecID].keysOfUpgrades);
+      return state.wholeData.keysOfComputeActions !== undefined
+        ? state.wholeData.keysOfComputeActions
+        : [];
+    },
+  },
   mutations: {
     setIsGM(state, isGM) {
       state.isGM = isGM;
     },
     updateData(state, data) {
       state.wholeData = data;
+      if (
+        data.keysOfComputeActions === undefined &&
+        data.computeActions !== undefined
+      ) {
+        data.keysOfComputeActions = [...Object.keys(data.computeActions)];
+        update(refs.wholeData, data);
+      } else if (
+        data.computeActions !== undefined &&
+        Object.keys(data.computeActions).length ===
+          data.keysOfComputeActions.length + 1
+      ) {
+        data.keysOfComputeActions.push(
+          Object.keys(data.computeActions)[
+            Object.keys(data.computeActions).length - 1
+          ]
+        );
+        update(refs.wholeData, data);
+      } else if (
+        data.computeActions !== undefined &&
+        Object.keys(data.computeActions).length ===
+          data.keysOfComputeActions.length - 1
+      ) {
+        data.keysOfComputeActions = data.keysOfComputeActions.filter((item) =>
+          Object.keys(data.computeActions).includes(item)
+        );
+        update(refs.wholeData, data);
+      }
       state.finishedLoading = true;
     },
     setIsDisplayModal(state, stateofDisplayMode) {
@@ -58,6 +93,12 @@ const store = createStore({
       });
     },
     async updateWholeData({ commit }, changesObj) {
+      await update(refs.wholeData, changesObj);
+    },
+    async computeActionKeys({ state }, keys) {
+      console.log(keys);
+      const changesObj = {};
+      changesObj.keysOfComputeActions = [...keys];
       await update(refs.wholeData, changesObj);
     },
   },

@@ -24,14 +24,14 @@
     </div>
     <span
       class="text-2xl cursor-pointer"
+      ref="actionName"
       :class="{
-        'hover:text-success-content hover:bg-success hover:inline':
-          !isCommitted && !isForecast,
-        'badge badge-success inline hover:line-through':
-          isCommitted && !isForecast,
-        'line-through hover:no-underline': isForecast,
+        '': !isCommitted && !isForecast,
+        'badge badge-success inline': isCommitted && !isForecast,
+        'line-through': isForecast,
       }"
       @click="toggleCardMode"
+      v-on:mouseenter="addHoverEffect"
       >{{ name }}</span
     >
     <p :class="{ 'line-through': isForecast }">
@@ -74,6 +74,7 @@ export default {
     isDirty: Boolean,
     isCommitted: Boolean,
     isForecast: Boolean,
+    isNormal: Boolean,
     commitTimeISO: String,
     dayLeft: String,
   },
@@ -99,11 +100,13 @@ export default {
   },
   methods: {
     toggleCardMode() {
-      if (!this.isCommitted) this.commitCard();
-      else if (!this.isForecast) this.markAsForecast();
-      else {
+      console.log(this.isNormal);
+      if (!this.isCommitted && this.isNormal) this.commitCard();
+      else if (!this.isForecast && this.isCommitted) this.markAsForecast();
+      else if (!this.isNormal && this.isForecast) {
         this.undoCommit();
         this.undoForecast();
+        this.normalCard();
       }
     },
     editCard() {
@@ -125,6 +128,9 @@ export default {
         )}`,
       });
     },
+    normalCard() {
+      this.$store.dispatch("normalCard", this.actionID);
+    },
     undoCommit() {
       // undo the commit
       this.$store.dispatch("undoCommitAction", this.actionID);
@@ -138,6 +144,21 @@ export default {
     },
     deleteCard() {
       this.$store.dispatch("deleteAction", this.actionID);
+    },
+    addHoverEffect() {
+      const ele = this.$refs.actionName;
+
+      if (!this.isCommitted && !this.isForecast) {
+        ele.classList.add(
+          "hover:text-success-content",
+          "hover:bg-success",
+          "hover:inline"
+        );
+      } else if (this.isCommitted && !this.isForecast) {
+        ele.classList.add("hover:line-through");
+      } else if (this.isForecast) {
+        ele.classList.add("hover:no-underline");
+      }
     },
   },
 };

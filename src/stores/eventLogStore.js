@@ -6,6 +6,7 @@ import {
   update,
   push,
 } from "firebase/database";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const eventLogStore = {
   state: () => ({
@@ -63,6 +64,7 @@ const eventLogStore = {
     commitAction(state, { actionID, commitTimeISO, dayLeft }) {
       state.actions[actionID].isCommitted = true;
       state.actions[actionID].isForecast = false;
+      state.actions[actionID].isNormal = false;
       state.actions[actionID].commitTimeISO = commitTimeISO;
       state.actions[actionID].dayLeft = dayLeft;
     },
@@ -72,6 +74,12 @@ const eventLogStore = {
     markAsForecast(state, actionID) {
       state.actions[actionID].isForecast = true;
       state.actions[actionID].isCommitted = false;
+      state.actions[actionID].isNormal = false;
+    },
+    normalCard(state, actionID) {
+      state.actions[actionID].isForecast = false;
+      state.actions[actionID].isCommitted = false;
+      state.actions[actionID].isNormal = true;
     },
     undoForecastAction(state, actionID) {
       state.actions[actionID].isForecast = false;
@@ -119,6 +127,7 @@ const eventLogStore = {
         description: "",
         isDirty: true,
         isNew: true,
+        isNormal: true,
         isCommitted: false,
         isForecast: false,
         actionState: "",
@@ -166,6 +175,11 @@ const eventLogStore = {
 
     async undoForecastAction({ commit, state }, actionID) {
       commit("undoForecastAction", actionID);
+      await update(refs.actions, { [actionID]: state.actions[actionID] });
+    },
+
+    async normalCard({ commit, state }, actionID) {
+      commit("normalCard", actionID);
       await update(refs.actions, { [actionID]: state.actions[actionID] });
     },
   },

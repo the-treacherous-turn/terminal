@@ -1,8 +1,12 @@
 <script>
 import ComputeActionCard from './ComputeActionCard.vue'
+import draggable from "vuedraggable";
+import { mapGetters, mapState } from 'vuex';
+
 export default {
   components: {
     ComputeActionCard,
+    draggable
   },
   data() {
     return {
@@ -10,6 +14,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+        keysOfComputeActions: "keysOfComputeActions",
+    }),
+    ...mapState({
+        computeActions: (state) => state.computeAction.computeActions,
+    }),
     canAssignCompute() {
       return this.$store.getters.computeAvailable > 0 && this.$store.getters.computeToSpend > 0
     },
@@ -195,6 +205,9 @@ export default {
     saveScrollPos(e) {
       this.$store.commit('setComputeActionScrollPos', e.target.scrollTop)
     },
+    computeActionMove(keys) {
+      this.$store.dispatch("computeActionKeys", keys);
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -207,14 +220,22 @@ export default {
 <template>
 <h1 class="text-xl font-bold">Computational Action Manager</h1>
 <div id="compute-action-list" class="overflow-y-scroll" ref="scroller" @scroll.passive="saveScrollPos">
-  <ComputeActionCard
-    v-for="(action, key) in $store.state.computeAction.computeActions"
-    v-bind="action"
-    :key="key"
-    :actionID="key"
-    @edit="onClickEditAction"
-    @delete="onClickDeleteAction"
-  />
+    <draggable
+      :list="keysOfComputeActions"
+      class="w-full"
+      @change="keysOfComputeActions !== [] ? computeActionMove(keysOfComputeActions) : ''"
+      item-key="id"
+    >
+    <template #item="{ element }" :key="key">
+        <ComputeActionCard
+        v-bind="computeActions[element]"
+        :key="element"
+        :actionID="element"
+        @edit="onClickEditAction"
+        @delete="onClickDeleteAction"
+        />
+    </template>
+    </draggable>
   <div class="flex justify-center m-4">
     <label for="modal-edit-compute-action" class="btn btn-circle"
     @click="onClickPlus"

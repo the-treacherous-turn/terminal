@@ -26,7 +26,7 @@
     </div>
     <div class="float-left p-4">
       <span class="text-base uppercase">Adjust compute</span>
-      <div class="flex mt-2 gap-4">
+      <div class="flex gap-4 mt-2">
         <input
           type="number"
           class="w-12 text-center input input-sm"
@@ -72,6 +72,7 @@
                   placeholder="Name"
                   v-model="source.name"
                   class="w-full max-w-xs input input-sm input-bordered"
+                  v-on:change="updateComputeSource"
                 />
               </th>
               <td>
@@ -80,6 +81,7 @@
                   placeholder="Amount"
                   v-model="source.val"
                   class="w-full max-w-xs input input-sm input-bordered"
+                  v-on:change="updateComputeSource"
                 />
               </td>
               <td class="text-right">
@@ -133,6 +135,7 @@
                   placeholder="Name"
                   v-model="source.name"
                   class="w-full max-w-xs input input-sm input-bordered"
+                  v-on:change="updateRecurringCosts"
                 />
               </th>
               <td>
@@ -141,6 +144,7 @@
                   placeholder="Amount"
                   v-model="source.val"
                   class="w-full max-w-xs input input-sm input-bordered"
+                  :on-change="updateRecurringCosts"
                 />
               </td>
               <td class="text-right">
@@ -231,11 +235,17 @@ export default {
     addComputeSource() {
       this.$store.dispatch("addComputeSource");
     },
+    updateComputeSource() {
+      this.$store.dispatch("syncComputeSources");
+    },
     removeComputeSource(key) {
       this.$store.dispatch("removeComputeSource", key);
     },
     addRecurringCost() {
       this.$store.dispatch("addRecurringCost");
+    },
+    updateRecurringCosts() {
+      this.$store.dispatch("syncRecurringCosts");
     },
     removeRecurringCost(key) {
       this.$store.dispatch("removeRecurringCost", key);
