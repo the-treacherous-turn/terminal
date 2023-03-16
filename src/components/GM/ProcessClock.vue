@@ -81,7 +81,7 @@ export default {
         class="absolute w-full top-[65px] flex justify-center items-center"
       >
         <div
-          class="w-[110px] bg-white text-[#3CE800] uppercase text-[16px] text-center justify-center items-center]"
+          class="w-[110px] bg-white text-[#00ffa8] uppercase text-[16px] text-center justify-center items-center]"
         >
           complete
         </div>
@@ -96,7 +96,7 @@ export default {
   --color-blue: #0f96ff;
   --color-dark: #020308;
   --color-dark-gray: #1d2225;
-  --color-green: #3CE800
+  --color-green: #00ffa8
   --color-mid: #101116;
   --color-light: #44454a;
   --color-bright: white;
@@ -155,13 +155,13 @@ export default {
 }
 
 .clock .slice[filled = true] {
-  background: #3CE800;
+  background: #00ffa8;
 }
 .clock .slice_2[filled = true] {
-  background: #3CE800;
+  background: #00ffa8;
 }
 .clock .slice_1[filled = true] {
-  background: #3CE800;
+  background: #00ffa8;
 }
 .clock .disc {
   --offset: calc((var(--clock-size) - var(--clock-disc-size)) / 2);
