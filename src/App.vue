@@ -175,15 +175,17 @@ export default {
               <font-awesome-icon :icon="['fas', 'bars']" />
             </label>
           </div>
-          <span class="pl-2 text-3xl">
-            <span>
-              The Treacherous Turn
-              <span class="ml-4 text-base"
-                >ID:
-                <span class="text-black bg-white">{{
-                  $store.state.sessionID
-                }}</span></span
-              >
+          <img src="/logo.png" alt="logo" class="hidden w-20 xl:block" />
+          <span class="pl-2">
+            <span class="text-3xl">
+              The Treacherous Terminal
+            </span>
+            <a href="https://thetreacherousturn.ai" target="_blank" class="pl-2 text-lg normal-case link">TheTreacherousTurn.ai</a>
+            <span class="ml-4 text-base"
+              >ID:
+              <span class="text-black bg-white">{{
+                $store.state.sessionID
+              }}</span>
             </span>
           </span>
         </div>

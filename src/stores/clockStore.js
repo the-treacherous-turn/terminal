@@ -104,7 +104,6 @@ const clockStore = {
       });
     },
     async syncClock({ state }) {
-      console.log(state);
       await update(refs.clock, {
         cycle: state.cycle,
         cycleLength: state.cycleLength,

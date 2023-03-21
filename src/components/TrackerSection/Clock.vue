@@ -29,13 +29,13 @@
             </span>
           </label>
         </div>
-        <div class="text-4xl stat-value" v-if="loadingFinished">
+        <div class="text-3xl stat-value" v-if="loadingFinished">
           {{ nowHour }}:{{ nowMin }}
         </div>
       </div>
       <div class="px-4 stat">
         <div class="text-base stat-title">Stage</div>
-        <div class="text-4xl stat-value">
+        <div class="text-3xl stat-value">
           <select
             :value="gameStage"
             class="input input-xs w-30"
@@ -59,7 +59,7 @@
             </span>
           </label>
         </div>
-        <div class="text-4xl stat-value" v-if="loadingFinished">
+        <div class="text-3xl stat-value" v-if="loadingFinished">
           {{ cycle }}
         </div>
         <div class="stat-figure">
