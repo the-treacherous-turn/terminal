@@ -79,10 +79,38 @@ const gmClockStore = {
     async addGMClock({}, val) {
       return await push(child(refs.gmClock, "clocks"), val)
     },
-    async updateGMClock({}, {clockID, val}) {
+    async updateGMClock({ state, dispatch }, {clockID, val}) {
+      // check if the clock is getting completed. 
+      // if so, and if the clock has progress check,
+      // check if that progress check's other clocks are also complete.
+      // if so, then delete its pending progress checks.
+      if (val.elapsed) {
+        const clock = state.clocks[clockID]
+        // check if this clock is completed
+        if (val.elapsed === clock.size && clock.pc) {
+          const thisPCID = clock.pc
+          const otherClocksWithThisPC = Object.entries(state.clocks).filter(
+            val => val[0] !== clockID && val[1].pc === thisPCID
+          )
+          const allCompleted = otherClocksWithThisPC.every(val => val[1].elapsed === val[1].size)
+          if (otherClocksWithThisPC.length === 0 || allCompleted) {
+            // delete all ppcs that have this pcid
+            const ppcs = Object.entries(state.pendingPCs)
+            const ppcsToDelete = ppcs.filter(val => val[1].pc === thisPCID)
+            ppcsToDelete.forEach(val => dispatch('deletePendingPC', val[0]))
+          }
+        }
+      }
       return await update(child(refs.gmClock, `clocks/${clockID}`), val)
     },
-    async deleteGMClock({}, clockID) {
+    async deleteGMClock({ state, dispatch }, clockID) {
+      // check if there are any pending PCs to remove
+      const clock = state.clocks[clockID]
+      const pcid = clock.pc
+      if (pcid) {
+        const ppcsToDelete = Object.entries(state.pendingPCs).filter(val => val[1].pc === pcid)
+        ppcsToDelete.forEach(val => dispatch('deletePendingPC', val[0]))
+      }
       return await update(child(refs.gmClock, 'clocks'), {[clockID]: null})
     },
     async addGMPCheck({}, val) {
