@@ -26,15 +26,15 @@ window.onhashchange = () => {
 };
 
 export const updateUser = (userId, users, openGM, gmUsers) => {
-  if (openGM) {
+  if (openGM && gmUsers) {
     const index = gmUsers.indexOf(userId);
-    const gnUserRef = ref(db, `${sessionID}/gmUsers/${index}`);
-    onDisconnect(gnUserRef).remove();
+    const gmUserRef = ref(db, `${sessionID}/gmUsers/${index}`);
+    onDisconnect(gmUserRef).remove()
   }
   if (users) {
     const index = users.indexOf(userId);
     const userRef = ref(db, `${sessionID}/users/${index}`);
-    onDisconnect(userRef).remove();
+    onDisconnect(userRef).remove()
   }
 };
 

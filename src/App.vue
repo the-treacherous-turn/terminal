@@ -123,7 +123,7 @@ export default {
       }
     },
     wholeData(a, b) {
-      if (a.gmUsers !== undefined && b.gmUsers !== undefined)
+      if (a.gmUsers !== undefined && b.gmUsers !== undefined) {
         if (a.gmUsers !== b.gmUsers) {
           if (
             a.gmUsers[a.gmUsers.length - 1] !== this.user_id &&
@@ -135,12 +135,13 @@ export default {
             });
           }
         }
+      }
       updateUser(
         this.user_id,
         this.wholeData.users,
         this.isOpenGMPanel,
         this.wholeData.gmUsers
-      );
+      )
     },
   },
   computed: {
