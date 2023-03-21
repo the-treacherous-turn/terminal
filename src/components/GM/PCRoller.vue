@@ -52,6 +52,11 @@ export default {
         val: { die: dieSize },
       });
     },
+    /**
+     * 
+     * @param {*} pcid 
+     * @returns an object of clocks that match the pcid
+     */
     getClocksWithMatchingPCID(pcid) {
       return {
         ...Object.fromEntries(
@@ -64,21 +69,52 @@ export default {
     renderPPCTime(time) {
       return DateTime.fromISO(time).toFormat('MM-dd HH:mm')
     },
-    rollDie(die, key) {
+    rollDie(die, ppcID) {
+      ///// Roll Die
       // TODO improve the roll function
       // with true randomness
       const dieSize = die.slice(1)
       const result = Math.floor(Math.random() * dieSize) + 1
       this.rollLog.unshift({die, result})
-      this.lastResults[key] = result
+      this.lastResults[ppcID] = result
+      ///// automatically tick clocks
+      this.autoTick(result, ppcID)
     },
-    clockTickResult(clockID, ppcID) {
+    getClockTickResult(clockID, ppcID) {
       if (!this.ppcClockResult[ppcID]) return false
       return this.ppcClockResult[ppcID][clockID]
+    },
+    onClickAgentTick(clockID, ppcID) {
+      const currentTick = this.getClockTickResult(clockID, ppcID)
+      if (currentTick === 0) return this.recordTick(1, clockID, ppcID)
+      if (currentTick === 1) return this.recordTick(2, clockID, ppcID)
+      if (currentTick === 2) return this.recordTick(1, clockID, ppcID)
     },
     recordTick(num, clockID, ppcID) {
       if (!this.ppcClockResult[ppcID]) this.ppcClockResult[ppcID] = {}
       this.ppcClockResult[ppcID][clockID] = num
+    },
+    autoTick(dieResult, ppcID) {
+      // see rulebook section "Process Clocks and Progress Checks"
+      // the paragraph that starts with "To roll a progress check"
+      const pcType = this.pChecks[this.pendingPCs[ppcID].pc].type
+      let tickAmt = 0
+      switch (pcType) {
+        case 'inanimate':
+          if(dieResult <= 2) tickAmt = 1
+          break;
+        case 'agent':
+          if(dieResult == 2) tickAmt = 1
+          if(dieResult <= 1) tickAmt = 2
+          break;
+        default:
+          break;
+      }
+      // record tick for each clock that matches the ppc
+      const clocks = this.getClocksWithMatchingPCID(this.pendingPCs[ppcID].pc)
+      for (const clockID in clocks) {
+        this.recordTick(tickAmt, clockID, ppcID)
+      }
     },
     
     submit() {
@@ -115,7 +151,7 @@ export default {
     <div class="w-2/3 pt-[48px] px-[46px] overflow-y-scroll">
       <!-- <pre class="text-green-500">{{ allPCsToRoll }}</pre> -->
       <!-- it should display all PCs to roll, sorted by the PC. -->
-      <template v-for="(ppc, key, index) in allPendingPCs" :key="key">
+      <template v-for="(ppc, ppcID, index) in allPendingPCs" :key="ppcID">
         <hr v-if="index !== 0" class="my-6" />
         <div class="text-[20px]">{{ renderPPCTime(ppc.time) }}</div>
         <div class="flex items-center justify-between">
@@ -157,13 +193,13 @@ export default {
               </select>
             </div>
             <button
-              v-if="lastResults[key]"
-              @click="rollDie(pChecks[ppc.pc].die, key)"
+              v-if="lastResults[ppcID]"
+              @click="rollDie(pChecks[ppc.pc].die, ppcID)"
               class="w-24 px-0 py-4 text-3xl leading-3 text-center text-black bg-white"
-            >{{ lastResults[key] }}</button>
+            >{{ lastResults[ppcID] }}</button>
             <button
               v-else
-              @click="rollDie(pChecks[ppc.pc].die, key)"
+              @click="rollDie(pChecks[ppc.pc].die, ppcID)"
               class="w-24 px-0 py-4 text-3xl leading-3 text-center text-black bg-white"
             >ROLL</button>
 
@@ -181,23 +217,34 @@ export default {
           </div>
           <div class="flex">
             <button
-              @click="recordTick(0, clockID, key)"
+              @click="recordTick(0, clockID, ppcID)"
               class="border py-[16px] px-[24px] text-[20px] leading-[14px]"
               :class="{
-                'bg-white text-darkgray': clockTickResult(clockID, key) === 0,
+                'bg-white text-darkgray': getClockTickResult(clockID, ppcID) === 0,
               }"
             >
               DON'T TICK
             </button>
             <button
-              @click="recordTick(1, clockID, key)"
+              v-if="pChecks[ppc.pc].type === 'inanimate'"
+              @click="recordTick(1, clockID, ppcID)"
               class="border py-[16px] px-[24px] text-[20px] leading-[14px]"
               :class="{
-                'bg-white text-darkgray': clockTickResult(clockID, key) > 0,
+                'bg-white text-darkgray': getClockTickResult(clockID, ppcID) > 0,
               }"
             >
               TICK
             </button>
+            <template v-if="pChecks[ppc.pc].type === 'agent'">
+              <button
+              @click="onClickAgentTick(clockID, ppcID)"
+              class="border py-[16px] px-[24px] text-[20px] leading-[14px]"
+              :class="{
+                'bg-white text-darkgray': getClockTickResult(clockID, ppcID) > 0,
+              }"
+            >
+              {{ getClockTickResult(clockID, ppcID) === 2 ? 'TICK 2X' : 'TICK' }}
+            </button></template>
           </div>
         </div>
       </template>
