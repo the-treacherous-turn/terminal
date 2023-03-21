@@ -8,6 +8,7 @@
 
 @layer components {
   .notification {
+    /* requires parent element to have position: relative */
     @apply absolute flex items-center justify-center w-5 h-5 text-2xl text-center rounded-full bg-accent text-neutral -top-3 -left-3
   }
 }
