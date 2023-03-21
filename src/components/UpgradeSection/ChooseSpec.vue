@@ -133,10 +133,10 @@ export default {
 
 <template>
 <div class="relative pb-1/10">
-  <h1 class="pb-2 pl-4 text-3xl">Specializations</h1>
+  <h1 class="pb-2 pl-4 text-3xl">Specialisations</h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
     <li class="relative flex flex-col justify-between max-w-lg p-4 m-4 shadow-xl card group bg-primary" v-for="(spec, key) in specs" :key="key">
-      <img :src="`high_res_${spec.focus}.png`" class="absolute top-0 m-auto pointer-events-none bottom-32 -right-32 scale-150" alt="">
+      <img :src="`high_res_${spec.focus}.png`" class="absolute top-0 m-auto scale-150 pointer-events-none bottom-32 -right-32" alt="">
       <div class="bg-inherit">
         <div class="flex justify-between bg-inherit">
           <h2 class="px-2 mb-2 text-3xl font-bold capitalize text-primary" :class="getTheoryTextStyle(spec.focus)">{{ spec.focus }}</h2>
@@ -180,7 +180,7 @@ export default {
   @mousedown.self="onClickModalOutside"
 >
   <label class="relative max-w-xs modal-box">
-    <h3 class="text-lg font-bold">{{ isAddNewSpec ? 'Add' : 'Edit' }} Specialization</h3>
+    <h3 class="text-lg font-bold">{{ isAddNewSpec ? 'Add' : 'Edit' }} Specialisation</h3>
     <form class="w-full form-control" autocomplete="off">
       <label class="label label-text">Player</label>
       <input

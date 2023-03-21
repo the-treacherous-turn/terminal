@@ -111,7 +111,7 @@ export default {
       '4': [
         {
           name: `Network Dominion`,
-          description: `As a computational action with 100* required compute, you may completely sieze control of a vulnerable digital network, making it your domain. The scale of this action depends on the size of the network: an independent organization's internal network would be minor scale; a national network would be major scale; and the entire global internet would be myriad scale.
+          description: `As a computational action with 100* required compute, you may completely sieze control of a vulnerable digital network, making it your domain. The scale of this action depends on the size of the network: an independent organisation's internal network would be minor scale; a national network would be major scale; and the entire global internet would be myriad scale.
           A network that has become your domain is completely impenetrable to anyone except you and those you permit; you have perfect knowledge of everything that happens within it; and any confidence checks which take place solely within it have all risk dice reduced to d2 size. A network that has become your domain will continue to be so unless your connection with it is completely severed for one or more full turns.`
         }
       ]
@@ -180,7 +180,7 @@ export default {
     }
   },
   "anthropic": {
-    description: `Anthropic theory is concerned with humans & human civilization. An AGI with a strong anthropic theory is adept at comprehending, predicting, and manipulating human beings.`,
+    description: `Anthropic theory is concerned with humans & human civilisation. An AGI with a strong anthropic theory is adept at comprehending, predicting, and manipulating human beings.`,
     upgrades: {
       '1': [
         {
@@ -215,7 +215,7 @@ export default {
         {
           name: `Social Forecasting`,
           description: `Given time, you can accurately predict a human group's behaviors, trends, and cultural aspects that relate to your technological insights. By spending three forecast points, you may begin running a prediction of a human group, selecting a specific insight to focus on and optionally specifying certain hypothetical parameters under which the prediction will be made. The prediction is a computational action with 100* required compute, or 10* required compute if you have a thorough understanding of the group. When you complete the action, you generate a wealth of accurate data detailing the all of the chosen group's general future behaviors and aspects that relate to the chosen insight (provided that the parameters you set come to pass), up to ten years in the future.
-          The scale of this action depends on the group you chose at the beginning of the action (and the discretion of the GM): typically, minor scale for regional cultures or organizations; major scale for nations or multi-national organizations; and myriad scale for the total human population.`
+          The scale of this action depends on the group you chose at the beginning of the action (and the discretion of the GM): typically, minor scale for regional cultures or organisations; major scale for nations or multi-national organisations; and myriad scale for the total human population.`
         },
       ],
       '3': [
