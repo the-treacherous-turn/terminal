@@ -298,7 +298,7 @@ export default {
         >
           load backup
         </div>
-        <span class="absolute text-base bottom-4">version 0.3.1</span>
+        <span class="absolute text-base bottom-4">version 0.3.2</span>
       </ul>
       <div
         class="absolute w-[100vw] h-[100vh] flex items-center justify-center"
