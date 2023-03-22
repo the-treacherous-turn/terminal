@@ -135,12 +135,12 @@ export default {
 <div class="relative pb-1/10">
   <h1 class="pb-2 pl-4 text-3xl">Specialisations</h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-    <li class="relative flex flex-col justify-between max-w-lg p-4 m-4 shadow-xl card group bg-primary" v-for="(spec, key) in specs" :key="key">
-      <img :src="`high_res_${spec.focus}.png`" class="absolute top-0 m-auto scale-150 pointer-events-none bottom-32 -right-32" alt="">
-      <div class="bg-inherit">
-        <div class="flex justify-between bg-inherit">
+    <li class="relative flex flex-col justify-between max-w-lg p-4 m-4 bg-transparent border-2 shadow-xl card group" v-for="(spec, key) in specs" :key="key">
+      <img :src="`high_res_${spec.focus}.png`" class="absolute top-0 m-auto scale-150 pointer-events-none -z-10 bottom-12 -right-24" alt="">
+      <div class="">
+        <div class="flex justify-between ">
           <h2 class="px-2 mb-2 text-3xl font-bold capitalize text-primary" :class="getTheoryTextStyle(spec.focus)">{{ spec.focus }}</h2>
-          <div class="z-10 hidden bg-inherit h-min group-hover:inline-block">
+          <div class="z-10 hidden h-min group-hover:inline-block">
             <label for="modal-edit-spec">
               <font-awesome-icon
                 :icon="['fas', 'pen-to-square']"
