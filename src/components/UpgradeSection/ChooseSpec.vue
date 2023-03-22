@@ -159,7 +159,7 @@ export default {
         <p v-if="spec.upgrades">Upgrades: {{ Object.keys(spec.upgrades).length }}</p>
         <p v-if="spec.insights">Insights: {{ Object.keys(spec.insights).length }}</p>
       </div>
-      <button class="z-10 w-1/2 mx-auto mt-4 text-3xl btn" :class="getTheoryButtonClass(spec.focus)" @click="selectSpec(key)">Enter</button>
+      <button class="w-1/2 mx-auto mt-4 text-3xl btn" :class="getTheoryButtonClass(spec.focus)" @click="selectSpec(key)">Enter</button>
     </li>
     <label for="modal-edit-spec"
       class="flex items-center justify-center h-20 max-w-lg p-4 m-4 border-4 border-dashed shadow-xl cursor-pointer card btn btn-ghost hover:btn-secondary border-neutral group"

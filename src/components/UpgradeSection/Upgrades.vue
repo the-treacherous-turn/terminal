@@ -179,7 +179,7 @@ export default {
     class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
     @mousedown.self="onClickModalOutside"
   >
-    <label class="relative modal-box">
+    <label class="relative overflow-y-visible modal-box">
       <h3 class="text-lg font-bold">
         {{ isAddNewUpgrade ? "Add" : "Edit" }} Upgrade
       </h3>
@@ -242,7 +242,7 @@ export default {
         <div class="btn-group btn-group-vertical">
           <template v-for="upgrade in upgradesAvailable" :key="upgrade.name">
             <div
-              class="tooltip tooltip-info"
+              class="tooltip tooltip-info before:text-ellipsis before:line-clamp-[8]"
               :data-tip="
                 upgrade.flavor
                   ? upgrade.flavor + ' ' + upgrade.description
