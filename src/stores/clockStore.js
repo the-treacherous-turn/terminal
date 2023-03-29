@@ -7,22 +7,33 @@ const clockStore = {
     loadingFinished: false,
     cycle: 0,
     cycleLength: 12, // in hours
-    hoursPassed: 0,
     originTimeISO: DateTime.now()
       .plus({ years: 10 })
-      .toISO({ includeOffset: false, suppressSeconds: true }),
-    nowTimeISO: DateTime.now()
+      .set({ second: 0, millisecond: 0 })
+      .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true, }),
+      cycleBeginTimeISO: DateTime.now()
       .plus({ years: 10 })
-      .toISO({ includeOffset: false, suppressSeconds: true }),
+      .set({ second: 0, millisecond: 0 })
+      .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true, }),
+      nowTimeISO: DateTime.now()
+      .plus({ years: 10 })
+      .set({ second: 0, millisecond: 0 })
+      .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true, }),
     gameStage: "",
   }),
   getters: {
     originTime(state) {
       return DateTime.fromISO(state.originTimeISO);
     },
+    cycleBeginTime(state) {
+      return DateTime.fromISO(state.cycleBeginTimeISO);
+    },
     nowTime(state) {
       return DateTime.fromISO(state.nowTimeISO);
     },
+    cycleEndTime(state, getters) {
+      return getters.cycleBeginTime.plus({ hours: state.cycleLength });
+    }
   },
   mutations: {
     advanceTime(state, hours) {
@@ -31,8 +42,8 @@ const clockStore = {
       state.nowTimeISO = nowTime.toISO({
         includeOffset: false,
         suppressSeconds: true,
+        suppressMilliseconds: true,
       });
-      state.hoursPassed += hours;
     },
     setCycle(state, cycle) {
       state.cycle = cycle;
@@ -40,12 +51,18 @@ const clockStore = {
     setCycleLength(state, cycleLength) {
       state.cycleLength = cycleLength;
     },
+    setOriginTimeISO(state, originTimeISO) {
+      state.originTimeISO = originTimeISO;
+    },
+    setCycleBeginTimeISO(state, cycleBeginTimeISO) {
+      state.cycleBeginTimeISO = cycleBeginTimeISO;
+      // IF the current turn start time is set AFTER the current time, copy the new turn start time into the current time
+      if (DateTime.fromISO(state.nowTimeISO) < DateTime.fromISO(cycleBeginTimeISO)) {
+        state.nowTimeISO = cycleBeginTimeISO;
+      }
+    },
     setNowTimeISO(state, nowTimeISO) {
       state.nowTimeISO = nowTimeISO;
-    },
-    setOriginTimeISO(state, originTimeISO) {
-      console.log(originTimeISO);
-      state.originTimeISO = originTimeISO;
     },
     updateClock(state, changesObj) {
       for (const key in changesObj) {
@@ -74,27 +91,20 @@ const clockStore = {
       });
     },
     async advanceCycle({ commit, state, rootState, getters }) {
-      let remainingCycleTime =
-        state.cycleLength *
-        (1 -
-          rootState.compute.computeSpent /
-            (getters.computeTotal - getters.recurringSum));
-      if (isNaN(remainingCycleTime)) {
-        console.warn(`[clockStore] remainingCycleTime is NaN. Possibly due to having no compute sources? Setting it to cycleLength ${state.cycleLength}`)
-        remainingCycleTime = state.cycleLength
-      }
-      // HACK handle other abnormalities
-      if (remainingCycleTime > state.cycleLength) remainingCycleTime = state.cycleLength
-      if (remainingCycleTime < 0) remainingCycleTime = 0
-      commit("advanceTime", remainingCycleTime);
-      state.cycle++;
+      const newCycle = state.cycle + 1;
+      const newCycleBeginTimeISO = getters.cycleEndTime.toISO({
+        includeOffset: false,
+        suppressSeconds: true,
+        suppressMilliseconds: true,
+      })
       commit("refillCompute");
       await update(refs.computeTracker, {
         computeSpent: rootState.compute.computeSpent,
       });
       return await update(refs.clock, {
-        nowTimeISO: state.nowTimeISO,
-        cycle: state.cycle,
+        nowTimeISO: newCycleBeginTimeISO,
+        cycleBeginTimeISO: newCycleBeginTimeISO,
+        cycle: newCycle,
       });
     },
     async advanceTime({ commit, state }, hours) {
@@ -108,6 +118,7 @@ const clockStore = {
         cycle: state.cycle,
         cycleLength: state.cycleLength,
         nowTimeISO: state.nowTimeISO,
+        cycleBeginTimeISO: state.cycleBeginTimeISO,
         originTimeISO: state.originTimeISO,
       });
     },

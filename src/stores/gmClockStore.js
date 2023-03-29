@@ -68,7 +68,7 @@ const gmClockStore = {
       }
       // convert the DateTime object to ISO without timezone
       if (!lastCheckTime) throw new Error('Could not compute lastCheckTime.')
-      const lastCheckTimeISO = lastCheckTime.toISO({ includeOffset: false, suppressSeconds: true })
+      const lastCheckTimeISO = lastCheckTime.toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true })
       commit('setLastCheckTimeISO', lastCheckTimeISO)
       // send lastCheckTimeISO to firebase
       return await update(refs.gmClock, {lastCheckTimeISO})
@@ -164,7 +164,7 @@ const gmClockStore = {
       while (rootGetters.nowTime > getters.lastCheckTime.plus({hours: pcInterval})){
         // make new pc time
         const newCheckTime = getters.lastCheckTime.plus({hours: pcInterval})
-        const newCheckTimeISO = newCheckTime.toISO({ includeOffset: false, suppressSeconds: true })
+        const newCheckTimeISO = newCheckTime.toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true })
         // find PCs that qualify for this check
         const pcAsArray = Object.entries(state.pChecks)
         for (const [pcid, pc] of pcAsArray) {

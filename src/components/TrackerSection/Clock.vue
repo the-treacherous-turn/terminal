@@ -119,10 +119,10 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
       @mousedown.self="onClickModalOutside('timesetting')"
     >
       <label class="relative modal-box" for>
-        <h3 class="text-lg font-bold">Time</h3>
+        <h3 class="text-lg font-bold">Clock Settings</h3>
         <p class="my-4">
-          <label class="inline-block w-20" for="clock-tracker-now-time"
-            >Now:
+          <label class="inline-block w-52" for="clock-tracker-now-time"
+            >Current time
           </label>
           <input
             v-model="nowTimeISO"
@@ -133,8 +133,20 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
         </p>
 
         <p class="my-4">
-          <label class="inline-block w-20" for="clock-tracker-origin-time"
-            >Origin:
+          <label class="inline-block w-52" for="clock-tracker-cycle-begin-time"
+            >current turn start
+          </label>
+          <input
+            v-model="cycleBeginTimeISO"
+            type="datetime-local"
+            id="clock-tracker-cycle-begin-time"
+            class="text-black bg-white input input-sm input-bordered"
+          />
+        </p>
+
+        <p class="my-4">
+          <label class="inline-block w-52" for="clock-tracker-origin-time"
+            >Origin
           </label>
           <input
             v-model="originTimeISO"
@@ -190,7 +202,7 @@ v-model="isTurnSettingOpen" @change="onTurnModalToggle" /> -->
         </p>
 
         <p class="my-4">
-          <label for="clock-tracker-cycle" class="pr-2">Set Turn: </label>
+          <label for="clock-tracker-cycle" class="pr-2">Current Turn: </label>
           <input
             v-model.number="cycle"
             type="number"
@@ -274,8 +286,15 @@ export default {
         return this.$store.state.clock.originTimeISO;
       },
       set(newVal) {
-        console.log(newVal);
         this.$store.commit("setOriginTimeISO", newVal);
+      },
+    },
+    cycleBeginTimeISO: {
+      get() {
+        return this.$store.state.clock.cycleBeginTimeISO;
+      },
+      set(newVal) {
+        this.$store.commit("setCycleBeginTimeISO", newVal);
       },
     },
     nowTimeISO: {

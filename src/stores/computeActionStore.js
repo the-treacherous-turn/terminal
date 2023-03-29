@@ -119,59 +119,43 @@ const computeActionStore = {
         [actionID]: state.computeActions[actionID],
       });
     },
-    // calculate compute point assignment
-    // NOTE this is a bit of a hack. we need to figure out a better way to do this
-    // basically, it's very easy to create bugs
-    // when any firebase sync happens before all calculations are resolved.
-    // Therefore we only commit during the loops,
-    // and sync at the very end.
-    async assignComputePoints({ state, rootState, getters, commit, dispatch }) {
-      ///// 1. assign commpute to burn
-      const computeToBurn = rootState.compute.computeToBurn;
-      let burnChange = 0;
-      if (computeToBurn > getters.computeAvailable) {
-        burnChange = getters.computeAvailable;
-      } else {
-        burnChange = computeToBurn;
-      }
-      commit("updateComputeSpent", burnChange);
-      const burnToHours =
-        rootState.clock.cycleLength *
-        (burnChange / (getters.computeTotal - getters.recurringSum));
-      commit("advanceTime", burnToHours);
-
+    async assignComputePoints({ state, rootState, getters, rootGetters, commit, dispatch }) {
       ///// 2. assign computes in compute actions
       Object.values(state.computeActions).forEach((ca) => {
-        const computeAvailable = getters.computeAvailable;
+        const computeAvailable = getters.computeAvailable
+        // if we used it all up, then don't bother.
+        if (!computeAvailable) return
         // if there isn't enough compute available, then add however much is left
-        let change = 0;
+        let change = 0
         if (ca.computeToAdd > computeAvailable) {
-          change = computeAvailable;
+          change = computeAvailable
         } else {
-          change = ca.computeToAdd;
+          change = ca.computeToAdd
         }
-        commit("updateComputeSpent", change);
-        ca.computeApplied += change;
-        const computeToHours =
-          rootState.clock.cycleLength *
-          (change / (getters.computeTotal - getters.recurringSum));
-        commit("advanceTime", computeToHours);
+        ca.computeApplied += change
+
+        const timeLeft = rootGetters.cycleEndTime - rootGetters.nowTime // in ms
+        const timeLeftInHours = timeLeft / (1000*60*60) // to hr
+        const hourToAdvance = (change / computeAvailable) * timeLeftInHours
+
+        commit("advanceTime", hourToAdvance)
+        commit("updateComputeSpent", change)
 
         // calculate the computes to add for next assign, and new total compute to spend
-        const remainingComputeNeeded = ca.computeNeeded - ca.computeApplied;
+        const remainingComputeNeeded = ca.computeNeeded - ca.computeApplied
         // if the bar is almost filled, then set compute to add to the remaining amount
         if (remainingComputeNeeded < ca.computeToAdd) {
-          ca.computeToAdd = remainingComputeNeeded;
+          ca.computeToAdd = remainingComputeNeeded
         }
-      });
+      })
       ///// 3. sync
-      await dispatch("syncClock");
-      await update(refs.computeActions, state.computeActions);
+      await dispatch("syncClock")
+      await update(refs.computeActions, state.computeActions)
       await update(refs.computeTracker, {
         computeSpent: rootState.compute.computeSpent,
-      });
+      })
     },
   },
-};
+}
 
 export default computeActionStore;

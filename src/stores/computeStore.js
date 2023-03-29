@@ -8,16 +8,16 @@ const computeStore = {
     computeSources: {},
     baseComputeCost: 0,
     recurringCosts: {},
-    computeToBurn: 0, // standalone compute adjustment
+    computeAdjustAmt: 0, // standalone compute adjustment
   }),
   getters: {
     /**
-     * Sum of all computes we want to add, from all compute actions, and the burner
+     * Sum of all computes we want to add, from all compute actions
      */
     computeToSpend(state, getters, rootState) {
       return Object.values(rootState.computeAction.computeActions).reduce(
         (a, b) => a + b.computeToAdd,
-        state.computeToBurn
+        0
       );
     },
     /**
@@ -71,8 +71,8 @@ const computeStore = {
       }
       state.loadingFinished = true;
     },
-    modifyComputeToBurn(state, val) {
-      state.computeToBurn = val;
+    modifyComputeAdjustAmt(state, val) {
+      state.computeAdjustAmt = val;
     },
     setBaseComputeCost(state, baseComputeCost) {
       state.baseComputeCost = baseComputeCost;
@@ -142,11 +142,16 @@ const computeStore = {
         recurringCosts: state.recurringCosts,
       });
     },
-    async modifyComputeToBurn({ commit, state, getters }, val) {
-      if (val > getters.computeAvailable) val = getters.computeAvailable;
-      commit("modifyComputeToBurn", val);
+    async modifyComputeAdjustAmt({ commit, state }, val) {
+      commit("modifyComputeAdjustAmt", val);
       await update(refs.computeTracker, {
-        computeToBurn: state.computeToBurn,
+        computeAdjustAmt: state.computeAdjustAmt,
+      });
+    },
+    async updateComputeSpent({ commit, state }, change) {
+      commit("updateComputeSpent", change);
+      await update(refs.computeTracker, {
+        computeSpent: state.computeSpent,
       });
     },
   },

@@ -30,12 +30,12 @@
         <input
           type="number"
           class="w-12 text-center input input-sm"
-          v-model.number="computeToBurn"
+          v-model.number="computeAdjustAmt"
         />
-        <button class="btn btn-sm btn-circle" @click="addComputeToBurn">
+        <button class="btn btn-sm btn-circle" @click="addComputeAvailable">
           <font-awesome-icon icon="plus" class="text-2xl" />
         </button>
-        <button class="btn btn-sm btn-circle" @click="removeComputeToBurn">
+        <button class="btn btn-sm btn-circle" @click="removeComputeAvailable">
           <font-awesome-icon icon="minus" class="text-2xl" />
         </button>
       </div>
@@ -207,14 +207,14 @@ export default {
         this.$store.commit("setBaseComputeCost", value);
       },
     },
-    computeToBurn: {
+    computeAdjustAmt: {
       get() {
-        return this.$store.state.compute.computeToBurn;
+        return this.$store.state.compute.computeAdjustAmt;
       },
       set(value) {
         if (value === "") return; // user just cleared the input. disregard.
         const newValue = parseInt(value);
-        this.$store.dispatch("modifyComputeToBurn", newValue);
+        this.$store.dispatch("modifyComputeAdjustAmt", newValue);
       },
     },
 
@@ -222,15 +222,23 @@ export default {
       computeSources: (state) => state.compute.computeSources,
       recurringCosts: (state) => state.compute.recurringCosts,
       loadingFinished: (state) => state.compute.loadingFinished,
+      computeSpent: (state) => state.compute.computeSpent,
     }),
   },
   methods: {
-    addComputeToBurn() {
-      this.$store.dispatch("modifyComputeToBurn", this.computeToBurn + 1);
+    addComputeAvailable() {
+      // apply computeAdjustAmt to computeAvailable,
+      // by changing the computeSpent.
+      let amt = this.computeAdjustAmt
+      if (amt > this.computeSpent) amt = this.computeSpent
+      this.$store.dispatch("updateComputeSpent", -amt)
     },
-    removeComputeToBurn() {
-      if (this.computeToBurn <= 0) return;
-      this.$store.dispatch("modifyComputeToBurn", this.computeToBurn - 1);
+    removeComputeAvailable() {
+      let amt = this.computeAdjustAmt
+      // if the new computeSpent results in a negative computeAvailable,
+      // set computeSpent to the max it can be
+      if (amt > this.available) amt = this.available
+      this.$store.dispatch("updateComputeSpent", amt)
     },
     addComputeSource() {
       this.$store.dispatch("addComputeSource");
