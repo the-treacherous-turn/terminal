@@ -43,7 +43,7 @@
 export default {
   data() {
     return {
-      diceValues: [6, 6, 6], // Default dice values (d6)
+      diceValues: [10, 10, 6], // Default dice values (2 d10 for the percentile, and a d6 risk die)
       rollResults: [[], [], []] // Arrays to store roll results for each dice
     }
   },
