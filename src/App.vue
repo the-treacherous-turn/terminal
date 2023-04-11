@@ -3,6 +3,7 @@ import { mapState } from "vuex";
 import ActionEditor from "./components/ActionEditor.vue";
 import Clock from "./components/TrackerSection/Clock.vue";
 import GMPanel from "./components/GM/GMPanel.vue";
+import PasswordPrompt from "./components/PasswordPrompt.vue"
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -14,12 +15,15 @@ export default {
       isImport: false,
       isOpenGMPanel: false,
       user_id: "",
+      passwordVerified: false,
+      passwordSet: false,
     };
   },
   components: {
     ActionEditor,
     Clock,
     GMPanel,
+    PasswordPrompt,
   },
   methods: {
     onToggleGM(e) {
@@ -98,6 +102,34 @@ export default {
         alert("failed");
       }
     },
+    handlePassword(password) {
+      if (this.wholeData.password) {
+        // verify password
+        if (this.wholeData.password === password) {
+          this.passwordVerified = true;
+        } else {
+          alert("Incorrect password. Please try again.");
+        }
+      } else {
+        // set password
+        this.$store.dispatch('updatePassword', password)
+        this.passwordSet = true;
+        this.passwordVerified = true;
+      }
+    },
+    cancelPasswordCreation() {
+      this.$store.dispatch("updateNoPassword", true);
+    },
+    onToggleNoPassword() {
+      this.$store.dispatch("updateNoPassword", !this.noPassword);;
+    },
+    updatePassword(e) {
+      this.$store.commit('setPassword', e.target.value)
+    },
+    submitPassword() {
+      this.$store.dispatch("updatePassword", this.password);
+    },
+
   },
   watch: {
     finishedLoading() {
@@ -147,7 +179,23 @@ export default {
       isGM: (state) => state.isGM,
       wholeData: (state) => state.wholeData,
       finishedLoading: (state) => state.finishedLoading,
+      password: (state) => state.password,
+      noPassword: (state) => state.noPassword,
     }),
+    isNewSession() {
+      let keys = Object.keys(this.wholeData)
+      return (keys.length === 0) || (keys.length === 1 && keys[0] === "users")
+    },
+    showPasswordInput() {
+      return (
+        this.finishedLoading && !this.wholeData.noPassword && // finished loading, and password is required
+        (
+          (this.wholeData.password && !this.passwordVerified) || // there's existing password, and it's not verified
+          (!this.wholeData.password && !this.passwordSet) // there's no existing password, but it's not set
+        )
+      );
+    },
+
   },
 };
 </script>
@@ -281,19 +329,57 @@ export default {
             />
           </label>
         </li>
+      
+        <div class="mt-10 divider">GAME</div>
+        <!-- session id, password, and option to change password -->
+        <div class="text-xl">
+          <div>
+            <span class="">Session ID: </span>
+            <span class="text-black bg-white">{{
+              $store.state.sessionID
+            }}</span>
+          </div>
+          <!-- password is displayed in a textfield, and you can change and set it. -->
+          <!-- you can also tick a box to choose not to use the password -->
+          <div class="mt-4">
+            <label class="flex items-center">
+              <span class="pr-2">Password</span>
+              <input
+                :checked="!noPassword"
+                @change="onToggleNoPassword"
+                type="checkbox"
+                class="checkbox checkbox-sm"
+              />
+            </label>
+          </div>
+          <div class="flex items-end mt-2">
+            <input
+              name="password"
+              type="text"
+              :disabled="noPassword"
+              :value="password"
+              @change="updatePassword"
+              class="w-full mt-1 mr-4 input-xs input"
+            />
+            <button class="btn btn-xs" :disabled="noPassword" @click="submitPassword">change</button>
+
+          </div>
+        </div>
+
+        <div class="mt-10 divider">BACKUP</div>
         <div
-          class="flex self-center cursor-pointer my-[10px]"
+          class="flex self-center my-4 text-left cursor-pointer btn btn-wide"
           @click="exportData"
         >
           export backup
         </div>
         <div
-          class="flex self-center text-center cursor-pointer"
+          class="flex self-center text-left text-center cursor-pointer btn btn-wide"
           @click="openImportModal"
         >
           load backup
         </div>
-        <span class="absolute text-base bottom-4">version 0.3.2</span>
+        <span class="absolute text-base bottom-4">version 0.3.3</span>
       </ul>
       <div
         class="absolute w-[100vw] h-[100vh] flex items-center justify-center"
@@ -328,6 +414,13 @@ export default {
         </div>
       </div>
     </div>
+    <password-prompt
+      :showPasswordInput="showPasswordInput"
+      :isCreatePassword="isNewSession"
+      @password-submitted="handlePassword"
+      @cancel-password-creation="cancelPasswordCreation"
+    ></password-prompt>
+
   </div>
 </template>
 

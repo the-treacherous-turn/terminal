@@ -36,6 +36,8 @@ const store = createStore({
       wholeData: [],
       finishedLoading: false,
       stateofDisplayMode: false,
+      password: '',
+      noPassword: false,
     };
   },
   getters: {
@@ -52,6 +54,8 @@ const store = createStore({
     },
     updateData(state, data) {
       state.wholeData = data;
+      state.password = state.wholeData.password
+      state.noPassword = state.wholeData.noPassword
       if (
         data.keysOfComputeActions === undefined &&
         data.computeActions !== undefined
@@ -84,6 +88,13 @@ const store = createStore({
     setIsDisplayModal(state, stateofDisplayMode) {
       state.stateofDisplayMode = stateofDisplayMode;
     },
+    setPassword(state, password) {
+      state.password = password;
+    },
+    setNoPassword(state, noPassword) {
+      state.noPassword = noPassword;
+    },
+
   },
   actions: {
     async listenToFBWholeData({ commit }) {
@@ -101,6 +112,15 @@ const store = createStore({
       changesObj.keysOfComputeActions = [...keys];
       await update(refs.wholeData, changesObj);
     },
+    async updatePassword({ commit }, password) {
+      commit("setPassword", password);
+      await update(refs.wholeData, { password });
+    },
+    async updateNoPassword({ commit }, noPassword) {
+      commit("setNoPassword", noPassword);
+      await update(refs.wholeData, { noPassword });
+    },
+
   },
 });
 
