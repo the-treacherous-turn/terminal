@@ -3,7 +3,6 @@ import { mapState } from "vuex";
 import ActionEditor from "./components/ActionEditor.vue";
 import Clock from "./components/TrackerSection/Clock.vue";
 import GMPanel from "./components/GM/GMPanel.vue";
-import Footer from "./Footer.vue";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -21,7 +20,6 @@ export default {
     ActionEditor,
     Clock,
     GMPanel,
-    Footer,
   },
   methods: {
     onToggleGM(e) {
@@ -262,9 +260,6 @@ export default {
         </button>
       </div>
     </div>
-    <!-- NOTE: Footer may not make sense anymore as its position is filled by Bottom Navigation. -->
-    <!-- It's currently blocked behind the bottom navigation. -->
-    <!-- <Footer /> -->
     <Teleport to="body">
       <ActionEditor />
     </Teleport>
