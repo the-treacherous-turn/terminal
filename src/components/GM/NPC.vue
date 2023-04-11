@@ -403,7 +403,7 @@ export default {
       </div>
     </div>
   </div>
-  <div v-else class="flex flex-col w-full px-[23px] overflow-auto">
+  <div v-else class="flex flex-col w-full px-[23px] overflow-y-scroll">
     <div class="flex justify-between mt-[26px]">
       <div class="flex px-[16px] py-[4px] border-white border-1 justify-center items-center">
         <input placeholder="search" class="bg-darkgray outline-none text-grey text-[14px]" v-model="searchValue" @input="searchResult($event)"/>

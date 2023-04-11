@@ -263,7 +263,7 @@ export default {
         @click="openClockSetting"
       ></div>
     </div>
-    <div class="w-full mt-[24px] h-[calc(100%-8rem)] overflow-auto">
+    <div class="w-full mt-[24px] h-[calc(100%-8rem)] overflow-y-scroll">
       <!-- render each clock in clocks object. use their key as key -->
       <ClockCard
         v-for="(clock, key) in clocks"
