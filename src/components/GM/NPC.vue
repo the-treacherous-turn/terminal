@@ -289,7 +289,7 @@ export default {
 </script>
 
 <template>
-  <div class="fixed top-0 left-0 z-50 table w-full h-full uppercase bg-black/50 transition-opacity"
+  <div class="fixed top-0 left-0 z-50 table w-full h-full uppercase transition-opacity bg-black/50"
     v-if="isDeleteFlag">
     <div class="table-cell align-middle bg-transparent">
       <div class="
@@ -325,7 +325,7 @@ export default {
         />
       </div>
     </div>
-    <div class="flex flex-col w-full h-[calc(100%)] overflow-y-scroll">
+    <div class="flex flex-col w-full h-full overflow-y-scroll">
       <div class="mt-[24px] flex justify-between items-center px-[23px]">
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Name</div>
@@ -403,7 +403,7 @@ export default {
       </div>
     </div>
   </div>
-  <div v-else class="flex flex-col w-full px-[23px]">
+  <div v-else class="flex flex-col w-full px-[23px] overflow-auto">
     <div class="flex justify-between mt-[26px]">
       <div class="flex px-[16px] py-[4px] border-white border-1 justify-center items-center">
         <input placeholder="search" class="bg-darkgray outline-none text-grey text-[14px]" v-model="searchValue" @input="searchResult($event)"/>

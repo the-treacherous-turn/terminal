@@ -26,6 +26,12 @@
 .input {
   @apply input-bordered border-white
 }
+.btn-inverted {
+  @apply bg-grey text-darkgray
+}
+.btn-inverted:hover {
+  @apply bg-middlegrey text-grey
+}
 @tailwind utilities;
 
 @layer utilities {

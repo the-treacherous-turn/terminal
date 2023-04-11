@@ -19,7 +19,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex py-4">
     <ProcessClock :size="size" :elapsed="elapsed < size ? elapsed : size" :width="100" :height="100" />
     <div class="flex ml-[20px] w-full">
       <div class="flex flex-col w-full">

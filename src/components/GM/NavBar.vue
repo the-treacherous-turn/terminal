@@ -2,7 +2,7 @@
 export default {
   data() {
     return{
-    clickedTab : 'NPCs'
+    clickedTab : 'CLOCKS'
   }},
   methods: {
     switchTab(tab){

@@ -135,7 +135,7 @@ const computeActionStore = {
         ca.computeApplied += change
 
         const timeLeft = rootGetters.cycleEndTime - rootGetters.nowTime // in ms
-        const timeLeftInHours = timeLeft / (1000*60*60) // to hr
+        const timeLeftInHours = timeLeft / (1000 * 60 * 60) // to hr
         const hourToAdvance = (change / computeAvailable) * timeLeftInHours
 
         commit("advanceTime", hourToAdvance)

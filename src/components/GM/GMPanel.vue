@@ -3,11 +3,12 @@ import NavBar from "./NavBar.vue";
 import NPC from "./NPC.vue";
 import Notes from "./Notes.vue";
 import GMClock from "./GMClock.vue";
+import DiceRoller from './DiceRoller.vue'
 
 export default {
   data() {
     return {
-      currentTab: "NPCs",
+      currentTab: "CLOCKS",
     };
   },
   components: {
@@ -15,12 +16,13 @@ export default {
     NPC,
     Notes,
     GMClock,
+    DiceRoller,
   },
 };
 </script>
 
 <template>
-  <div class="h-full bg-darkgray">
+  <div class="flex flex-col h-full bg-darkgray">
     <NavBar
       @changeTab="
         (payload) => {
@@ -31,6 +33,7 @@ export default {
     <NPC v-if="currentTab === 'NPCs'" />
     <Notes v-if="currentTab === 'NOTES'" />
     <GMClock v-if="currentTab === 'CLOCKS'" />
+    <DiceRoller v-if="currentTab === 'ROLL'" />
   </div>
 </template>
 
