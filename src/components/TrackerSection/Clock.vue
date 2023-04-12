@@ -158,7 +158,7 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
 
         <div class="flex justify-between w-full">
           <label class="flex cursor-pointer">
-            <span class="label-text">Display mode:</span>
+            <span class="label-text">Hide Dates</span>
             <input
               :checked="stateofDisplayMode"
               @change="onToggleDisplayMode"
