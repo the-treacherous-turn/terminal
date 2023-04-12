@@ -16,7 +16,7 @@ export default {
       isOpenGMPanel: false,
       user_id: "",
       passwordVerified: false,
-      passwordSet: false,
+      passwordPromptUsed: false,
     };
   },
   components: {
@@ -113,21 +113,29 @@ export default {
       } else {
         // set password
         this.$store.dispatch('updatePassword', password)
-        this.passwordSet = true;
+        this.passwordPromptUsed = true;
         this.passwordVerified = true;
       }
     },
     cancelPasswordCreation() {
       this.$store.dispatch("updateNoPassword", true);
+      this.passwordPromptUsed = true;
     },
     onToggleNoPassword() {
-      this.$store.dispatch("updateNoPassword", !this.noPassword);;
+      if (this.noPassword) {
+        this.passwordPromptUsed = true; // don't show password prompt if the session is set to no password
+      }
+      this.$store.dispatch("updateNoPassword", !this.noPassword);
     },
     updatePassword(e) {
       this.$store.commit('setPassword', e.target.value)
     },
     submitPassword() {
       this.$store.dispatch("updatePassword", this.password);
+      toast.success('Password changed', {
+        autoClose: 1000,
+        position: 'bottom-right',
+      });
     },
 
   },
@@ -186,12 +194,16 @@ export default {
       let keys = Object.keys(this.wholeData)
       return (keys.length === 0) || (keys.length === 1 && keys[0] === "users")
     },
+    needPasswordCreation() {
+      // if this session's data has no password, and it doesn't have noPassword checked
+      return !this.wholeData.noPassword && !this.wholeData.password
+    },
     showPasswordInput() {
       return (
-        this.finishedLoading && !this.wholeData.noPassword && // finished loading, and password is required
+        this.finishedLoading && !this.wholeData.noPassword && !this.passwordPromptUsed && // finished loading, and password is required, and user hasn't interacted with the prompt yet
         (
           (this.wholeData.password && !this.passwordVerified) || // there's existing password, and it's not verified
-          (!this.wholeData.password && !this.passwordSet) // there's no existing password, but it's not set
+          (!this.wholeData.password) // there's no existing password, and we need to make one
         )
       );
     },
@@ -416,7 +428,7 @@ export default {
     </div>
     <password-prompt
       :showPasswordInput="showPasswordInput"
-      :isCreatePassword="isNewSession"
+      :isCreatePassword="needPasswordCreation"
       @password-submitted="handlePassword"
       @cancel-password-creation="cancelPasswordCreation"
     ></password-prompt>
