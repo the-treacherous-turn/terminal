@@ -16,8 +16,15 @@
                 <span class="inline-block w-10">
                   D{{ result[0] }}:
                 </span>
-                <span class="" :class="{ 'bg-white text-black ': (result[1] === 1 || result[1] === 12) && result[0] === 12 }">
-                  {{ result[1] }}</span>
+                <span
+                  class=""
+                  :class="{
+                    'bg-white text-black': result[0] !== 2 && (result[1] === 1 || result[1] === result[0])
+                  }"
+                >
+                  {{ result[1] }}
+                </span>
+
               </div>
             </transition-group>
           </div>
