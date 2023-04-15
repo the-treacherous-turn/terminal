@@ -1,12 +1,12 @@
 <template>
   <Transition name="modal">
     <div
-      class="fixed top-0 left-0 z-50 table w-full h-full uppercase bg-black/50 transition-opacity"
+      class="fixed top-0 left-0 z-50 table w-full h-full uppercase transition-opacity bg-black/50"
       v-if="$store.state.eventLog.isEditorOpen"
     >
       <div class="table-cell align-middle bg-transparent">
         <div
-          class="relative w-3/5 p-8 m-auto border modal-container transition-all bg-base-100"
+          class="relative w-3/5 p-8 m-auto transition-all border modal-container bg-base-100"
         >
           <button
             class="absolute top-0 right-0 m-2 mt-0 text-2xl lowercase decoration-transparent"
@@ -76,6 +76,7 @@
               class="w-full px-2 py-2 mb-4 bg-black border"
             ></textarea>
             <div class="flex items-center mb-4">
+              <span class="label-text">STATUS:</span>
               <select
                 v-model="actionState"
                 class="bg-black w-[130px] label-text text-white placeholder-white outline-none"
@@ -89,12 +90,14 @@
                   CROSSED OUT
                 </option>
               </select>
-              <input
-                v-if="stateofDisplayMode"
-                v-model="dayLeft"
-                class="ml-[20px]"
-              />
-              <input v-else v-model="commitTimeISO" class="ml-[20px]" />
+              <div v-if="actionState == 'FINALIZED' || actionState == 'CROSSED OUT'">
+                <input
+                  v-if="stateofDisplayMode"
+                  v-model="dayLeft"
+                  class="ml-[20px]"
+                />
+                <input v-else v-model="commitTimeISO" class="ml-[20px]" />
+              </div>
             </div>
 
             <button
