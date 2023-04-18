@@ -14,23 +14,26 @@
               {{ nowDate }}
             </div>
           </div>
+        </div>
+        <div class="text-3xl stat-value" v-if="loadingFinished">
+          <span>
+            {{ nowHour }}:{{ nowMin }}
+          </span>
           <label
             v-if="isGM"
             for="modal-time-setting"
             @click="openModal('timesetting')"
           >
             <span
-              class="p-1 indicator-item indicator-bottom indicator-center badge badge-secondary"
+              class="px-2 cursor-pointer"
             >
               <font-awesome-icon
                 :icon="['fas', 'pen-to-square']"
-                class="text-base"
+                class="text-2xl"
               />
             </span>
           </label>
-        </div>
-        <div class="text-3xl stat-value" v-if="loadingFinished">
-          {{ nowHour }}:{{ nowMin }}
+
         </div>
       </div>
       <div
@@ -69,19 +72,21 @@
       <div class="px-4 stat">
         <div>
           <div class="inline text-base stat-title">Turn</div>
+        </div>
+        <div class="text-3xl stat-value" v-if="loadingFinished">
+          <span>
+            {{ cycle }}
+          </span>
           <label for="modal-turn-setting" @click="openModal('turnsetting')">
             <span
-              class="p-1 indicator-item indicator-bottom indicator-center badge badge-secondary"
+              class="px-2 cursor-pointer"
             >
               <font-awesome-icon
                 :icon="['fas', 'pen-to-square']"
-                class="text-base"
+                class="text-2xl"
               />
             </span>
           </label>
-        </div>
-        <div class="text-3xl stat-value" v-if="loadingFinished">
-          {{ cycle }}
         </div>
         <div class="stat-figure">
           <label
