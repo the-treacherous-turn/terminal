@@ -33,6 +33,27 @@
           {{ nowHour }}:{{ nowMin }}
         </div>
       </div>
+      <div
+        class="px-4 stat"
+        v-if="isGM"
+      >
+        <span class="text-base stat-title">ADJUST TIME (min)</span>
+        <div class="flex gap-4 mt-2">
+          <input
+            type="number"
+            class="w-12 text-center input input-sm"
+            v-model.number="timeAdjustAmt"
+          />
+          <div class="flex gap-2">
+            <button class="btn btn-sm btn-circle" @click="increaseTimeToAdjust">
+              <font-awesome-icon icon="plus" class="text-2xl" />
+            </button>
+            <button class="btn btn-sm btn-circle" @click="decreaseTimeToAdjust">
+              <font-awesome-icon icon="minus" class="text-2xl" />
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="px-4 stat">
         <div class="text-base stat-title">Stage</div>
         <div class="text-3xl stat-value">
@@ -308,8 +329,24 @@ export default {
     isComputeUsedUp() {
       return this.$store.getters.computeAvailable === 0;
     },
+    timeAdjustAmt: {
+      get() {
+        return this.$store.state.clock.timeAdjustAmt;
+      },
+      set(value) {
+        if (value === "") return; // user just cleared the input. disregard.
+        const newValue = parseInt(value);
+        this.$store.dispatch("setTimeAdjustAmt", newValue);
+      },
+    },
   },
   methods: {
+    increaseTimeToAdjust() {
+      this.$store.dispatch("adjustTime", this.timeAdjustAmt);
+    },
+    decreaseTimeToAdjust() {
+      this.$store.dispatch("adjustTime", -this.timeAdjustAmt);
+    },
     onStageChange(e) {
       this.$store.dispatch("setGameStage", e.target.value);
     },

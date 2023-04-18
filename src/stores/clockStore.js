@@ -20,6 +20,7 @@ const clockStore = {
       .set({ second: 0, millisecond: 0 })
       .toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true, }),
     gameStage: "",
+    timeAdjustAmt: 0, // standalone time adjustment
   }),
   getters: {
     originTime(state) {
@@ -39,6 +40,15 @@ const clockStore = {
     advanceTime(state, hours) {
       let nowTime = DateTime.fromISO(state.nowTimeISO);
       nowTime = nowTime.plus({ hours });
+      state.nowTimeISO = nowTime.toISO({
+        includeOffset: false,
+        suppressSeconds: true,
+        suppressMilliseconds: true,
+      });
+    },
+    adjustTime(state, minutes) {
+      let nowTime = DateTime.fromISO(state.nowTimeISO);
+      nowTime = nowTime.plus({ minutes });
       state.nowTimeISO = nowTime.toISO({
         includeOffset: false,
         suppressSeconds: true,
@@ -79,6 +89,9 @@ const clockStore = {
     setGameStage(state, gs) {
       state.gameStage = gs
     },
+    setTimeAdjustAmt(state, val) {
+      state.timeAdjustAmt = val
+    },
   },
   actions: {
     async listenToFBClock({ commit }) {
@@ -113,6 +126,12 @@ const clockStore = {
         nowTimeISO: state.nowTimeISO,
       });
     },
+    async adjustTime({ commit, state }, minutes) {
+      commit("adjustTime", minutes);
+      await update(refs.clock, {
+        nowTimeISO: state.nowTimeISO,
+      });
+    },
     async syncClock({ state }) {
       await update(refs.clock, {
         cycle: state.cycle,
@@ -125,6 +144,10 @@ const clockStore = {
     async setGameStage({commit}, gs) {
       commit("setGameStage", gs)
       await update(refs.clock, {gameStage: gs})
+    },
+    async setTimeAdjustAmt({commit}, val) {
+      commit("setTimeAdjustAmt", val)
+      await update(refs.clock, {timeAdjustAmt: val})
     },
   },
 };
