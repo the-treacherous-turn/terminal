@@ -63,7 +63,7 @@ import { mapState } from 'vuex';
     }
 </script>
 <template>
-    <div class="flex flex-col w-full h-[calc(100%-63px)] py-[16px] px-[24px] space-y-[24px] overflow-y-scroll">
+    <div class="flex flex-col w-full h-[calc(100%-63px)] py-4 px-6 space-y-6 overflow-y-scroll">
         <div v-for="key in keysOfNotes" :key="key" class="flex flex-col w-full justify-between items-center space-x-[15px] border-b-gray border-b-[2px]">
             <div class="flex">
                 <input class="note_input" placeholder="TYPE TITLE" :value="notes[key].title"  @input="updateNote(key, 'title', $event)"/>
@@ -73,9 +73,9 @@ import { mapState } from 'vuex';
                     <div class="w-[17px] h-[20px] bg-[url('/trash_bin.svg')] bg-cover bg-no-repeat cursor-pointer" @click="removeNote(key)"></div>
                 </div>
             </div>
-            <textarea placeholder="TYPE NOTES" class="mt-[24px] w-full bg-darkgray outline-none resize-none text-[26px]" :value="notes[key].content" @input="updateNote(key, 'content', $event)" :style="{height: notes[key].content_height + 'px'}"></textarea>
+            <textarea placeholder="TYPE NOTES" class="mt-6 w-full bg-darkgray outline-none resize-none text-[26px]" :value="notes[key].content" @input="updateNote(key, 'content', $event)" :style="{height: notes[key].content_height + 'px'}"></textarea>
         </div>
-        <div class="self-center text-grey px-[16px] py-[10px] text-[20px] border-[1px] border-white cursor-pointer" @click="addNote">
+        <div class="self-center text-grey px-4 py-[10px] text-[20px] border-[1px] border-white cursor-pointer" @click="addNote">
             ADD SECTION
         </div>
     </div>

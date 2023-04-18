@@ -148,7 +148,7 @@ export default {
 
 <template>
   <div class="w-full flex h-[600px]">
-    <div class="w-2/3 pt-[48px] px-[46px] overflow-y-scroll">
+    <div class="w-2/3 pt-12 px-[46px] overflow-y-scroll">
       <!-- <pre class="text-green-500">{{ allPCsToRoll }}</pre> -->
       <!-- it should display all PCs to roll, sorted by the PC. -->
       <template v-for="(ppc, ppcID, index) in allPendingPCs" :key="ppcID">
@@ -158,7 +158,7 @@ export default {
           <div class="font-bold text-[20px]">
             {{ pChecks[ppc.pc].name }} - {{ pChecks[ppc.pc].type }}
           </div>
-          <div class="flex space-x-[24px]">
+          <div class="flex space-x-6">
             <div
               class="flex bg-[url('/select_arrow_down.svg')] w-[58px] overflow-hidden bg-no-repeat bg-right"
             >
@@ -208,7 +208,7 @@ export default {
         <div
           v-for="(clock, clockID) in getClocksWithMatchingPCID(ppc.pc)"
           :key="clockID"
-          class="flex w-full justify-between mt-[48px] items-center"
+          class="flex w-full justify-between mt-12 items-center"
         >
           <div class="uppercase text-[20px]">{{ clock.name }}</div>
           <div class="uppercase">
@@ -218,7 +218,7 @@ export default {
           <div class="flex">
             <button
               @click="recordTick(0, clockID, ppcID)"
-              class="border py-[16px] px-[24px] text-[20px] leading-[14px]"
+              class="border py-4 px-6 text-[20px] leading-[14px]"
               :class="{
                 'bg-white text-darkgray': getClockTickResult(clockID, ppcID) === 0,
               }"
@@ -228,7 +228,7 @@ export default {
             <button
               v-if="pChecks[ppc.pc].type === 'inanimate'"
               @click="recordTick(1, clockID, ppcID)"
-              class="border py-[16px] px-[24px] text-[20px] leading-[14px]"
+              class="border py-4 px-6 text-[20px] leading-[14px]"
               :class="{
                 'bg-white text-darkgray': getClockTickResult(clockID, ppcID) > 0,
               }"
@@ -238,7 +238,7 @@ export default {
             <template v-if="pChecks[ppc.pc].type === 'agent'">
               <button
               @click="onClickAgentTick(clockID, ppcID)"
-              class="border py-[16px] px-[24px] text-[20px] leading-[14px]"
+              class="border py-4 px-6 text-[20px] leading-[14px]"
               :class="{
                 'bg-white text-darkgray': getClockTickResult(clockID, ppcID) > 0,
               }"

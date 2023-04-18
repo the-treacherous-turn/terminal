@@ -399,7 +399,7 @@ export default {
       >
         <div
           id="eventImportModal"
-          class="flex flex-col justify-center items-center bg-white py-[30px] px-[40px] rounded-[10px]"
+          class="flex flex-col justify-center items-center bg-white py-[30px] px-10 rounded-[10px]"
           :on-focusout="closeImportModal"
         >
           <p class="text-center text-black heading h3">

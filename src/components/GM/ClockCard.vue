@@ -19,7 +19,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex py-4">
+  <div class="flex px-10 py-4">
     <ProcessClock :size="size" :elapsed="elapsed < size ? elapsed : size" :width="100" :height="100" />
     <div class="flex ml-[20px] w-full">
       <div class="flex flex-col w-full">
@@ -27,7 +27,7 @@ export default {
           <span class="text-[20px] text-white uppercase">{{ name }}</span>
           <div class="flex items-center justify-center space-x-4">
             <div
-              class="bg-[url('/edit.svg')] w-[24px] h-[23px] bg-cover cursor-pointer"
+              class="bg-[url('/edit.svg')] w-6 h-[23px] bg-cover cursor-pointer"
               @click="$emit('edit', this.clockID)"
             ></div>
             <div
@@ -63,7 +63,7 @@ export default {
               <div class="notification" v-if="$store.getters.amtPendingPCForClock(clockID) > 0">{{ $store.getters.amtPendingPCForClock(clockID) }}</div>
             </button>
           </div>
-          <span v-else class="flex text-[16px] text-white uppercase text-center"
+          <span v-else class="flex text-2xl text-center text-white uppercase"
             >{{ mode }}</span
           >
         </div>

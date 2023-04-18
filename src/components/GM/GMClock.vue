@@ -243,17 +243,17 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col px-[40px] pt-[16px]">
-    <div class="flex items-center self-end justify-center space-x-8">
+  <div class="flex flex-col overflow-y-scroll">
+    <div class="flex items-center self-end justify-center px-10 pt-4 space-x-8">
       <div
-        class="border-[1px] border-grey uppercase text-[16px] py-[8px] px-[12px] cursor-pointer relative"
+        class="border-[1px] border-grey uppercase text-2xl py-[8px] px-[12px] cursor-pointer relative"
         @click="openRollerForAll"
       >
         Roll all
         <div class="notification" v-if="Object.entries($store.state.gmCLOCK.pendingPCs).length">{{ Object.entries($store.state.gmCLOCK.pendingPCs).length }}</div>
       </div>
       <div
-        class="border-[1px] border-grey uppercase text-[16px] py-[8px] px-[12px] cursor-pointer"
+        class="border-[1px] border-grey uppercase text-2xl py-[8px] px-[12px] cursor-pointer"
         @click="onClickAdd"
       >
         add clock
@@ -263,7 +263,7 @@ export default {
         @click="openClockSetting"
       ></div>
     </div>
-    <div class="w-full mt-[24px] h-[calc(100%-8rem)] overflow-y-scroll">
+    <div class="w-full mt-6 overflow-y-scroll">
       <!-- render each clock in clocks object. use their key as key -->
       <ClockCard
         v-for="(clock, key) in clocks"
@@ -298,20 +298,20 @@ export default {
       </div>
       <div class="flex w-full border-white border-1 bg-darkgray">
         <div
-          class="w-2/3 flex border-1 border-white flex-col px-[48px] pb-[40px]"
+          class="flex flex-col w-2/3 px-12 pb-10 border-white border-1"
         >
           <span class="uppercase text-[20px] text-grey mt-[36px]"
             >clock name</span
           >
           <input
-            class="mt-[4px] border-1 border-white w-full bg-darkgray text-[26px]"
+            class="mt-1 border-1 border-white w-full bg-darkgray text-[26px]"
             placeholder="TYPE HERE"
             v-model="editorClock.name"
           />
           <div class="flex w-full justify-between mt-[36px]">
             <div class="flex flex-col items-center justify-center">
               <span class="uppercase text-[20px] self-start">segments</span>
-              <div class="flex items-center space-x-2 mt-[8px] mb-[24px]">
+              <div class="flex items-center space-x-2 mt-[8px] mb-6">
                 <div
                   class="w-[18px] h-[9px] bg-[url('/arrow_down.svg')] bg-cover bg-no-repeat cursor-pointer"
                   @click="editorClock.size --"
@@ -370,7 +370,7 @@ export default {
                   manual
                 </div>
               </div>
-              <div class="mt-[24px] w-full">
+              <div class="w-full mt-6">
                 <div v-if="editorClock.mode === 'automatic'">
                   <span class="text-[20px] text-grey"
                     >Ticks once every interval.</span

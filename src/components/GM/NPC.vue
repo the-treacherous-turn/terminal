@@ -292,22 +292,12 @@ export default {
   <div class="fixed top-0 left-0 z-50 table w-full h-full uppercase transition-opacity bg-black/50"
     v-if="isDeleteFlag">
     <div class="table-cell align-middle bg-transparent">
-      <div class="
-        modal-container
-        relative
-        w-2/5 m-auto
-        border
-        transition-all
-        bg-grey
-        p-[24px]
-        border-3
-        border-black
-        ">
+      <div class="relative w-2/5 p-6 m-auto transition-all border border-black  modal-container bg-grey border-3">
         <div class="text-[20px] text-black font-bold">Are you sure you want to delete the current NPC?</div>
-        <div class="mt-[24px] text-[20px] text-black">This action cannot be reverse.</div>
-        <div class="flex mt-[48px] justify-end items-end">
-          <button class="text-middlegrey text-[14px] px-[16px] py-[8px] border border-black" @click="cancelDeleteModal">Cancel</button>
-          <button class="ml-[24px] bg-[#1D2225] text-grey text-[14px] px-[16px] py-[8px] border border-white" @click="onClickDelete">DELETE NPC</button>
+        <div class="mt-6 text-[20px] text-black">This action cannot be reverse.</div>
+        <div class="flex items-end justify-end mt-12">
+          <button class="text-middlegrey text-[14px] px-4 py-[8px] border border-black" @click="cancelDeleteModal">Cancel</button>
+          <button class="ml-6 bg-[#1D2225] text-grey text-[14px] px-4 py-[8px] border border-white" @click="onClickDelete">DELETE NPC</button>
         </div>
       </div>
     </div>
@@ -316,7 +306,7 @@ export default {
   <div v-if="isOpenEditor" class="flex flex-col w-full h-[calc(100%-63px)]">
     <div class="flex justify-between items-center w-full mt-[9px] px-[23px]">
       <div class="flex items-center justify-center cursor-pointer" @click="close">
-        <div class="w-[14px] h-[24px] bg-[url('/back_icon.svg')] bg-cover"></div>
+        <div class="w-[14px] h-6 bg-[url('/back_icon.svg')] bg-cover"></div>
         <div class="ml-[15px] text-[20px] text-grey">back</div>
       </div>
       <div class="flex" @click="openDeleteModal">
@@ -326,7 +316,7 @@ export default {
       </div>
     </div>
     <div class="flex flex-col w-full h-full overflow-y-scroll">
-      <div class="mt-[24px] flex justify-between items-center px-[23px]">
+      <div class="mt-6 flex justify-between items-center px-[23px]">
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Name</div>
           <input v-model="editorNpc.name" placeholder="Enter Name" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white font-bold outline-none"/>
@@ -336,7 +326,7 @@ export default {
           <input v-model="editorNpc.status" placeholder="[None]" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none" style="text-align: right"/>
         </div>
       </div>
-      <div class="mt-[16px] flex justify-between items-center border-b w-full border-b-3 border-b-white px-[23px] pb-[8px]">
+      <div class="mt-4 flex justify-between items-center border-b w-full border-b-3 border-b-white px-[23px] pb-[8px]">
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Type</div>
           <select v-model="editorNpc.type" class="bg-darkgray w-[100px] text-[20px] mt-[8px] text-white placeholder-white outline-none">
@@ -367,7 +357,7 @@ export default {
           </select>
         </div>
       </div>
-      <div class="py-[4px] px-[16px] border-b-3 border-b-white border-b">
+      <div class="px-4 py-1 border-b border-b-3 border-b-white">
         <textarea v-model="editorNpc.description" ref="textarea_des" placeholder="Type description here" @input="resize('textarea_des')" role="textbox" class="bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_des}"></textarea>
       </div>
       <div class="flex border-b border-b-3 border-b-white">
@@ -390,65 +380,65 @@ export default {
         </div>
       </div>
       <div class="flex flex-col py-[5px] border-b border-b-3 border-b-white">
-        <div class="text-[14px] ml-[16px] text-white font-normal">Connections</div>
-        <textarea v-model="editorNpc.connect" id="textarea_connect" ref="textarea_connect" placeholder="[None]" v-on:keyup.enter="process('textarea_connect')" @input="resize('textarea_connect')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_connect}"></textarea>
+        <div class="text-[14px] ml-4 text-white font-normal">Connections</div>
+        <textarea v-model="editorNpc.connect" id="textarea_connect" ref="textarea_connect" placeholder="[None]" v-on:keyup.enter="process('textarea_connect')" @input="resize('textarea_connect')" role="textbox" class="ml-4 bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_connect}"></textarea>
       </div>
       <div class="flex flex-col py-[5px] border-b border-b-3 border-b-white">
-        <div class="text-[14px] ml-[16px] text-white font-normal">Assests & Capabilities</div>
-        <textarea v-model="editorNpc.assets" id="textarea_assets" ref="textarea_assets" placeholder="[None]" v-on:keyup.enter="process('textarea_assets')" @input="resize('textarea_assets')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_assets}"></textarea>
+        <div class="text-[14px] ml-4 text-white font-normal">Assests & Capabilities</div>
+        <textarea v-model="editorNpc.assets" id="textarea_assets" ref="textarea_assets" placeholder="[None]" v-on:keyup.enter="process('textarea_assets')" @input="resize('textarea_assets')" role="textbox" class="ml-4 bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_assets}"></textarea>
       </div>
       <div class="flex flex-col py-[5px] border-b border-b-3 border-b-white">
-        <div class="text-[14px] ml-[16px] text-white font-normal">Notes</div>
-        <textarea v-model="editorNpc.notes" id="textarea_notes" ref="textarea_notes" placeholder="Type notes here" @input="resize('textarea_notes')" role="textbox" class="ml-[16px] bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_notes}"></textarea>
+        <div class="text-[14px] ml-4 text-white font-normal">Notes</div>
+        <textarea v-model="editorNpc.notes" id="textarea_notes" ref="textarea_notes" placeholder="Type notes here" @input="resize('textarea_notes')" role="textbox" class="ml-4 bg-darkgray text-[20px] mt-[8px] text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_notes}"></textarea>
       </div>
     </div>
   </div>
   <div v-else class="flex flex-col w-full px-[23px] overflow-y-scroll">
     <div class="flex justify-between mt-[26px]">
-      <div class="flex px-[16px] py-[4px] border-white border-1 justify-center items-center">
+      <div class="flex items-center justify-center px-4 py-1 border-white border-1">
         <input placeholder="search" class="bg-darkgray outline-none text-grey text-[14px]" v-model="searchValue" @input="searchResult($event)"/>
-        <div class="w-[24px] h-[24px] bg-[url('/search_icon.svg')] bg-cover ml-[16px]"></div>
+        <div class="w-6 h-6 bg-[url('/search_icon.svg')] bg-cover ml-4"></div>
       </div>
-      <div class="flex px-[16px] py-[8px] border-white border-1 justify-center items-center cursor-pointer" @click="addNpc">
+      <div class="flex px-4 py-[8px] border-white border-1 justify-center items-center cursor-pointer" @click="addNpc">
         <div class="text-grey text-[14px] leading-snug">add NPC</div>
         <div class="w-[15px] h-[15px] bg-[url('/Union.svg')] bg-cover ml-[8px]"></div>
       </div>
     </div>
-    <div class="mt-[40px] flex flex-col w-full">
+    <div class="flex flex-col w-full mt-10">
       <div class="flex justify-between">
         <div class="flex justify-between w-[140px]">
-          <div class="text-[16px] text-white">Name</div>
+          <div class="text-2xl text-white">Name</div>
           <div class="flex flex-col pr-1">
             <div class="btn_up_unclicked" @click="sortByBTS($event, 'name')"></div>
             <div class="btn_down_unclicked" @click="sortBySTB($event, 'name')"></div>
           </div>
         </div>
         <div class="flex justify-between w-[150px]">
-          <div class="text-[16px] text-white">Type</div>
+          <div class="text-2xl text-white">Type</div>
           <div class="flex items-center justify-center pr-1">
             <div :class="[filterQuery.length !== 0 ? 'filter_clicked' : 'filter_unclicked']" @click="openFilterModal">
-				<div id="filterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-[24px] py-[12px] flex flex-col bg-grey" :on-focusout="closeFilterModal">
+				<div id="filterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-6 py-[12px] flex flex-col bg-grey" :on-focusout="closeFilterModal">
 					<label class="flex w-fit space-x-[8px]">
 						<div class="flex items-center justify-center">
-							<input :checked="filterQuery.includes('Human')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Human')"/>
+							<input :checked="filterQuery.includes('Human')" type="checkbox" class="w-6 h-6 filter_checkbox" @click="updateFilterQuery($event, 'Human')"/>
 						</div>
 						<div class="text-black text-[20px]">Human</div>
 					</label>
 					<label class="flex w-fit space-x-[8px]">
 						<div class="flex items-center justify-center">
-							<input :checked="filterQuery.includes('Animal')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Animal')"/>
+							<input :checked="filterQuery.includes('Animal')" type="checkbox" class="w-6 h-6 filter_checkbox" @click="updateFilterQuery($event, 'Animal')"/>
 						</div>
 						<div class="text-black text-[20px]">Animal</div>
 					</label>
 					<label class="flex w-fit space-x-[8px]">
 						<div class="flex items-center justify-center">
-							<input :checked="filterQuery.includes('AI')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'AI')"/>
+							<input :checked="filterQuery.includes('AI')" type="checkbox" class="w-6 h-6 filter_checkbox" @click="updateFilterQuery($event, 'AI')"/>
 						</div>
 						<div class="text-black text-[20px]">AI</div>
 					</label>
 					<label class="flex w-fit space-x-[8px]">
 						<div class="flex items-center justify-center">
-							<input :checked="filterQuery.includes('Other')" type="checkbox" class="filter_checkbox w-[24px] h-[24px]" @click="updateFilterQuery($event, 'Other')"/>
+							<input :checked="filterQuery.includes('Other')" type="checkbox" class="w-6 h-6 filter_checkbox" @click="updateFilterQuery($event, 'Other')"/>
 						</div>
 						<div class="text-black text-[20px]">Other</div>
 					</label>
@@ -471,7 +461,7 @@ export default {
           </div>
         </div>
         <div class="flex justify-between w-[100px]">
-          <div class="text-[16px] text-white">Status</div>
+          <div class="text-2xl text-white">Status</div>
           <div class="flex flex-col pr-1">
             <div class="btn_up_unclicked" @click="sortByBTS($event,'status')"></div>
             <div class="btn_down_unclicked" @click="sortBySTB($event,'status')"></div>
@@ -480,7 +470,7 @@ export default {
 
       </div>
     </div>
-    <div v-for="(data, key) in sortNpcs" class="flex flex-col mt-[16px] space-y-[12px]">
+    <div v-for="(data, key) in sortNpcs" class="flex flex-col mt-4 space-y-[12px]">
       <div :id="'divRef'+key" class="flex justify-between text-white cursor-pointer hover:bg-white hover:text-black" v-on:mouseenter="toggleTooltip(key)" v-on:mouseleave="toggleTooltip(key)" @click="onClickEdit(key)">
         <div class="text-[14px] w-[140px] font-bold flex">{{data.name}}</div>
         <div class="w-[150px] flex text-[14px]">

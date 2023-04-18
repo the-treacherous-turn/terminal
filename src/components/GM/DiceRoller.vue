@@ -33,7 +33,7 @@
 
       <!-- Roll value select and roll button sets -->
       <div class="p-4 border-t">
-        <div class="flex justify-between">
+        <div class="flex justify-between gap-2">
           <div v-for="index in 3" :key="index" class="flex flex-col items-center">
             <select v-model="diceValues[index - 1]" class="pr-6 mb-2 font-normal select select-ghost">
               <option v-for="dice in [2, 4, 6, 8, 10, 12]" :key="dice" :value="dice">D{{ dice }}</option>

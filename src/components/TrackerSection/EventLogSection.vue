@@ -117,7 +117,7 @@ export default {
         <div
           id="eventFilterModal"
           v-if="isFilter"
-          class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-[24px] py-[12px] flex flex-col bg-grey"
+          class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-6 py-[12px] flex flex-col bg-grey"
           :on-focusout="closeFilterModal"
         >
           <label class="flex w-fit space-x-[8px]">
@@ -125,7 +125,7 @@ export default {
               <input
                 :checked="filterQuery.includes('Finalized')"
                 type="checkbox"
-                class="filter_checkbox w-[24px] h-[24px]"
+                class="filter_checkbox w-6 h-6"
                 @click="updateFilterQuery($event, 'Finalized')"
               />
             </div>
@@ -136,7 +136,7 @@ export default {
               <input
                 :checked="filterQuery.includes('Crossed Out')"
                 type="checkbox"
-                class="filter_checkbox w-[24px] h-[24px]"
+                class="filter_checkbox w-6 h-6"
                 @click="updateFilterQuery($event, 'Crossed Out')"
               />
             </div>

@@ -81,7 +81,7 @@ export default {
         class="absolute w-full top-[65px] flex justify-center items-center"
       >
         <div
-          class="w-[110px] bg-white text-[#00ffa8] uppercase text-[16px] text-center justify-center items-center]"
+          class="w-[110px] bg-white text-[#00ffa8] uppercase text-2xl text-center justify-center items-center]"
         >
           complete
         </div>

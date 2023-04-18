@@ -136,7 +136,7 @@ export default {
   <h1 class="pb-2 pl-4 text-3xl">Specialisations</h1>
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
     <li class="relative flex flex-col justify-between max-w-lg p-4 m-4 bg-transparent border-2 shadow-xl card group" v-for="(spec, key) in specs" :key="key">
-      <img :src="`high_res_${spec.focus}.png`" class="absolute top-0 m-auto scale-150 pointer-events-none -z-10 bottom-12 -right-24" alt="">
+      <img :src="`high_res_${spec.focus}.png`" class="absolute top-0 m-auto scale-50 pointer-events-none -z-10 bottom-12 -right-12" alt="">
       <div class="">
         <div class="flex justify-between ">
           <h2 class="px-2 mb-2 text-3xl font-bold capitalize text-primary" :class="getTheoryTextStyle(spec.focus)">{{ spec.focus }}</h2>
@@ -187,7 +187,7 @@ export default {
         v-model="editorSpec.name"
         type="text" placeholder="" autocomplete="off"
         class="input input-bordered">
-      <label class="label label-text">Focus</label>
+      <label class="label label-text">Theory</label>
       <select v-model="editorSpec.focus" class="capitalize select select-bordered">
         <option>autonomic</option>
         <option>digital</option>
