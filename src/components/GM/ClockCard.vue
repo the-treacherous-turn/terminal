@@ -19,12 +19,12 @@ export default {
 </script>
 
 <template>
-  <div class="flex px-10 py-4">
+  <div class="flex py-4 pl-10 pr-7">
     <ProcessClock :size="size" :elapsed="elapsed < size ? elapsed : size" :width="100" :height="100" />
-    <div class="flex ml-[20px] w-full">
+    <div class="flex w-full ml-5">
       <div class="flex flex-col w-full">
         <div class="flex items-center justify-between w-full">
-          <span class="text-[20px] text-white uppercase">{{ name }}</span>
+          <span class="text-3xl text-white uppercase">{{ name }}</span>
           <div class="flex items-center justify-center space-x-4">
             <div
               class="bg-[url('/edit.svg')] w-6 h-[23px] bg-cover cursor-pointer"
@@ -34,7 +34,7 @@ export default {
               class="w-[18px] h-[9px] bg-[url('/arrow_down.svg')] bg-cover bg-no-repeat cursor-pointer"
             ></div>
             <div
-              class="w-[18px] h-[8px] bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
+              class="w-[18px] h-2 bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
             ></div>
           </div>
         </div>
@@ -45,12 +45,12 @@ export default {
               @click="$emit('decreaseElapsed')"
             ></div>
 
-            <div class="border-[1px] border-grey px-4">
-              <span class="text-[25px]">{{ elapsed < size ? elapsed : size }}</span>
-              <span class="text-[12px]">{{ `/${size}` }}</span>
+            <div class="px-2 border-1 border-grey">
+              <span class="text-5xl leading-8">{{ elapsed < size ? elapsed : size }}</span>
+              <span class="text-lg">{{ `/${size}` }}</span>
             </div>
             <div
-              class="w-[18px] h-[8px] bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
+              class="w-[18px] h-2 bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
               @click="$emit('increaseElapsed')"
             ></div>
           </div>

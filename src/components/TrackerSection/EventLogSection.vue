@@ -117,10 +117,10 @@ export default {
         <div
           id="eventFilterModal"
           v-if="isFilter"
-          class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-6 py-[12px] flex flex-col bg-grey"
+          class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-6 py-3 flex flex-col bg-grey"
           :on-focusout="closeFilterModal"
         >
-          <label class="flex w-fit space-x-[8px]">
+          <label class="flex w-fit space-x-2">
             <div class="flex items-center justify-center">
               <input
                 :checked="filterQuery.includes('Finalized')"
@@ -129,9 +129,9 @@ export default {
                 @click="updateFilterQuery($event, 'Finalized')"
               />
             </div>
-            <div class="text-black text-[20px]">Finalized</div>
+            <div class="text-black text-3xl">Finalized</div>
           </label>
-          <label class="flex w-fit space-x-[8px]">
+          <label class="flex w-fit space-x-2">
             <div class="flex items-center justify-center">
               <input
                 :checked="filterQuery.includes('Crossed Out')"
@@ -140,14 +140,14 @@ export default {
                 @click="updateFilterQuery($event, 'Crossed Out')"
               />
             </div>
-            <div class="text-black text-[20px]">Crossed out</div>
+            <div class="text-black text-3xl">Crossed out</div>
           </label>
           <div class="flex bg-black h-[1px] w-full"></div>
           <div
-            class="flex space-x-[8px] justify-center w-full cursor-pointer items-center"
+            class="flex space-x-2 justify-center w-full cursor-pointer items-center"
             @click="clearFilter"
           >
-            <p class="text-black text-[20px]">Clear</p>
+            <p class="text-black text-3xl">Clear</p>
             <div class="flex items-center justify-center">
               <font-awesome-icon
                 :icon="['fas', 'trash-can']"

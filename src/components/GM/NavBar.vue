@@ -16,7 +16,7 @@ export default {
 <template>
 <div class="flex justify-around border-b border-b-white">
   <div
-    class="relative flex items-center cursor-pointer text-white text-[20px] leading-tight pt-[18px] pb-4"
+    class="relative flex items-center cursor-pointer text-white text-3xl leading-tight pt-[18px] pb-4"
     :class="[clickedTab === 'CLOCKS' ? 'border-b border-b-white' : '']"
     @click="switchTab('CLOCKS')"
     >CLOCKS<div
@@ -24,9 +24,9 @@ export default {
       v-if="Object.entries($store.state.gmCLOCK.pendingPCs).length"
       >!</div>
   </div>
-  <div class="cursor-pointer text-white text-[20px] leading-tight pt-[18px] pb-4" :class="[clickedTab === 'NPCs' ? 'border-b border-b-white' : '']" @click="switchTab('NPCs')">NPCs</div>
-  <div class="cursor-pointer text-white text-[20px] leading-tight pt-[18px] pb-4" :class="[clickedTab === 'ROLL' ? 'border-b border-b-white' : '']" @click="switchTab('ROLL')">ROLL</div>
-  <div class="cursor-pointer text-white text-[20px] leading-tight pt-[18px] pb-4" :class="[clickedTab === 'NOTES' ? 'border-b border-b-white' : '']"  @click="switchTab('NOTES')">NOTES</div>
+  <div class="cursor-pointer text-white text-3xl leading-tight pt-[18px] pb-4" :class="[clickedTab === 'NPCs' ? 'border-b border-b-white' : '']" @click="switchTab('NPCs')">NPCs</div>
+  <div class="cursor-pointer text-white text-3xl leading-tight pt-[18px] pb-4" :class="[clickedTab === 'ROLL' ? 'border-b border-b-white' : '']" @click="switchTab('ROLL')">ROLL</div>
+  <div class="cursor-pointer text-white text-3xl leading-tight pt-[18px] pb-4" :class="[clickedTab === 'NOTES' ? 'border-b border-b-white' : '']"  @click="switchTab('NOTES')">NOTES</div>
 </div>
 </template>
 

@@ -246,14 +246,14 @@ export default {
   <div class="flex flex-col overflow-y-scroll">
     <div class="flex items-center self-end justify-center px-10 pt-4 space-x-8">
       <div
-        class="border-[1px] border-grey uppercase text-2xl py-[8px] px-[12px] cursor-pointer relative"
+        class="relative px-3 py-2 text-2xl uppercase cursor-pointer border-1 border-grey"
         @click="openRollerForAll"
       >
         Roll all
         <div class="notification" v-if="Object.entries($store.state.gmCLOCK.pendingPCs).length">{{ Object.entries($store.state.gmCLOCK.pendingPCs).length }}</div>
       </div>
       <div
-        class="border-[1px] border-grey uppercase text-2xl py-[8px] px-[12px] cursor-pointer"
+        class="px-3 py-2 text-2xl uppercase cursor-pointer border-1 border-grey"
         @click="onClickAdd"
       >
         add clock
@@ -288,9 +288,9 @@ export default {
       @click="(e) => e.preventDefault()"
     >
       <div class="flex items-center justify-between w-full">
-        <h3 class="text-lg font-bold uppercase text-[28px]">clock editor</h3>
+        <h3 class="text-6xl font-bold uppercase">clock editor</h3>
         <button
-          class="lowercase decoration-transparent m-2 mt-0 text-[30px]"
+          class="m-2 mt-0 text-6xl lowercase decoration-transparent"
           @click="clear"
         >
           x
@@ -300,7 +300,7 @@ export default {
         <div
           class="flex flex-col w-2/3 px-12 pb-10 border-white border-1"
         >
-          <span class="uppercase text-[20px] text-grey mt-[36px]"
+          <span class="text-3xl uppercase text-grey mt-9"
             >clock name</span
           >
           <input
@@ -308,10 +308,10 @@ export default {
             placeholder="TYPE HERE"
             v-model="editorClock.name"
           />
-          <div class="flex w-full justify-between mt-[36px]">
+          <div class="flex justify-between w-full mt-9">
             <div class="flex flex-col items-center justify-center">
-              <span class="uppercase text-[20px] self-start">segments</span>
-              <div class="flex items-center space-x-2 mt-[8px] mb-6">
+              <span class="self-start text-3xl uppercase">segments</span>
+              <div class="flex items-center mt-2 mb-6 space-x-2">
                 <div
                   class="w-[18px] h-[9px] bg-[url('/arrow_down.svg')] bg-cover bg-no-repeat cursor-pointer"
                   @click="editorClock.size --"
@@ -322,7 +322,7 @@ export default {
                   v-model="editorClock.size"
                 />
                 <div
-                  class="w-[18px] h-[8px] bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
+                  class="w-[18px] h-2 bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
                   @click="editorClock.size ++"
                 ></div>
               </div>
@@ -334,10 +334,10 @@ export default {
               />
             </div>
             <div class="flex flex-col">
-              <span class="text-[20px] text-grey uppercase">mode</span>
+              <span class="text-3xl uppercase text-grey">mode</span>
               <div class="flex">
                 <div
-                  class="uppercase text-[20px] py-[10px] px-[13px]"
+                  class="uppercase text-3xl py-[10px] px-[13px]"
                   :style="{
                     backgroundColor:
                       editorClock.mode === 'automatic' ? '#FFFFFF' : '#1D2225',
@@ -348,7 +348,7 @@ export default {
                   automatic
                 </div>
                 <div
-                  class="uppercase text-[20px] py-[10px] px-[13px]"
+                  class="uppercase text-3xl py-[10px] px-[13px]"
                   :style="{
                     backgroundColor:
                       editorClock.mode === 'pc' ? '#FFFFFF' : '#1D2225',
@@ -359,7 +359,7 @@ export default {
                   progress check
                 </div>
                 <div
-                  class="uppercase text-[20px] py-[10px] px-[13px]"
+                  class="uppercase text-3xl py-[10px] px-[13px]"
                   :style="{
                     backgroundColor:
                       editorClock.mode === 'manual' ? '#FFFFFF' : '#1D2225',
@@ -372,21 +372,21 @@ export default {
               </div>
               <div class="w-full mt-6">
                 <div v-if="editorClock.mode === 'automatic'">
-                  <span class="text-[20px] text-grey"
+                  <span class="text-3xl text-grey"
                     >Ticks once every interval.</span
                   >
                 </div>
 
                 <div v-if="editorClock.mode === 'pc'" class="flex flex-col">
                   <div class="flex flex-col">
-                    <span class="text-[20px] text-grey"
+                    <span class="text-3xl text-grey"
                       >PROGRESS CHECK NAME (optional)</span
                     >
                     <div class="flex items-center mb-4">
                       <!-- TODO: write special case handler for changing the pname here. -->
                       <!-- <select
                         v-model="pChecks[editorClock.pc].name"
-                        class="bg-darkgray w-full text-[26px] text-white placeholder-white border-1 border-white p-[8px]"
+                        class="bg-darkgray w-full text-[26px] text-white placeholder-white border-1 border-white p-2"
                       >
                         <option v-for="pc in pChecks" :value="pc.name">
                           {{ pc.name }}
@@ -398,10 +398,10 @@ export default {
                   </div>
                   <div v-if="editorClock.pc" class="flex w-full space-x-2">
                     <div class="flex flex-col w-1/2">
-                      <span class="uppercase text-[20px] text-grey">die</span>
+                      <span class="text-3xl uppercase text-grey">die</span>
                       <div class="flex items-center mb-4">
                         <select
-                          class="bg-darkgray w-full text-[26px] text-white placeholder-white border-1 border-white p-[8px]"
+                          class="bg-darkgray w-full text-[26px] text-white placeholder-white border-1 border-white p-2"
                           v-model="pChecks[editorClock.pc].die"
                         >
                           <option value="d2" class="text-[26px] text-white">D2</option>
@@ -414,12 +414,12 @@ export default {
                       </div>
                     </div>
                     <div class="flex flex-col w-1/2">
-                      <span class="uppercase text-[20px] text-grey"
+                      <span class="text-3xl uppercase text-grey"
                         >process type</span
                       >
                       <div class="flex items-center mb-4">
                         <select
-                          class="bg-darkgray w-full text-[26px] text-white placeholder-white border-1 border-white p-[8px]"
+                          class="bg-darkgray w-full text-[26px] text-white placeholder-white border-1 border-white p-2"
                           v-model="pChecks[editorClock.pc].type"
                         >
                           <option
@@ -438,7 +438,7 @@ export default {
                 </div>
 
                 <div v-if="editorClock.mode === 'manual'">
-                  <span class="text-[20px] text-grey"
+                  <span class="text-3xl text-grey"
                     >Only manual adjustments to the clock.
                   </span>
                 </div>
@@ -447,20 +447,20 @@ export default {
           </div>
           <div class="flex mt-[100px] justify-between">
             <div
-              class="border-1 border-[#DB504D] bg-middlegrey text-[#DB504D] text-[20px] py-[12px] px-[26px] uppercase cursor-pointer"
+              class="border-1 border-[#DB504D] bg-middlegrey text-[#DB504D] text-3xl py-3 px-[26px] uppercase cursor-pointer"
               @click="onClickDelete(editorClockID)"
             >
               delete
             </div>
             <div class="flex space-x-4">
               <div
-                class="border-1 border-white bg-middlegrey text-white text-[20px] py-[12px] px-[26px] uppercase cursor-pointer"
+                class="border-1 border-white bg-middlegrey text-white text-3xl py-3 px-[26px] uppercase cursor-pointer"
                 @click="clear"
               >
                 cancel
               </div>
               <div
-                class="border-1 border-white bg-white text-black text-[20px] py-[12px] px-[26px] uppercase cursor-pointer"
+                class="border-1 border-white bg-white text-black text-3xl py-3 px-[26px] uppercase cursor-pointer"
                 @click="submit"
               >
                 save
@@ -482,9 +482,9 @@ export default {
       @click="(e) => e.preventDefault()"
     >
       <div class="flex items-center justify-between w-full">
-        <h3 class="text-lg font-bold uppercase text-[28px]">Clocks - Progress Check</h3>
+        <h3 class="text-lg text-6xl font-bold uppercase">Clocks - Progress Check</h3>
         <button
-          class="lowercase decoration-transparent m-2 mt-0 text-[30px]"
+          class="m-2 mt-0 text-6xl lowercase decoration-transparent"
           @click="closeRoller"
         >
           x
@@ -508,9 +508,9 @@ export default {
       @click="(e) => e.preventDefault()"
     >
       <div class="flex items-center justify-between w-full">
-        <h3 class="text-lg font-bold uppercase text-[28px]">Clock Settings</h3>
+        <h3 class="text-lg text-6xl font-bold uppercase">Clock Settings</h3>
         <button
-          class="lowercase decoration-transparent m-2 mt-0 text-[30px]"
+          class="m-2 mt-0 text-6xl lowercase decoration-transparent"
           @click="closeClockSetting"
         >
           x

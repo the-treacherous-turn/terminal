@@ -153,9 +153,9 @@ export default {
       <!-- it should display all PCs to roll, sorted by the PC. -->
       <template v-for="(ppc, ppcID, index) in allPendingPCs" :key="ppcID">
         <hr v-if="index !== 0" class="my-6" />
-        <div class="text-[20px]">{{ renderPPCTime(ppc.time) }}</div>
+        <div class="text-3xl">{{ renderPPCTime(ppc.time) }}</div>
         <div class="flex items-center justify-between">
-          <div class="font-bold text-[20px]">
+          <div class="text-3xl font-bold">
             {{ pChecks[ppc.pc].name }} - {{ pChecks[ppc.pc].type }}
           </div>
           <div class="flex space-x-6">
@@ -164,6 +164,7 @@ export default {
             >
               <select
                 v-model="pChecks[ppc.pc].die"
+                class="text-3xl text-white"
                 @change="updatePCheckDieSize(ppc.pc, $event.target.value)"
                 style="
                   appearance: none;
@@ -172,22 +173,22 @@ export default {
                   width: 58px;
                 "
               >
-                <option value="d2" class="text-[26px] bg-[#1D2225] text-white">
+                <option value="d2" class="bg-[#1D2225]">
                   D2
                 </option>
-                <option value="d4" class="text-[26px] bg-[#1D2225] text-white">
+                <option value="d4" class="bg-[#1D2225]">
                   D4
                 </option>
-                <option value="d6" class="text-[26px] bg-[#1D2225] text-white">
+                <option value="d6" class="bg-[#1D2225]">
                   D6
                 </option>
-                <option value="d8" class="text-[26px] bg-[#1D2225] text-white">
+                <option value="d8" class="bg-[#1D2225]">
                   D8
                 </option>
-                <option value="d10" class="text-[26px] bg-[#1D2225] text-white">
+                <option value="d10" class="bg-[#1D2225]">
                   D10
                 </option>
-                <option value="d12" class="text-[26px] bg-[#1D2225] text-white">
+                <option value="d12" class="bg-[#1D2225]">
                   D12
                 </option>
               </select>
@@ -208,17 +209,17 @@ export default {
         <div
           v-for="(clock, clockID) in getClocksWithMatchingPCID(ppc.pc)"
           :key="clockID"
-          class="flex w-full justify-between mt-12 items-center"
+          class="flex items-center justify-between w-full mt-12"
         >
-          <div class="uppercase text-[20px]">{{ clock.name }}</div>
-          <div class="uppercase">
-            <span class="text-[32px] font-bold">{{ clock.elapsed }}</span>
-            <span class="text-[20px]">/{{ clock.size }}</span>
+          <div class="text-3xl uppercase">{{ clock.name }}</div>
+          <div class="text-white uppercase">
+            <span class="text-6xl font-bold">{{ clock.elapsed }}</span>
+            <span class="text-3xl">/{{ clock.size }}</span>
           </div>
-          <div class="flex">
+          <div class="flex text-white">
             <button
               @click="recordTick(0, clockID, ppcID)"
-              class="border py-4 px-6 text-[20px] leading-[14px]"
+              class="px-6 py-4 text-3xl leading-3 border border-white"
               :class="{
                 'bg-white text-darkgray': getClockTickResult(clockID, ppcID) === 0,
               }"
@@ -228,7 +229,7 @@ export default {
             <button
               v-if="pChecks[ppc.pc].type === 'inanimate'"
               @click="recordTick(1, clockID, ppcID)"
-              class="border py-4 px-6 text-[20px] leading-[14px]"
+              class="border py-4 px-6 text-3xl leading-[14px]"
               :class="{
                 'bg-white text-darkgray': getClockTickResult(clockID, ppcID) > 0,
               }"
@@ -238,7 +239,7 @@ export default {
             <template v-if="pChecks[ppc.pc].type === 'agent'">
               <button
               @click="onClickAgentTick(clockID, ppcID)"
-              class="border py-4 px-6 text-[20px] leading-[14px]"
+              class="border py-4 px-6 text-3xl leading-[14px]"
               :class="{
                 'bg-white text-darkgray': getClockTickResult(clockID, ppcID) > 0,
               }"

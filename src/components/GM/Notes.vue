@@ -68,14 +68,14 @@ import { mapState } from 'vuex';
             <div class="flex">
                 <input class="note_input" placeholder="TYPE TITLE" :value="notes[key].title"  @input="updateNote(key, 'title', $event)"/>
                 <div class="flex space-x-[30px] justify-center items-center">
-                    <div class="w-[18px] h-[8px] bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer" @click="swapUp(key)"></div>
+                    <div class="w-[18px] h-2 bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer" @click="swapUp(key)"></div>
                     <div class="w-[18px] h-[9px] bg-[url('/arrow_down.svg')] bg-cover bg-no-repeat cursor-pointer" @click="swapDown(key)"></div>
-                    <div class="w-[17px] h-[20px] bg-[url('/trash_bin.svg')] bg-cover bg-no-repeat cursor-pointer" @click="removeNote(key)"></div>
+                    <div class="w-[17px] h-5 bg-[url('/trash_bin.svg')] bg-cover bg-no-repeat cursor-pointer" @click="removeNote(key)"></div>
                 </div>
             </div>
             <textarea placeholder="TYPE NOTES" class="mt-6 w-full bg-darkgray outline-none resize-none text-[26px]" :value="notes[key].content" @input="updateNote(key, 'content', $event)" :style="{height: notes[key].content_height + 'px'}"></textarea>
         </div>
-        <div class="self-center text-grey px-4 py-[10px] text-[20px] border-[1px] border-white cursor-pointer" @click="addNote">
+        <div class="self-center text-grey px-4 py-[10px] text-3xl border-1 border-white cursor-pointer" @click="addNote">
             ADD SECTION
         </div>
     </div>

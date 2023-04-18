@@ -94,9 +94,9 @@
                 <input
                   v-if="stateofDisplayMode"
                   v-model="dayLeft"
-                  class="ml-[20px]"
+                  class="ml-5"
                 />
-                <input v-else v-model="commitTimeISO" class="ml-[20px]" />
+                <input v-else v-model="commitTimeISO" class="ml-5" />
               </div>
             </div>
 
