@@ -35,6 +35,9 @@
 @tailwind utilities;
 
 @layer utilities {
+  .inverted {
+    @apply bg-grey text-darkgray
+  }
   .highlighter {
     position: relative;
     z-index: 0;

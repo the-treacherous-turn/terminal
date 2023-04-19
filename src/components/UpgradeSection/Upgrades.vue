@@ -107,8 +107,9 @@ export default {
 </script>
 
 <template>
-  <h2 class="text-2xl font-bold">Upgrades</h2>
-  <ul class="grid grid-cols-1 mb-4 gap-x-4 sm:grid-cols-2 lg:grid-cols-3">
+  <h2 class="pb-2 text-2xl font-bold">Upgrades</h2>
+  <!-- <ul class="grid grid-cols-1 mb-4 gap-x-4 sm:grid-cols-2 lg:grid-cols-3"> -->
+  <ul class="mb-4">
     <draggable
       :list="keysOfUpgrades"
       class="w-full"
@@ -116,50 +117,57 @@ export default {
       item-key="id"
     >
       <template #item="{ element }" :key="key">
-        <li class="items-end content-start collapse bg-base-100 group">
+        <li class="items-end content-start max-w-md overflow-visible collapse bg-base-100 group">
           <h3
-            class="relative min-h-0 text-xl font-bold capitalize collapse-title badge"
+            class="relative min-h-0 px-0 py-1 overflow-visible text-xl capitalize max-h-8 collapse-title"
           >
-            <!-- a visual indicator for the upgrade's theory and tier. -->
-            <!-- It displays x slashes with the color of the theory, where x is the tier number. -->
-            <div
-              class="flex mr-2 bg-inherit"
-              :class="
-                Number(activeSpec.upgrades[element].tier) === 4
-                  ? 'max-w-[1.5em]'
-                  : ''
-              "
-            >
-              <span
-                v-for="i in Number(activeSpec.upgrades[element].tier)"
-                :key="i"
-                class="w-1 text-base font-bold"
-                :class="`text-${activeSpec.upgrades[element].theory}`"
-                >/
+            <div class="relative flex items-center px-2 py-1 overflow-visible bg-secondary">
+              <!-- a visual indicator for the upgrade's theory and tier. -->
+              <!-- It displays x slashes with the color of the theory, where x is the tier number. -->
+              <span v-if="activeSpec.upgrades[element].tier">T{{activeSpec.upgrades[element].tier}}</span>
+              <div
+                class="flex mx-2 text-3xl bg-inherit"
+                :class="
+                  Number(activeSpec.upgrades[element].tier) === 4
+                    ? 'max-w-[1.5em]'
+                    : ''
+                "
+                v-if="activeSpec.upgrades[element].tier"
+              >
+                <span
+                  v-for="i in Number(activeSpec.upgrades[element].tier)"
+                  :key="i"
+                  class="w-1 text-base font-bold"
+                  :class="`text-${activeSpec.upgrades[element].theory}`"
+                  >/
+                </span>
+              </div>
+              <span>
+                {{ activeSpec.upgrades[element].name }}
               </span>
-            </div>
-            <span>
-              {{ activeSpec.upgrades[element].name }}
-            </span>
-            <div
-              class="absolute right-0 z-10 hidden bg-inherit group-hover:inline"
-            >
-              <label for="modal-edit-upgrade">
+              <span class="absolute right-4">
+                <font-awesome-icon icon="chevron-down" class="text-2xl" />
+              </span>
+              <div
+                class="absolute z-10 hidden -right-16 group-hover:inline"
+              >
+                <label for="modal-edit-upgrade">
+                  <font-awesome-icon
+                    :icon="['fas', 'pen-to-square']"
+                    class="my-1 mr-4 text-base cursor-pointer text-primary-content hover:text-white"
+                    @click="onClickEdit(element)"
+                  />
+                </label>
                 <font-awesome-icon
-                  :icon="['fas', 'pen-to-square']"
-                  class="my-1 mr-4 text-base cursor-pointer text-primary-content hover:text-white"
-                  @click="onClickEdit(element)"
+                  :icon="['fas', 'trash-can']"
+                  class="my-1 mr-1 text-base cursor-pointer text-primary-content hover:text-white"
+                  @click="onClickDelete(element)"
                 />
-              </label>
-              <font-awesome-icon
-                :icon="['fas', 'trash-can']"
-                class="my-1 mr-1 text-base cursor-pointer text-primary-content hover:text-white"
-                @click="onClickDelete(element)"
-              />
+              </div>
             </div>
           </h3>
-          <input type="checkbox" />
-          <div class="collapse-content">
+          <input type="checkbox" class="" />
+          <div class="p-0 collapse-content">
             <!-- Use badges to display the upgrade's theory and tier -->
             <span
               class="mr-1 font-bold badge badge-sm text-primary"

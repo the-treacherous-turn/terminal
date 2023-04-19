@@ -118,6 +118,12 @@ export default {
     async addSpec({ state }, spec) {
       await push(refs.specs, spec);
     },
+    async renameSpec({ state }, { id, name }) {
+      await update(child(refs.specs, id), { name });
+    },
+    async changeSpecFocus({ state }, { id, focus }) {
+      await update(child(refs.specs, id), { focus });
+    },
     async editSpec({ state }, { id, spec }) {
       await update(child(refs.specs, id), spec);
     },

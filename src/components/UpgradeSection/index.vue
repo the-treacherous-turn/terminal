@@ -1,3 +1,7 @@
+<template>
+  <component :is="currentComponent" />
+</template>
+
 <script>
 import { mapState } from "vuex";
 import ChooseSpec from "./ChooseSpec.vue";
@@ -13,16 +17,9 @@ export default {
     ...mapState({
       activeSpecID: (state) => state.spec.activeSpecID,
     }),
-  },
-  watch: {
-    activeSpecID() {},
+    currentComponent() {
+      return this.activeSpecID ? "OneSpecManager" : "ChooseSpec";
+    },
   },
 };
 </script>
-
-<template>
-  <div>
-    <ChooseSpec v-if="!activeSpecID" />
-    <OneSpecManager v-else />
-  </div>
-</template>
