@@ -36,10 +36,16 @@ export default {
     },
   },
   methods: {
+    selectFirstUpgrade(tier) {
+      // get the first upgrade in the tier
+      const upgrade = theoryUpgrades[this.editorUpgrade.theory].upgrades[tier][0];
+      this.setEditorUpgrade(upgrade, this.editorUpgrade.theory, tier);
+    },
     onClickAdd() {
       this.isEditorOpen = true;
       this.isAddNewUpgrade = true;
       this.editorUpgrade = { tier: "1", theory: this.activeSpec.focus };
+      this.selectFirstUpgrade("1");
     },
     onClickEdit(key) {
       this.isEditorOpen = true;
@@ -52,6 +58,14 @@ export default {
     },
     onClickModalOutside() {
       if (this.isEditorOpen) this.cancel();
+    },
+    onInputUpgradeName() {
+      this.editorUpgrade.theory = "custom";
+      this.editorUpgrade.tier = '';
+    },
+    onInputUpgradeDescription() {
+      this.editorUpgrade.theory = "custom";
+      this.editorUpgrade.tier = '';
     },
     setEditorUpgrade(upgrade, theory, tier) {
       this.editorUpgrade = {
@@ -179,7 +193,7 @@ export default {
     class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
     @mousedown.self="onClickModalOutside"
   >
-    <label class="relative overflow-y-visible modal-box">
+    <label class="relative max-w-3xl overflow-y-visible modal-box">
       <h3 class="text-lg font-bold">
         {{ isAddNewUpgrade ? "Add" : "Edit" }} Upgrade
       </h3>
@@ -211,6 +225,7 @@ export default {
               data-title="T1"
               value="1"
               class="btn btn-sm"
+              @click="selectFirstUpgrade(1)"
             />
             <input
               type="radio"
@@ -219,6 +234,7 @@ export default {
               data-title="T2"
               value="2"
               class="btn btn-sm"
+              @click="selectFirstUpgrade(2)"
             />
             <input
               type="radio"
@@ -227,6 +243,7 @@ export default {
               data-title="T3"
               value="3"
               class="btn btn-sm"
+              @click="selectFirstUpgrade(3)"
             />
             <input
               type="radio"
@@ -235,6 +252,7 @@ export default {
               data-title="T4"
               value="4"
               class="btn btn-sm"
+              @click="selectFirstUpgrade(4)"
             />
           </div>
         </div>
@@ -242,26 +260,17 @@ export default {
         <div class="btn-group btn-group-vertical">
           <template v-for="upgrade in upgradesAvailable" :key="upgrade.name">
             <div
-              class="tooltip tooltip-info before:text-ellipsis before:line-clamp-[8]"
-              :data-tip="
-                upgrade.flavor
-                  ? upgrade.flavor + ' ' + upgrade.description
-                  : upgrade.description
+              class="w-full btn btn-xs"
+              :class="editorUpgrade.name === upgrade.name && 'btn-inverted hover:bg-grey hover:text-darkgray'"
+              @click="
+                setEditorUpgrade(
+                  upgrade,
+                  editorUpgrade.theory,
+                  editorUpgrade.tier
+                )
               "
             >
-              <div
-                class="w-full btn btn-xs"
-                :class="editorUpgrade.name === upgrade.name && 'btn-active'"
-                @click="
-                  setEditorUpgrade(
-                    upgrade,
-                    editorUpgrade.theory,
-                    editorUpgrade.tier
-                  )
-                "
-              >
-                {{ upgrade.name }}
-              </div>
+              {{ upgrade.name }}
             </div>
           </template>
         </div>
@@ -273,6 +282,7 @@ export default {
           placeholder=""
           autocomplete="off"
           class="w-full max-w-xs input input-bordered"
+          @input="onInputUpgradeName"
         />
 
         <label class="label label-text">Description</label>
@@ -282,6 +292,7 @@ export default {
           placeholder=""
           autocomplete="off"
           class="w-full input input-bordered h-44"
+          @input="onInputUpgradeDescription"
         ></textarea>
 
         <div class="flex justify-end mt-4 btn-group">
