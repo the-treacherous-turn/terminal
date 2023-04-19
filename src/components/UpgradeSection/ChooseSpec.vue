@@ -99,9 +99,7 @@ export default {
       this.editorSpec = this.specs[key]
     },
     onClickDelete(key) {
-      // TODO a spec definitely shouldn't be deleted so easily.
-      // Maybe a confirmation?
-      // Or better, finish the undo system and use that.
+      if (!window.confirm(`Are you sure you want to delete this Specialisation?`)) return
       this.$store.dispatch('deleteSpec', key)
     },
     onClickModalOutside() {

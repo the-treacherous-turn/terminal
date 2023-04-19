@@ -197,6 +197,7 @@ export default {
       this.isEditorOpen = true
     },
     onClickDeleteAction(actionID) {
+      if (!window.confirm(`Are you sure you want to delete this Computational Action?`)) return
       this.$store.dispatch('deleteComputeAction', actionID)
     },
     onClickModalOutside() {

@@ -35,6 +35,7 @@ export default {
       this.$store.commit('clearActiveSpecID')
     },
     onClickDelete() {
+      if (!window.confirm(`Are you sure you want to delete this Specialisation?`)) return
       this.$store.dispatch('deleteSpec', this.activeSpecID)
       this.exitSpec()
     },

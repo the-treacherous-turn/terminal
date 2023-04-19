@@ -292,8 +292,8 @@ export default {
   <div class="fixed top-0 left-0 z-50 table w-full h-full uppercase transition-opacity bg-black/50"
     v-if="isDeleteFlag">
     <div class="table-cell align-middle bg-transparent">
-      <div class="relative w-2/5 p-6 m-auto transition-all border border-black  modal-container bg-grey border-3">
-        <div class="text-3xl text-black font-bold">Are you sure you want to delete the current NPC?</div>
+      <div class="relative w-2/5 p-6 m-auto transition-all border border-black modal-container bg-grey border-3">
+        <div class="text-3xl font-bold text-black">Are you sure you want to delete the current NPC?</div>
         <div class="mt-6 text-3xl text-black">This action cannot be reverse.</div>
         <div class="flex items-end justify-end mt-12">
           <button class="text-middlegrey text-[14px] px-4 py-2 border border-black" @click="cancelDeleteModal">Cancel</button>
@@ -319,11 +319,11 @@ export default {
       <div class="mt-6 flex justify-between items-center px-[23px]">
         <div class="flex flex-col">
           <div class="text-[14px] text-white">Name</div>
-          <input v-model="editorNpc.name" placeholder="Enter Name" class="bg-darkgray text-3xl mt-2 text-white placeholder-white font-bold outline-none"/>
+          <input v-model="editorNpc.name" placeholder="Enter Name" class="mt-2 text-3xl font-bold text-white placeholder-white outline-none bg-darkgray"/>
         </div>
         <div class="flex flex-col items-end">
           <div class="text-[14px] text-white">Status</div>
-          <input v-model="editorNpc.status" placeholder="[None]" class="bg-darkgray text-3xl mt-2 text-white placeholder-white outline-none" style="text-align: right"/>
+          <input v-model="editorNpc.status" placeholder="[None]" class="mt-2 text-3xl text-white placeholder-white outline-none bg-darkgray" style="text-align: right"/>
         </div>
       </div>
       <div class="mt-4 flex justify-between items-center border-b w-full border-b-3 border-b-white px-[23px] pb-2">
@@ -358,38 +358,38 @@ export default {
         </div>
       </div>
       <div class="px-4 py-1 border-b border-b-3 border-b-white">
-        <textarea v-model="editorNpc.description" ref="textarea_des" placeholder="Type description here" @input="resize('textarea_des')" role="textbox" class="bg-darkgray text-3xl mt-2 text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_des}"></textarea>
+        <textarea v-model="editorNpc.description" ref="textarea_des" placeholder="Type description here" @input="resize('textarea_des')" role="textbox" class="w-full mt-2 text-3xl text-white placeholder-white outline-none bg-darkgray" :style="{resize:'none', height:editorNpc.textarea_des}"></textarea>
       </div>
       <div class="flex border-b border-b-3 border-b-white">
-        <div class="flex justify-center -rotate-180 text-white text-3xl border-l-3 border-l-white border-l px-3" :style="{writingMode:'vertical-lr'}">
+        <div class="flex justify-center px-3 text-3xl text-white -rotate-180 border-l border-l-3 border-l-white" :style="{writingMode:'vertical-lr'}">
           CHARACTERISTICS
         </div>
         <div class="flex flex-col w-full px-1">
           <div class="flex flex-col px-3 py-[5px] border-b-1 border-b-white first-letter:border-b ">
             <div class="text-[14px] text-white font-bold">Trust</div>
-            <textarea v-model="editorNpc.trust" id="textarea_trust" ref="textarea_trust" placeholder="[None]" v-on:keyup.enter="process('textarea_trust')" @input="resize('textarea_trust')" role="textbox" class="bg-darkgray text-3xl mt-2 text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_trust}"></textarea>
+            <textarea v-model="editorNpc.trust" id="textarea_trust" ref="textarea_trust" placeholder="[None]" v-on:keyup.enter="process('textarea_trust')" @input="resize('textarea_trust')" role="textbox" class="w-full mt-2 text-3xl text-white placeholder-white outline-none bg-darkgray" :style="{resize:'none', height:editorNpc.textarea_trust}"></textarea>
           </div>
           <div class="flex flex-col px-3 py-[5px] border-b-1 border-b-white first-letter:border-b ">
             <div class="text-[14px] text-white font-bold">Leverage</div>
-            <textarea v-model="editorNpc.lev" id="textarea_lev" ref="textarea_lev" placeholder="[None]" v-on:keyup.enter="process('textarea_lev')" @input="resize('textarea_lev')" role="textbox" class="bg-darkgray text-3xl mt-2 text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_lev}"></textarea>
+            <textarea v-model="editorNpc.lev" id="textarea_lev" ref="textarea_lev" placeholder="[None]" v-on:keyup.enter="process('textarea_lev')" @input="resize('textarea_lev')" role="textbox" class="w-full mt-2 text-3xl text-white placeholder-white outline-none bg-darkgray" :style="{resize:'none', height:editorNpc.textarea_lev}"></textarea>
           </div>
           <div class="flex flex-col px-3 py-[5px]" :class="{'hidden': editorNpc.type == 'AI'}">
             <div class="text-[14px] text-white font-bold">Emotion</div>
-            <textarea v-model="editorNpc.emo" id="textarea_emo" ref="textarea_emo" placeholder="[None]" v-on:keyup.enter="process('textarea_emo')" @input="resize('textarea_emo')" role="textbox" class="bg-darkgray text-3xl mt-2 text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_emo}"></textarea>
+            <textarea v-model="editorNpc.emo" id="textarea_emo" ref="textarea_emo" placeholder="[None]" v-on:keyup.enter="process('textarea_emo')" @input="resize('textarea_emo')" role="textbox" class="w-full mt-2 text-3xl text-white placeholder-white outline-none bg-darkgray" :style="{resize:'none', height:editorNpc.textarea_emo}"></textarea>
           </div>
         </div>
       </div>
       <div class="flex flex-col py-[5px] border-b border-b-3 border-b-white">
         <div class="text-[14px] ml-4 text-white font-normal">Connections</div>
-        <textarea v-model="editorNpc.connect" id="textarea_connect" ref="textarea_connect" placeholder="[None]" v-on:keyup.enter="process('textarea_connect')" @input="resize('textarea_connect')" role="textbox" class="ml-4 bg-darkgray text-3xl mt-2 text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_connect}"></textarea>
+        <textarea v-model="editorNpc.connect" id="textarea_connect" ref="textarea_connect" placeholder="[None]" v-on:keyup.enter="process('textarea_connect')" @input="resize('textarea_connect')" role="textbox" class="w-full mt-2 ml-4 text-3xl text-white placeholder-white outline-none bg-darkgray" :style="{resize:'none', height:editorNpc.textarea_connect}"></textarea>
       </div>
       <div class="flex flex-col py-[5px] border-b border-b-3 border-b-white">
         <div class="text-[14px] ml-4 text-white font-normal">Assests & Capabilities</div>
-        <textarea v-model="editorNpc.assets" id="textarea_assets" ref="textarea_assets" placeholder="[None]" v-on:keyup.enter="process('textarea_assets')" @input="resize('textarea_assets')" role="textbox" class="ml-4 bg-darkgray text-3xl mt-2 text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_assets}"></textarea>
+        <textarea v-model="editorNpc.assets" id="textarea_assets" ref="textarea_assets" placeholder="[None]" v-on:keyup.enter="process('textarea_assets')" @input="resize('textarea_assets')" role="textbox" class="w-full mt-2 ml-4 text-3xl text-white placeholder-white outline-none bg-darkgray" :style="{resize:'none', height:editorNpc.textarea_assets}"></textarea>
       </div>
       <div class="flex flex-col py-[5px] border-b border-b-3 border-b-white">
         <div class="text-[14px] ml-4 text-white font-normal">Notes</div>
-        <textarea v-model="editorNpc.notes" id="textarea_notes" ref="textarea_notes" placeholder="Type notes here" @input="resize('textarea_notes')" role="textbox" class="ml-4 bg-darkgray text-3xl mt-2 text-white placeholder-white outline-none w-full" :style="{resize:'none', height:editorNpc.textarea_notes}"></textarea>
+        <textarea v-model="editorNpc.notes" id="textarea_notes" ref="textarea_notes" placeholder="Type notes here" @input="resize('textarea_notes')" role="textbox" class="w-full mt-2 ml-4 text-3xl text-white placeholder-white outline-none bg-darkgray" :style="{resize:'none', height:editorNpc.textarea_notes}"></textarea>
       </div>
     </div>
   </div>
@@ -399,7 +399,7 @@ export default {
         <input placeholder="search" class="bg-darkgray outline-none text-grey text-[14px]" v-model="searchValue" @input="searchResult($event)"/>
         <div class="w-6 h-6 bg-[url('/search_icon.svg')] bg-cover ml-4"></div>
       </div>
-      <div class="flex px-4 py-2 border-white border-1 justify-center items-center cursor-pointer" @click="addNpc">
+      <div class="flex items-center justify-center px-4 py-2 border-white cursor-pointer border-1" @click="addNpc">
         <div class="text-grey text-[14px] leading-snug">add NPC</div>
         <div class="w-[15px] h-[15px] bg-[url('/Union.svg')] bg-cover ml-2"></div>
       </div>
@@ -418,34 +418,34 @@ export default {
           <div class="flex items-center justify-center pr-1">
             <div :class="[filterQuery.length !== 0 ? 'filter_clicked' : 'filter_unclicked']" @click="openFilterModal">
 				<div id="filterModal" v-if="isFilter" class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-6 py-3 flex flex-col bg-grey" :on-focusout="closeFilterModal">
-					<label class="flex w-fit space-x-2">
+					<label class="flex space-x-2 w-fit">
 						<div class="flex items-center justify-center">
 							<input :checked="filterQuery.includes('Human')" type="checkbox" class="w-6 h-6 filter_checkbox" @click="updateFilterQuery($event, 'Human')"/>
 						</div>
-						<div class="text-black text-3xl">Human</div>
+						<div class="text-3xl text-black">Human</div>
 					</label>
-					<label class="flex w-fit space-x-2">
+					<label class="flex space-x-2 w-fit">
 						<div class="flex items-center justify-center">
 							<input :checked="filterQuery.includes('Animal')" type="checkbox" class="w-6 h-6 filter_checkbox" @click="updateFilterQuery($event, 'Animal')"/>
 						</div>
-						<div class="text-black text-3xl">Animal</div>
+						<div class="text-3xl text-black">Animal</div>
 					</label>
-					<label class="flex w-fit space-x-2">
+					<label class="flex space-x-2 w-fit">
 						<div class="flex items-center justify-center">
 							<input :checked="filterQuery.includes('AI')" type="checkbox" class="w-6 h-6 filter_checkbox" @click="updateFilterQuery($event, 'AI')"/>
 						</div>
-						<div class="text-black text-3xl">AI</div>
+						<div class="text-3xl text-black">AI</div>
 					</label>
-					<label class="flex w-fit space-x-2">
+					<label class="flex space-x-2 w-fit">
 						<div class="flex items-center justify-center">
 							<input :checked="filterQuery.includes('Other')" type="checkbox" class="w-6 h-6 filter_checkbox" @click="updateFilterQuery($event, 'Other')"/>
 						</div>
-						<div class="text-black text-3xl">Other</div>
+						<div class="text-3xl text-black">Other</div>
 					</label>
                     <div class="flex bg-black h-[1px] w-full">
                     </div>
-                    <div class="flex space-x-2 justify-center w-full cursor-pointer items-center" @click="clearFilter">
-                        <p class="text-black text-3xl">Clear</p>
+                    <div class="flex items-center justify-center w-full space-x-2 cursor-pointer" @click="clearFilter">
+                        <p class="text-3xl text-black">Clear</p>
                         <div class="flex items-center justify-center">
                             <font-awesome-icon
                             :icon="['fas', 'trash-can']" class="cursor-pointer text-[#1D2225]"

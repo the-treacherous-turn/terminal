@@ -40,10 +40,11 @@ const computeActionStore = {
       state.dirtyComputeActionID = null;
     },
     deleteComputeAction(state, computeActionID) {
-      if (!state.computeActions[computeActionID])
+      if (!state.computeActions[computeActionID]){
         throw new Error(
           `Cannot delete compute action ${computeActionID}: compute action does not exist`
         );
+      }
       delete state.computeActions[computeActionID];
     },
     setComputeActionScrollPos(state, pos) {

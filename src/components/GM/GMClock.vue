@@ -150,6 +150,7 @@ export default {
       this.editorClock = this.clocks[key]
     },
     onClickDelete(key) {
+      if (!window.confirm(`Are you sure you want to delete this Clock?`)) return
       this.$store.dispatch('deleteGMClock', key).then(() => {
         this.clear()
       })

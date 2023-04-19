@@ -54,6 +54,7 @@ export default {
       this.editorUpgrade = this.activeSpec.upgrades[key];
     },
     onClickDelete(key) {
+      if (!window.confirm(`Are you sure you want to delete this Upgrade?`)) return
       this.$store.dispatch("deleteUpgrade", key);
     },
     onClickModalOutside() {

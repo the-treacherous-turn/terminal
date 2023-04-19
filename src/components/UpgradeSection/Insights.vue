@@ -47,6 +47,7 @@ export default {
       this.editorInsight = this.activeSpec.insights[key];
     },
     onClickDelete(key) {
+      if (!window.confirm(`Are you sure you want to delete this Insight?`)) return
       this.$store.dispatch("deleteInsight", key);
     },
     onClickModalOutside() {
