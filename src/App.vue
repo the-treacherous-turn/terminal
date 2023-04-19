@@ -391,7 +391,15 @@ export default {
         >
           load backup
         </div>
-        <span class="absolute text-base bottom-4">version 0.3.3</span>
+        <div class="absolute text-base bottom-4">
+          <div class="mb-2">
+            <a class="link text-neutral-content hover:text-white" href="https://github.com/AI-Safety-Camp-Tabletop-RPG/companion-app/issues/new?labels=bug&title=New+bug+report&body=Describe+the+problem." target="_blank">Submit bug</a> / 
+            <a class="link text-neutral-content hover:text-white" href="https://github.com/AI-Safety-Camp-Tabletop-RPG/companion-app/issues/new?labels=bug&title=Feature+request" target="_blank">Request feature</a>
+          </div>
+          <div>
+            version 0.3.4
+          </div>
+        </div>
       </ul>
       <div
         class="absolute w-[100vw] h-[100vh] flex items-center justify-center"
