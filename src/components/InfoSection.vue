@@ -331,6 +331,7 @@ export default {
       });
     },
     removeCustomCampaignNote(noteID) {
+      if (!window.confirm(`Are you sure you want to delete this note?`)) return
       this.$store.dispatch("removeCustomCampaignNote", noteID);
     },
     addInPlayNote() {
@@ -346,6 +347,7 @@ export default {
       });
     },
     removeCustomInPlayNote(noteID) {
+      if (!window.confirm(`Are you sure you want to delete this note?`)) return
       this.$store.dispatch("removeCustomInPlayNote", noteID);
     },
   },

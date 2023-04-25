@@ -247,6 +247,7 @@ export default {
       this.$store.dispatch("syncComputeSources");
     },
     removeComputeSource(key) {
+      if (!window.confirm(`Are you sure you want to delete this compute source?`)) return
       this.$store.dispatch("removeComputeSource", key);
     },
     addRecurringCost() {
@@ -256,6 +257,7 @@ export default {
       this.$store.dispatch("syncRecurringCosts");
     },
     removeRecurringCost(key) {
+      if (!window.confirm(`Are you sure you want to delete this recurring cost?`)) return
       this.$store.dispatch("removeRecurringCost", key);
     },
     onModalToggle() {

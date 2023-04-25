@@ -28,6 +28,7 @@ import { mapState } from 'vuex';
                 this.$store.dispatch('updateNote', {noteID: key, changesObj})
             },
             removeNote(noteID) {
+                if (!window.confirm(`Are you sure you want to delete this note?`)) return
                 this.$store.dispatch('removeNote', noteID)
             },
             swapDown(k) {
