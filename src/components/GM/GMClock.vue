@@ -236,6 +236,12 @@ export default {
     updatePCInterval(val) {
       this.$store.dispatch('setPCInterval', val)
     },
+    increasePCInterval() {
+      if (this.pcInterval < 24) this.updatePCInterval(this.pcInterval + 1)
+    },
+    decreasePCInterval() {
+      if (this.pcInterval > 1) this.updatePCInterval(this.pcInterval - 1)
+    },
     closeClockSetting() {
       this.isClockSettingOpen = false
     },
@@ -505,7 +511,7 @@ export default {
     class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-black z-50"
   >
     <label
-      class="w-[1325px] relative flex flex-col"
+      class="relative flex flex-col"
       @click="(e) => e.preventDefault()"
     >
       <div class="flex items-center justify-between w-full">
@@ -518,17 +524,29 @@ export default {
         </button>
       </div>
       <div class="flex w-full border-white border-1 bg-darkgray">
-        <div class="m-auto">
+        <div class="m-8">
           <div class="">
             Progress Check Interval Length (hours)
           </div>
-          <input
-            type="number"
-            min="1"
-            max="24"
-            :value="pcInterval"
-            @change="updatePCInterval($event.target.value)"
-          />
+          <div class="flex items-center justify-center mt-4 space-x-2">
+            <div
+              class="w-[18px] h-[9px] bg-[url('/arrow_down.svg')] bg-cover bg-no-repeat cursor-pointer"
+              @click="decreasePCInterval()"
+            ></div>
+
+            <input
+              class="px-2 text-center border-1 border-grey"
+              type="number"
+              min="1"
+              max="24"
+              :value="pcInterval"
+              @change="updatePCInterval($event.target.value)"
+            />
+            <div
+              class="w-[18px] h-2 bg-[url('/arrow_up.svg')] bg-cover bg-no-repeat cursor-pointer"
+              @click="increasePCInterval()"
+            ></div>
+          </div>
         </div>
       </div>
     </label>
