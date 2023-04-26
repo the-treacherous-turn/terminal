@@ -213,7 +213,7 @@ export default {
         >
           <div class="text-3xl uppercase">{{ clock.name }}</div>
           <div class="text-white uppercase">
-            <span class="text-6xl font-bold">{{ clock.elapsed }}</span>
+            <span class="text-6xl font-bold">{{ clock.elapsed + getClockTickResult(clockID, ppcID) }}</span>
             <span class="text-3xl">/{{ clock.size }}</span>
           </div>
           <div class="flex text-white">
