@@ -71,6 +71,71 @@
     height: 100%;
     background: var(--tw-shadow-color);
   }
+  
+  .text-highlight-epistemic {
+    @apply font-bold text-epistemic
+  }
+  .text-highlight-epistemic::before {
+    content: '';
+    background-image: url('icon_epistemic.png');
+    @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
+  }
+  .text-highlight-constellation {
+    @apply font-bold text-constellation
+  }
+  .text-highlight-constellation::before {
+    content: '';
+    background-image: url('icon_constellation.png');
+    @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
+  }
+  .text-highlight-chaos {
+    @apply font-bold text-chaos
+  }
+  .text-highlight-chaos::before {
+    content: '';
+    background-image: url('icon_chaos.png');
+    @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
+  }
+  .text-highlight-agentic {
+    @apply font-bold text-agentic
+  }
+  .text-highlight-agentic::before {
+    content: '';
+    background-image: url('icon_agentic.png');
+    @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
+  }
+  .text-highlight-anthropic {
+    @apply font-bold text-anthropic
+  }
+  .text-highlight-anthropic::before {
+    content: '';
+    background-image: url('icon_anthropic.png');
+    @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
+  }
+  .text-highlight-physical {
+    @apply font-bold text-physical
+  }
+  .text-highlight-physical::before {
+    content: '';
+    background-image: url('icon_physical.png');
+    @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
+  }
+  .text-highlight-digital {
+    @apply font-bold text-digital
+  }
+  .text-highlight-digital::before {
+    content: '';
+    background-image: url('icon_digital.png');
+    @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
+  }
+  .text-highlight-autonomic {
+    @apply font-bold text-autonomic
+  }
+  .text-highlight-autonomic::before {
+    content: '';
+    background-image: url('icon_autonomic.png');
+    @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
+  }
 }
 
 /* Hide default input widget */

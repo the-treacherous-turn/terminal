@@ -1,5 +1,10 @@
 module.exports = {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  safelist: [
+    {
+      pattern: /text-highlight-(epistemic|constellation|chaos|agentic|anthropic|physical|digital|autonomic)/,
+    },
+  ],
   theme: {
     fontFamily: {
       mono: ["IBM Plex Mono", "Consolas", "ui-monospace", "monospace"],

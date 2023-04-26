@@ -7,6 +7,7 @@ import Editor from '@tinymce/tinymce-vue'
 export default {
   data() {
     return {
+      PRESET_THEORIES : ['autonomic', 'digital', 'physical', 'anthropic', 'agentic', 'chaos', 'constellation', 'epistemic'],
       isEditorOpen: false,
       isEditingDescription: false,
       isAddNewUpgrade: false,
@@ -108,6 +109,15 @@ export default {
     upgradeMove(keys) {
       this.$store.dispatch("updateKeys", keys);
     },
+    decorateDescription(desc) {
+      const CAPPED_THEORIES = this.PRESET_THEORIES.map(theory => theory.charAt(0).toUpperCase() + theory.slice(1).toLowerCase())
+      const regex = new RegExp('\\b(' + CAPPED_THEORIES.join('|') + ')\\b', 'g')
+      const decoratedDesc = desc.replace(regex, (match) => {
+        const theoryName = match.toLowerCase()
+        return `<span class="text-highlight-${theoryName}">${match}</span>`
+      })
+      return decoratedDesc
+    },
   },
 };
 </script>
@@ -186,7 +196,7 @@ export default {
               class="mr-1 font-bold text-white badge badge-sm"
               >tier {{ activeSpec.upgrades[element].tier }}</span
             >
-            <p class="text-lg" v-html="activeSpec.upgrades[element].description"></p>
+            <p class="text-lg" v-html="decorateDescription(activeSpec.upgrades[element].description)"></p>
           </div>
         </li>
       </template>
@@ -219,14 +229,9 @@ export default {
           class="w-full max-w-xs capitalize select select-bordered"
         >
           <option disabled selected>Pick Theory</option>
-          <option>autonomic</option>
-          <option>digital</option>
-          <option>physical</option>
-          <option>anthropic</option>
-          <option>agentic</option>
-          <option>chaos</option>
-          <option>constellation</option>
-          <option>epistemic</option>
+          <option v-for="theory in PRESET_THEORIES" :key="theory">
+            {{ theory }}
+          </option>
           <option>custom</option>
         </select>
 
@@ -308,7 +313,7 @@ export default {
         </label>
         <div
           v-if="!isEditingDescription"
-          v-html="editorUpgrade.description"
+          v-html="decorateDescription(editorUpgrade.description)"
           class="p-4 border cursor-text"
           @click="isEditingDescription = true"
         ></div>
