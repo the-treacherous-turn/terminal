@@ -218,7 +218,7 @@ export default {
     class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
     @mousedown.self="onClickModalOutside"
   >
-    <label class="relative max-w-3xl overflow-y-visible modal-box">
+    <label class="relative max-w-3xl overflow-y-scroll modal-box">
       <h3 class="text-lg font-bold">
         {{ isAddNewUpgrade ? "Add" : "Edit" }} Upgrade
       </h3>
@@ -307,9 +307,6 @@ export default {
 
         <label class="label label-text">
           <span>Description</span>
-          <!-- <div @click="isEditingDescription = !isEditingDescription" class="btn btn-xs">
-            {{ isEditingDescription ? "Done Editing" : "Edit Description" }}
-          </div> -->
         </label>
         <div
           v-if="!isEditingDescription"
