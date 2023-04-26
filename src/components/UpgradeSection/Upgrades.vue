@@ -2,11 +2,13 @@
 import { mapGetters } from "vuex";
 import theoryUpgrades from "../../theoryUpgradeData";
 import draggable from "vuedraggable";
+import Editor from '@tinymce/tinymce-vue'
 
 export default {
   data() {
     return {
       isEditorOpen: false,
+      isEditingDescription: false,
       isAddNewUpgrade: false,
       editorUpgrade: {},
       editorUpgradeID: null,
@@ -14,6 +16,7 @@ export default {
   },
   components: {
     draggable,
+    'tinymce-editor': Editor,
   },
   computed: {
     ...mapGetters({
@@ -64,7 +67,7 @@ export default {
       this.editorUpgrade.theory = "custom";
       this.editorUpgrade.tier = '';
     },
-    onInputUpgradeDescription() {
+    setUpgradeToCustom() {
       this.editorUpgrade.theory = "custom";
       this.editorUpgrade.tier = '';
     },
@@ -93,12 +96,14 @@ export default {
       this.editorUpgradeID = null;
       this.isEditorOpen = false;
       this.isAddNewUpgrade = false;
+      this.isEditingDescription = false
     },
     cancel() {
       this.editorUpgrade = {};
       this.editorUpgradeID = null;
       this.isAddNewUpgrade = false;
       this.isEditorOpen = false;
+      this.isEditingDescription = false
     },
     upgradeMove(keys) {
       this.$store.dispatch("updateKeys", keys);
@@ -171,16 +176,17 @@ export default {
           <div class="p-0 collapse-content">
             <!-- Use badges to display the upgrade's theory and tier -->
             <span
+              v-if="activeSpec.upgrades[element].theory !== 'custom'"
               class="mr-1 font-bold badge badge-sm text-primary"
               :class="`bg-${activeSpec.upgrades[element].theory}`"
               >{{ activeSpec.upgrades[element].theory }}</span
             >
-            <span class="mr-1 font-bold text-white badge badge-sm"
+            <span
+              v-if="activeSpec.upgrades[element].tier"
+              class="mr-1 font-bold text-white badge badge-sm"
               >tier {{ activeSpec.upgrades[element].tier }}</span
             >
-            <p class="text-lg">
-              {{ activeSpec.upgrades[element].description }}
-            </p>
+            <p class="text-lg" v-html="activeSpec.upgrades[element].description"></p>
           </div>
         </li>
       </template>
@@ -294,15 +300,33 @@ export default {
           @input="onInputUpgradeName"
         />
 
-        <label class="label label-text">Description</label>
-        <textarea
-          v-model="editorUpgrade.description"
-          type="text"
-          placeholder=""
-          autocomplete="off"
-          class="w-full input input-bordered h-44"
-          @input="onInputUpgradeDescription"
-        ></textarea>
+        <label class="label label-text">
+          <span>Description</span>
+          <!-- <div @click="isEditingDescription = !isEditingDescription" class="btn btn-xs">
+            {{ isEditingDescription ? "Done Editing" : "Edit Description" }}
+          </div> -->
+        </label>
+        <div
+          v-if="!isEditingDescription"
+          v-html="editorUpgrade.description"
+          class="p-4 border cursor-text"
+          @click="isEditingDescription = true"
+        ></div>
+        <div v-else>
+          <tinymce-editor
+            v-model="editorUpgrade.description"
+            :init="{
+              plugins: 'link lists autoresize',
+              toolbar: 'undo redo | bold italic | bullist numlist | link',
+              menubar: false,
+              skin: 'tinymce-5-dark',
+              content_css: 'tinymce-5-dark',
+            }"
+            class="w-full input input-bordered"
+            @keyPress="setUpgradeToCustom"
+            @blur="isEditingDescription = false"
+          ></tinymce-editor>
+        </div>
 
         <div class="flex justify-end mt-4 btn-group">
           <label
