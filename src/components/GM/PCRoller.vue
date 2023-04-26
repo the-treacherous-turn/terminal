@@ -251,7 +251,7 @@ export default {
       </template>
     </div>
   </div>
-  <div class="w-1/3 px-4 overflow-y-scroll border">
+  <div class="w-1/3 px-4 h-[600px] overflow-y-scroll border-l">
     <div class="text-5xl">Roll Log</div>
     <ul>
       <li v-for="(roll, i) in rollLog" :key="i">{{ roll.die }}: {{ roll.result }}</li>
