@@ -346,7 +346,7 @@ export default {
         <!-- session id, password, and option to change password -->
         <div class="text-xl">
           <div>
-            <span class="">Session ID: </span>
+            <span class="">Campaign ID: </span>
             <span class="text-black bg-white">{{
               $store.state.sessionID
             }}</span>

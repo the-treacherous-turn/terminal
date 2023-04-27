@@ -17,7 +17,7 @@ export default {
   <div class="flex flex-col items-center justify-center h-full">
     <img src="/logo.png" alt="logo" class="w-80" />
     <h1 class="pb-4 text-6xl text-white highlighter">The Treacherous Terminal_</h1>
-    <p class="pb-4 text-white">To start, enter your session ID:</p>
+    <p class="pb-4 text-white">To start, enter your campaign ID:</p>
     <input
       v-model="sessionID"
       type="text"
@@ -28,7 +28,7 @@ export default {
       :disabled="!sessionID"
       @click="openSession"
     >
-      Open Game Session
+      Open Campaign
     </button>
   </div>
 </template>
