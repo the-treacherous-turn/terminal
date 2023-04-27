@@ -50,7 +50,7 @@
       </span>
     </p>
     <p
-      class="mt-4 text-lg normal-case whitespace-pre-wrap"
+      class="mt-4 text-lg normal-case break-all whitespace-pre-wrap"
       :class="{ 'line-through': isForecast }"
       v-if="description"
     >
