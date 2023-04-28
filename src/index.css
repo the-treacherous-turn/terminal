@@ -73,7 +73,7 @@
   }
   
   .text-highlight-epistemic {
-    @apply font-bold text-epistemic
+    @apply text-epistemic
   }
   .text-highlight-epistemic::before {
     content: '';
@@ -81,7 +81,7 @@
     @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
   }
   .text-highlight-constellation {
-    @apply font-bold text-constellation
+    @apply text-constellation
   }
   .text-highlight-constellation::before {
     content: '';
@@ -89,7 +89,7 @@
     @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
   }
   .text-highlight-chaos {
-    @apply font-bold text-chaos
+    @apply text-chaos
   }
   .text-highlight-chaos::before {
     content: '';
@@ -97,7 +97,7 @@
     @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
   }
   .text-highlight-agentic {
-    @apply font-bold text-agentic
+    @apply text-agentic
   }
   .text-highlight-agentic::before {
     content: '';
@@ -105,7 +105,7 @@
     @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
   }
   .text-highlight-anthropic {
-    @apply font-bold text-anthropic
+    @apply text-anthropic
   }
   .text-highlight-anthropic::before {
     content: '';
@@ -113,7 +113,7 @@
     @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
   }
   .text-highlight-physical {
-    @apply font-bold text-physical
+    @apply text-physical
   }
   .text-highlight-physical::before {
     content: '';
@@ -121,7 +121,7 @@
     @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
   }
   .text-highlight-digital {
-    @apply font-bold text-digital
+    @apply text-digital
   }
   .text-highlight-digital::before {
     content: '';
@@ -129,7 +129,7 @@
     @apply mr-1 align-middle inline-block bg-contain bg-no-repeat w-6 h-6
   }
   .text-highlight-autonomic {
-    @apply font-bold text-autonomic
+    @apply text-autonomic
   }
   .text-highlight-autonomic::before {
     content: '';

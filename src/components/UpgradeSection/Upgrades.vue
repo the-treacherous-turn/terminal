@@ -38,6 +38,21 @@ export default {
         this.editorUpgrade.tier
       ];
     },
+    upgradeNameToTheoryMap() {
+      var outData = {}
+      var tk = Object.keys(theoryUpgrades)
+      var tv = Object.values(theoryUpgrades)
+      for (let i = 0; i < tv.length; ++i) {
+        var v = tv[i]
+        var k = tk[i]
+        var u = Object.values(v.upgrades)
+        u[0].forEach(val => outData[val.name] = k)
+        u[1].forEach(val => outData[val.name] = k)
+        u[2].forEach(val => outData[val.name] = k)
+        u[3].forEach(val => outData[val.name] = k)
+      }
+      return outData
+    },
   },
   methods: {
     selectFirstUpgrade(tier) {
@@ -111,9 +126,15 @@ export default {
     },
     decorateDescription(desc) {
       const CAPPED_THEORIES = this.PRESET_THEORIES.map(theory => theory.charAt(0).toUpperCase() + theory.slice(1).toLowerCase())
-      const regex = new RegExp('\\b(' + CAPPED_THEORIES.join('|') + ')\\b', 'g')
-      const decoratedDesc = desc.replace(regex, (match) => {
+      const regexTheoryName = new RegExp('\\b(' + CAPPED_THEORIES.join('|') + ')\\b', 'g')
+      let decoratedDesc = desc.replace(regexTheoryName, (match) => {
         const theoryName = match.toLowerCase()
+        return `<span class="text-highlight-${theoryName} font-bold">${match}</span>`
+      })
+      // get all the upgrade names and create a regex to match them
+      const regexUpgradeName = new RegExp('\\b(' + Object.keys(this.upgradeNameToTheoryMap).join('|') + ')\\b', 'g')
+      decoratedDesc = decoratedDesc.replace(regexUpgradeName, (match) => {
+        const theoryName = this.upgradeNameToTheoryMap[match]
         return `<span class="text-highlight-${theoryName}">${match}</span>`
       })
       return decoratedDesc
