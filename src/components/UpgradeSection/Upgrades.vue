@@ -133,7 +133,7 @@ export default {
       item-key="id"
     >
       <template #item="{ element }" :key="key">
-        <li class="items-end content-start max-w-md overflow-visible collapse bg-base-100 group">
+        <li class="items-end content-start max-w-lg pr-16 overflow-visible collapse bg-base-100 group">
           <h3
             class="relative min-h-0 px-0 py-1 overflow-visible text-xl capitalize max-h-8 collapse-title"
           >
