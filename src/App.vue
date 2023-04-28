@@ -397,7 +397,7 @@ export default {
             <a class="link text-neutral-content hover:text-white" href="https://github.com/AI-Safety-Camp-Tabletop-RPG/companion-app/issues/new?labels=bug&title=Feature+request" target="_blank">Request feature</a>
           </div>
           <div>
-            version 0.3.4
+            version {{ $store.state.version }}
           </div>
         </div>
       </ul>

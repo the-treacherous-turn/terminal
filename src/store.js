@@ -38,6 +38,7 @@ const store = createStore({
       stateofDisplayMode: false,
       password: '',
       noPassword: false,
+      version: '0.3.5',
     };
   },
   getters: {
