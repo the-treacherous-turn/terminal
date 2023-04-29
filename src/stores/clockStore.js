@@ -114,6 +114,9 @@ const clockStore = {
       await update(refs.computeTracker, {
         computeSpent: rootState.compute.computeSpent,
       });
+      commit("setNowTimeISO", newCycleBeginTimeISO)
+      commit("setCycleBeginTimeISO", newCycleBeginTimeISO)
+      commit("setCycle", newCycle)
       return await update(refs.clock, {
         nowTimeISO: newCycleBeginTimeISO,
         cycleBeginTimeISO: newCycleBeginTimeISO,

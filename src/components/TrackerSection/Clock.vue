@@ -360,9 +360,9 @@ export default {
     },
     advanceCycle() {
       this.isEndModalOpen = false;
-      this.$store.dispatch("advanceCycle").then(
+      this.$store.dispatch("advanceCycle").then(() => {
         this.$store.dispatch("advanceGMClock")
-      )
+      })
     },
     onTimeModalToggle() {
       if (!this.isTimeSettingOpen) {
