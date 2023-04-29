@@ -16,7 +16,7 @@ export default {
       activeSpecID: state => state.spec.activeSpecID,
     }),
     isSubmitDisabled () {
-      return !this.editorSpec.name && !this.editorSpec.focus
+      return !this.editorSpec.name || !this.editorSpec.focus
     },
   },
   methods: {
@@ -36,22 +36,6 @@ export default {
         return styleMap[theoryName]
       }
       return 'border-secondary'
-    },
-    getTheoryTextStyle(theoryName) {
-      const styleMap = {
-        epistemic: 'bg-epistemic',
-        constellation: 'bg-constellation',
-        chaos: 'bg-chaos',
-        agentic: 'bg-agentic',
-        anthropic: 'bg-anthropic',
-        physical: 'bg-physical',
-        digital: 'bg-digital',
-        autonomic: 'bg-autonomic',
-      }
-      if (theoryName in styleMap) {
-        return styleMap[theoryName]
-      }
-      return ''
     },
     getTheoryButtonClass(theoryName) {
       const styleMap = {
@@ -79,6 +63,7 @@ export default {
         physical: 'bg-physical',
         digital: 'bg-digital',
         autonomic: 'bg-autonomic',
+        custom: 'bg-grey',
       }
       if (theoryName in styleMap) {
         return styleMap[theoryName]
@@ -195,6 +180,7 @@ export default {
         <option>chaos</option>
         <option>constellation</option>
         <option>epistemic</option>
+        <option>custom</option>
       </select>
       <div class="flex justify-end mt-4 btn-group">
         <label

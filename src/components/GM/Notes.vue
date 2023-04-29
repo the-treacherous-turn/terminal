@@ -33,7 +33,7 @@ import { mapState } from 'vuex';
             },
             swapDown(k) {
                 let currentKey = Object.keys(this.keysOfNotes).find(key => this.keysOfNotes[key] === k)
-                if(Number(currentKey) + 1 <= this.keysOfNotes.length){
+                if(Number(currentKey) + 1 < this.keysOfNotes.length){
                     let temp = this.keysOfNotes[currentKey]
                     this.keysOfNotes[currentKey] = this.keysOfNotes[Number(currentKey) + 1]
                     this.keysOfNotes[Number(currentKey) + 1] = temp

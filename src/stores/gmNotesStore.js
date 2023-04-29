@@ -82,7 +82,10 @@ const gmNotesStore = {
     async listenToFBGMNOTES({ commit }) {
       onValue(refs.gmNotes, (snapshot) => {
         const data = snapshot.val() === null ? {} : snapshot.val();
-        if (data.notes === undefined) data.notes = {};
+        if (data.notes === undefined) {
+          data.notes = {}
+          data.keysOfNotes = []
+        }
         if (data.keysOfNotes === undefined) data.keysOfNotes = [];
         commit("updateNotes", data);
       });

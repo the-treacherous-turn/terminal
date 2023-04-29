@@ -43,7 +43,6 @@ const store = createStore({
   },
   getters: {
     keysOfComputeActions(state) {
-      //   console.log(state.specs[state.activeSpecID].keysOfUpgrades);
       return state.wholeData.keysOfComputeActions !== undefined
         ? state.wholeData.keysOfComputeActions
         : [];
@@ -62,7 +61,7 @@ const store = createStore({
       // we need to update keysOfComputeActions to be empty as well.
       if (data.keysOfComputeActions !== undefined && data.computeActions === undefined) {
         data.keysOfComputeActions = [];
-        update(refs.wholeData, data)
+        update(refs.wholeData, {keysOfComputeActions:[]})
       } else if (
         data.keysOfComputeActions === undefined &&
         data.computeActions !== undefined

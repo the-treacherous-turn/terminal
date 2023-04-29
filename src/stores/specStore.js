@@ -42,8 +42,10 @@ export default {
     },
     setSpec(state, { specID, spec }) {
       state.specs[specID] = spec;
-      //   console.log(spec.keysOfUpgrades);
-      if (spec.upgrades !== undefined && spec.keysOfUpgrades === undefined) {
+      if (spec.upgrades === undefined && spec.keysOfUpgrades !== undefined) {
+        spec.keysOfUpgrades = []
+        update(refs.specs, { [specID]: spec })
+      } else if (spec.upgrades !== undefined && spec.keysOfUpgrades === undefined) {
         spec.keysOfUpgrades = [...Object.keys(spec.upgrades)];
         update(refs.specs, { [specID]: spec });
       } else if (
@@ -55,8 +57,6 @@ export default {
           Object.keys(spec.upgrades)[Object.keys(spec.upgrades).length - 1]
         );
         update(refs.specs, { [specID]: spec });
-
-        // console.log(spec.keysOfUpgrades);
       } else if (
         spec.upgrades !== undefined &&
         Object.keys(spec.upgrades).length ===
