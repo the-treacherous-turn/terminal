@@ -112,6 +112,7 @@ export default {
       onChildRemoved(refs.specs, (snapshot) => {
         if (!state.specs[snapshot.key]) return;
         const specID = snapshot.key;
+        if (specID === state.activeSpecID) commit("clearActiveSpecID");
         commit("deleteSpec", specID);
       });
     },
