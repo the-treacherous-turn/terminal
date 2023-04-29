@@ -41,6 +41,13 @@
       </div>
     </div>
 
+    <div class="float-right p-4 pt-12">
+      <button
+        class="uppercase leading-2 btn btn-sm btn-ghost"
+        @click="addCA"
+      >Add Computational Action</button>
+    </div>
+
     <!-- <input type="checkbox" id="modal-compute-tracker-setting" class="modal-toggle"
     v-model="isSettingOpen" @change="onModalToggle" -->
     <label
@@ -277,6 +284,9 @@ export default {
     onClickModalOutside() {
       this.isSettingOpen = false;
       this.onModalToggle();
+    },
+    addCA() {
+      this.$store.dispatch('editNewComputeAction')
     },
   },
 };

@@ -88,7 +88,7 @@ export default {
   <div class="flex">
 
     <div v-if="isComplete" class="w-32 p-2 text-center">
-      <div class="badge badge-success gap-2">
+      <div class="gap-2 badge badge-success">
         Complete
       </div>
     </div>
@@ -97,6 +97,7 @@ export default {
         <font-awesome-icon icon="chevron-down" class="text-2xl" />
       </div>
       <span class="inline-block w-12 text-lg text-center">
+        +
         <input type="number" min="0" :max="computeRemaining"
           v-model.number="computeToAddInForm"
           class="inline w-8 px-1 text-center input input-bordered input-xs"
@@ -114,7 +115,7 @@ export default {
     >{{ `${computeApplied}/${computeNeeded}` }}</div>
   </div>
 
-  <div class="pl-32 overflow-hidden text-lg normal-case transition-max-h ease-in-out duration-300" :class="expanded?'max-h-screen':'max-h-0'">
+  <div class="pl-32 overflow-hidden text-lg normal-case duration-300 ease-in-out transition-max-h" :class="expanded?'max-h-screen':'max-h-0'">
     {{desc}}
   </div>
 

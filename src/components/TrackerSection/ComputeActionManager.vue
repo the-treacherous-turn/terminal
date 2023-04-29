@@ -10,7 +10,6 @@ export default {
   },
   data() {
     return {
-      isEditorOpen: false,
     }
   },
   computed: {
@@ -176,11 +175,11 @@ export default {
     },
     submit() {
       this.$store.dispatch('submitComputeAction')
-      this.isEditorOpen = false
+      this.$store.commit('closeComputeActionEditor')
 
     },
     cancel() {
-      this.isEditorOpen = false
+      this.$store.commit('closeComputeActionEditor')
       if (this.dirtyComputeAction.isNew) {
         this.$store.dispatch('deleteComputeAction', this.$store.state.computeAction.dirtyComputeActionID)
       } else {
@@ -188,20 +187,16 @@ export default {
         this.submit()
       }
     },
-    onClickPlus() {
-      this.$store.dispatch('editNewComputeAction')
-      this.isEditorOpen = true
-    },
     onClickEditAction(actionID) {
       this.$store.dispatch('editExtantComputeAction', actionID)
-      this.isEditorOpen = true
+      this.$store.commit('openComputeActionEditor')
     },
     onClickDeleteAction(actionID) {
       if (!window.confirm(`Are you sure you want to delete this Computational Action?`)) return
       this.$store.dispatch('deleteComputeAction', actionID)
     },
     onClickModalOutside() {
-      if (this.isEditorOpen) this.cancel()
+      if (this.$store.state.computeAction.isEditorOpen) this.cancel()
     },
     saveScrollPos(e) {
       this.$store.commit('setComputeActionScrollPos', e.target.scrollTop)
@@ -219,7 +214,7 @@ export default {
 </script>
 
 <template>
-<h1 class="text-xl font-bold">Computational Action Manager</h1>
+<h1 class="text-2xl">Computational Actions</h1>
 <div id="compute-action-list" class="overflow-y-scroll" ref="scroller" @scroll.passive="saveScrollPos">
     <draggable
       :list="keysOfComputeActions"
@@ -237,13 +232,6 @@ export default {
         />
     </template>
     </draggable>
-  <div class="flex justify-center m-4">
-    <label for="modal-edit-compute-action" class="btn btn-circle"
-    @click="onClickPlus"
-    >
-      <font-awesome-icon icon="plus" class="text-6xl" />
-    </label>
-  </div>
 </div>
 <div class="flex justify-center m-4">
   <button
@@ -255,7 +243,7 @@ export default {
   </button>
 </div>
 <label
-  v-if="isEditorOpen"
+  v-if="$store.state.computeAction.isEditorOpen"
   class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer bg-white bg-opacity-10 z-50"
   @mousedown.self="onClickModalOutside"
   >

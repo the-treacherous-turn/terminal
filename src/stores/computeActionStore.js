@@ -9,6 +9,7 @@ import {
 
 const computeActionStore = {
   state: () => ({
+    isEditorOpen: false,
     computeActions: {},
     dirtyComputeActionID: null,
     scrollPos: 0,
@@ -19,6 +20,12 @@ const computeActionStore = {
     },
   },
   mutations: {
+    openComputeActionEditor(state) {
+      state.isEditorOpen = true;
+    },
+    closeComputeActionEditor(state) {
+      state.isEditorOpen = false;
+    },
     updateComputeAction(state, { actionID, payload }) {
       const currentComputeAction = state.computeActions[actionID]; // this may be undefined, in which case we'd be creating a new action
       state.computeActions[actionID] = { ...currentComputeAction, ...payload };
@@ -86,6 +93,7 @@ const computeActionStore = {
       };
       const actionID = await push(refs.computeActions, actionObj).key;
       commit("editNewComputeAction", { actionID, actionObj });
+      commit("openComputeActionEditor")
     },
     async editExtantComputeAction({ commit, state }, actionID) {
       commit("editExtantComputeAction", actionID);
