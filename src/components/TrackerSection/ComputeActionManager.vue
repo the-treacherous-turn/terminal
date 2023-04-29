@@ -22,6 +22,14 @@ export default {
     canAssignCompute() {
       return this.$store.getters.computeAvailable > 0 && this.$store.getters.computeToSpend > 0
     },
+    isAdvancingTime: {
+      get() {
+        return this.$store.state.compute.isAdvancingTime
+      },
+      set(value) {
+        this.$store.dispatch('setIsAdvancingTime', value)
+      },
+    },
     // editor
     isSubmitDisabled() {
       return !(this.name && this.computeNeeded)
@@ -237,7 +245,7 @@ export default {
     </div>
     <div class="absolute bottom-0 flex items-center justify-between w-full px-6 pt-4 pb-2 bg-black border-t">
       <label class="flex items-center">
-        <input type="checkbox" class="checkbox checkbox-sm">
+        <input type="checkbox" class="checkbox checkbox-sm" v-model="isAdvancingTime">
         <span class="pl-2">Advance Time with Compute</span>
       </label>
       <button

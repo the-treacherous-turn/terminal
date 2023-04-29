@@ -9,6 +9,7 @@ const computeStore = {
     baseComputeCost: 0,
     recurringCosts: {},
     computeAdjustAmt: 0, // standalone compute adjustment
+    isAdvancingTime: true,
   }),
   getters: {
     /**
@@ -85,6 +86,9 @@ const computeStore = {
     removeRecurringCost(state, itemID) {
       delete state.recurringCosts[itemID];
     },
+    setIsAdvancingTime(state, val) {
+      state.isAdvancingTime = val
+    },
   },
   actions: {
     async listenToFBComputeTracker({ commit }) {
@@ -128,6 +132,12 @@ const computeStore = {
         computeSources: state.computeSources,
         recurringCosts: state.recurringCosts,
         baseComputeCost: state.baseComputeCost,
+      });
+    },
+    async setIsAdvancingTime({ commit, state }, val) {
+      commit("setIsAdvancingTime", val);
+      await update(refs.computeTracker, {
+        isAdvancingTime: state.isAdvancingTime,
       });
     },
     async removeComputeSource({ commit, state }, computeSourceID) {
