@@ -11,12 +11,10 @@ export default {
 </script>
 
 <template>
-<div class="relative flex flex-col w-full h-full mx-auto overflow-hidden uppercase border max-w-screen-lg">
+<div class="relative flex flex-col w-full h-full max-w-screen-lg mx-auto overflow-hidden border">
   <div>
     <ComputeTracker />
   </div>
-  <div class="flex flex-col p-8 overflow-hidden">
-    <ComputeActionManager />
-  </div>  
+  <ComputeActionManager />
 </div>
 </template>

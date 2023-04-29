@@ -3,7 +3,7 @@
     <div class="float-left stats">
       <div class="px-4 stat">
         <div>
-          <div class="inline mr-2 text-base stat-title">Compute Available</div>
+          <div class="inline mr-2 text-base uppercase stat-title">Compute Available</div>
           <label for="modal-compute-tracker-setting" @click="openModal">
             <span
               class="p-1 indicator-item indicator-bottom indicator-center badge badge-secondary"
@@ -57,9 +57,9 @@
       @mousedown.self="onClickModalOutside"
     >
       <label class="relative modal-box" for>
-        <h3 class="text-lg font-bold">Configure Compute</h3>
+        <h3 class="text-lg font-bold uppercase">Configure Compute</h3>
         <h4>
-          <label for="compute-tracker-total" class="text-3xl"
+          <label for="compute-tracker-total" class="text-3xl uppercase"
             >Total Compute: <span class="font-bold">{{ total }}</span></label
           >
         </h4>
@@ -109,7 +109,7 @@
         </div>
 
         <h4>
-          <label class="text-3xl"
+          <label class="text-3xl uppercase"
             >Recurring Costs:
             <span class="font-bold">{{ recurringSum }}</span></label
           >
