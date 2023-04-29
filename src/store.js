@@ -57,7 +57,13 @@ const store = createStore({
       state.wholeData = data;
       state.password = state.wholeData.password
       state.noPassword = state.wholeData.noPassword
-      if (
+
+      // PATCH: if compute action is empty but keysOfComputeActions is not, then
+      // we need to update keysOfComputeActions to be empty as well.
+      if (data.keysOfComputeActions !== undefined && data.computeActions === undefined) {
+        data.keysOfComputeActions = [];
+        update(refs.wholeData, data)
+      } else if (
         data.keysOfComputeActions === undefined &&
         data.computeActions !== undefined
       ) {
