@@ -3,7 +3,7 @@
   <div class="items-center grid-flow-col">
     <img src="/logo.png" width="50" height="50" alt="logo">
     <p>
-      <span>The Treacherous Turn © 2022. </span>
+      <span>The Treacherous Turn © 2023. </span>
       <span>
         <a class="link text-neutral-content hover:text-white" href="https://github.com/AI-Safety-Camp-Tabletop-RPG/companion-app/issues/new?labels=bug&title=New+bug+report&body=Describe+the+problem." target="_blank">Submit bug</a> / 
         <a class="link text-neutral-content hover:text-white" href="https://github.com/AI-Safety-Camp-Tabletop-RPG/companion-app/issues/new?labels=bug&title=Feature+request" target="_blank">Request feature</a>
