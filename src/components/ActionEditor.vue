@@ -15,7 +15,7 @@
             x
           </button>
           <div class="relative uppercase">
-            <h2 class="pb-4 text-3xl">Edit Action</h2>
+            <h2 class="pb-4 text-3xl">Edit Memory</h2>
             <textarea
               v-model="name"
               name="name"

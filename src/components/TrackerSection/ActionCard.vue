@@ -143,7 +143,7 @@ export default {
       this.$store.dispatch("markAsForecast", this.actionID);
     },
     deleteCard() {
-      if (!window.confirm(`Are you sure you want to delete this action?`)) return
+      if (!window.confirm(`Are you sure you want to delete this memory?`)) return
       this.$store.dispatch("deleteAction", this.actionID);
     },
     addHoverEffect() {
