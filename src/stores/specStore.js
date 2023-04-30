@@ -42,6 +42,8 @@ export default {
     },
     setSpec(state, { specID, spec }) {
       state.specs[specID] = spec;
+
+      // UPGRADES SPAGHETTI
       if (spec.upgrades === undefined && spec.keysOfUpgrades !== undefined) {
         spec.keysOfUpgrades = []
         update(refs.specs, { [specID]: spec })
@@ -68,7 +70,11 @@ export default {
         update(refs.specs, { [specID]: spec });
       }
 
-      if (spec.insights !== undefined && spec.keysOfInsights === undefined) {
+      // INSIGHTS SPAGHETTI
+      if (spec.insights === undefined && spec.keysOfInsights !== undefined) {
+        spec.keysOfInsights = []
+        update(refs.specs, { [specID]: spec })
+      } else if (spec.insights !== undefined && spec.keysOfInsights === undefined) {
         spec.keysOfInsights = [...Object.keys(spec.insights)];
         update(refs.specs, { [specID]: spec });
       } else if (
@@ -80,8 +86,6 @@ export default {
           Object.keys(spec.insights)[Object.keys(spec.insights).length - 1]
         );
         update(refs.specs, { [specID]: spec });
-
-        // console.log(spec.keysOfInsights);
       } else if (
         spec.insights !== undefined &&
         Object.keys(spec.insights).length ===
