@@ -461,16 +461,10 @@ export default {
             </div>
             <div class="flex space-x-4">
               <div
-                class="border-1 border-white bg-middlegrey text-white text-3xl py-3 px-[26px] uppercase cursor-pointer"
-                @click="clear"
-              >
-                cancel
-              </div>
-              <div
                 class="border-1 border-white bg-white text-black text-3xl py-3 px-[26px] uppercase cursor-pointer"
                 @click="submit"
               >
-                save
+                submit
               </div>
             </div>
           </div>
