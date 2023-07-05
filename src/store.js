@@ -35,7 +35,7 @@ const store = createStore({
       isGM: false,
       wholeData: [],
       finishedLoading: false,
-      stateofDisplayMode: false,
+      shouldHideDates: false,
       password: '',
       noPassword: false,
       version: '1.0.0',
@@ -56,6 +56,7 @@ const store = createStore({
       state.wholeData = data;
       state.password = state.wholeData.password
       state.noPassword = state.wholeData.noPassword
+      state.shouldHideDates = state.wholeData.shouldHideDates
 
       // PATCH: if compute action is empty but keysOfComputeActions is not, then
       // we need to update keysOfComputeActions to be empty as well.
@@ -91,8 +92,8 @@ const store = createStore({
       }
       state.finishedLoading = true;
     },
-    setIsDisplayModal(state, stateofDisplayMode) {
-      state.stateofDisplayMode = stateofDisplayMode;
+    setShouldHideDates(state, shouldHideDates) {
+      state.shouldHideDates = shouldHideDates;
     },
     setPassword(state, password) {
       state.password = password;
@@ -126,6 +127,10 @@ const store = createStore({
       commit("setNoPassword", noPassword);
       await update(refs.wholeData, { noPassword });
     },
+    async updateShouldHideDates({ commit }, shouldHideDates) {
+      commit("setShouldHideDates", shouldHideDates);
+      await update(refs.wholeData, { shouldHideDates });
+    }
 
   },
 });

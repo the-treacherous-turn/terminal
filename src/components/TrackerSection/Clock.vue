@@ -5,7 +5,7 @@
         <div class="flex items-center justify-between">
           <div v-if="loadingFinished">
             <div
-              v-if="stateofDisplayMode"
+              v-if="shouldHideDates"
               class="inline mr-2 text-base stat-title"
             >
               {{ `day ${dayAfter}` }}
@@ -186,8 +186,8 @@ v-model="isTimeSettingOpen" @change="onTimeModalToggle" /> -->
           <label class="flex cursor-pointer">
             <span class="label-text">Hide Dates</span>
             <input
-              :checked="stateofDisplayMode"
-              @change="onToggleDisplayMode"
+              :checked="shouldHideDates"
+              @change="onToggleShouldHideDates"
               type="checkbox"
               class="toggle ml-[10px]"
             />
@@ -268,7 +268,7 @@ export default {
   computed: {
     ...mapState({
       isGM: (state) => state.isGM,
-      stateofDisplayMode: (state) => state.stateofDisplayMode,
+      shouldHideDates: (state) => state.shouldHideDates,
       loadingFinished: (state) => state.clock.loadingFinished,
       gameStage: (state) => state.clock.gameStage,
     }),
@@ -355,8 +355,8 @@ export default {
     onStageChange(e) {
       this.$store.dispatch("setGameStage", e.target.value);
     },
-    onToggleDisplayMode(e) {
-      this.$store.commit("setIsDisplayModal", e.target.checked);
+    onToggleShouldHideDates(e) {
+      this.$store.dispatch("updateShouldHideDates", e.target.checked);
     },
     advanceCycle() {
       this.isEndModalOpen = false;

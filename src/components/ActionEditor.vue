@@ -92,7 +92,7 @@
               </select>
               <div v-if="actionState == 'FINALIZED' || actionState == 'CROSSED OUT'">
                 <input
-                  v-if="stateofDisplayMode"
+                  v-if="shouldHideDates"
                   v-model="dayLeft"
                   class="ml-5"
                 />
@@ -122,7 +122,7 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState({
-      stateofDisplayMode: (state) => state.stateofDisplayMode,
+      shouldHideDates: (state) => state.shouldHideDates,
     }),
     isSubmitDisabled() {
       return !this.name;
