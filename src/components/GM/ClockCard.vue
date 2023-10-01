@@ -11,6 +11,7 @@ export default {
     name: String,
     tickLog: Array,
     pc: String,
+    pcDie: String,
     clockID: String,
   },
   methods: {
@@ -56,10 +57,10 @@ export default {
           </div>
           <div v-if="mode=='pc'">
             <button
-              class="relative p-2 bg-gray-600 border"
+              class="relative w-16 p-2 ml-4 capitalize bg-gray-600 border"
               @click="$emit('roll')"
             >
-              ROLL PC
+              {{ pcDie }}
               <div class="notification" v-if="$store.getters.amtPendingPCForClock(clockID) > 0">{{ $store.getters.amtPendingPCForClock(clockID) }}</div>
             </button>
           </div>

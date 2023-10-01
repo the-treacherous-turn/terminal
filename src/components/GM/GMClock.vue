@@ -288,6 +288,7 @@ export default {
         v-bind="clock"
         :key="key"
         :clockID="key"
+        :pcDie="pChecks[clock.pc] ? pChecks[clock.pc].die : 'Roll PC'"
         @edit="onClickEdit(key)"
         @increaseElapsed="increaseElapsed(key)"
         @decreaseElapsed="decreaseElapsed(key)"
