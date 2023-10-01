@@ -144,24 +144,13 @@ const gmClockStore = {
       const { pcInterval } = state
       const { cycle } = rootState.clock
 
-      //////////// AUTOMATIC CLOCKS //////////
-      const clocksAsArray = Object.entries(state.clocks);
-      for (const [clockID, clock] of clocksAsArray) {
-        if (clock.mode === 'automatic') {
-          const updatedElapsed = clock.elapsed + 1;
-          if (updatedElapsed <= clock.size) {
-            dispatch('updateGMClock', {
-              clockID: clockID,
-              val: { elapsed: updatedElapsed },
-            });
-          }
-        }
-      }
-
+      let turnsToAdvance = 0
+      
       //////////// PROGRESS CHECKS ///////////
       // TODO: is there a less risky way to make this, 
       // that does not require a while loop?
       while (rootGetters.nowTime > getters.lastCheckTime.plus({hours: pcInterval})){
+        turnsToAdvance += 1
         // make new pc time
         const newCheckTime = getters.lastCheckTime.plus({hours: pcInterval})
         const newCheckTimeISO = newCheckTime.toISO({ includeOffset: false, suppressSeconds: true, suppressMilliseconds: true })
@@ -193,6 +182,20 @@ const gmClockStore = {
         // update GMClockStore's lastCheckTime
         commit('setLastCheckTimeISO', newCheckTimeISO)
         await dispatch('setLastCheckTimeISO', newCheckTimeISO)
+      }
+
+
+      //////////// AUTOMATIC CLOCKS //////////
+      if (turnsToAdvance === 0) return
+      const clocksAsArray = Object.entries(state.clocks);
+      for (const [clockID, clock] of clocksAsArray) {
+        if (clock.mode === 'automatic' && clock.elapsed < clock.size) {
+          const updatedElapsed = Math.min(clock.elapsed + turnsToAdvance, clock.size);
+          dispatch('updateGMClock', {
+            clockID: clockID,
+            val: { elapsed: updatedElapsed },
+          });
+        }
       }
     },
 

@@ -142,6 +142,10 @@ export default {
       this.isEditorOpen = true
       this.isAddNewGMClock = true
       this.editorClock = getDefaultClock()
+      // init lastCheckTime if it's the first clock
+      if (!Object.keys(this.clocks).length) {
+        this.$store.dispatch('initLastCheckTime')
+      }
     },
     onClickEdit(key) {
       this.isEditorOpen = true
@@ -183,11 +187,6 @@ export default {
     onClickPC() {
       // if the clock in editor doesn't have a pc, add one
       if (!this.editorClock.pc) {
-        // if it's the first time any PC gets created,
-        // then initialize a lastCheckTime
-        if (!Object.keys(this.pChecks).length) {
-          this.$store.dispatch('initLastCheckTime')
-        }
         // push a pc with the name of the clock
         this.$store.dispatch('addGMPCheck', {
           name: this.editorClock.name || "",
