@@ -310,7 +310,7 @@ export default {
         <h3 class="text-6xl font-bold uppercase">clock editor</h3>
         <button
           class="m-2 mt-0 text-6xl lowercase decoration-transparent"
-          @click="clear"
+          @click="submit"
         >
           x
         </button>
