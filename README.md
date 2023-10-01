@@ -17,3 +17,9 @@ Then, start the local development server:
 ```
 npm run dev
 ```
+
+### Use Firebase Realtiem Database Emulator for local development
+
+```
+firebase emulators:start
+```

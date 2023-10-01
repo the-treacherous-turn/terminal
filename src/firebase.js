@@ -3,7 +3,7 @@
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, onDisconnect } from "firebase/database";
+import { getDatabase, connectDatabaseEmulator, ref, onDisconnect } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCpQgKh8tRvW7IsWqy37jVCOAdFEGaP03w",
@@ -17,6 +17,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const fbApp = initializeApp(firebaseConfig);
 const db = getDatabase(fbApp);
+
+// enable firebase emulator for local development
+if (location.hostname === "localhost") {
+  connectDatabaseEmulator(db, "127.0.0.1", 9000)
+}
 
 // HACK: use location hash to differentiate between different sessions.
 const sessionID = window.location.hash.substring(1);
