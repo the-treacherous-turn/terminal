@@ -337,7 +337,7 @@ export default {
                 :width="200"
                 :height="200"
                 :size="editorClock.size"
-                :elapsed="0"
+                :elapsed="editorClock.elapsed"
               />
             </div>
             <div class="flex flex-col">
