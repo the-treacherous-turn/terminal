@@ -202,6 +202,18 @@ export default {
       this.editorClock.mode = 'pc'
     },
     submit() {
+      // NOTE - the PC is updated first
+      // because the clock update will
+      // reset the PC to default values (D4, Agent)
+      if (this.editorClock.mode === 'pc') {
+        this.$store.dispatch('updateGMPCheck', {
+          pcid: this.editorClock.pc,
+          val: {
+            die: this.pChecks[this.editorClock.pc].die,
+            type: this.pChecks[this.editorClock.pc].type,
+          },
+        })
+      }
       if (this.isAddNewGMClock) {
         this.$store.dispatch('addGMClock', this.editorClock)
       } else {
