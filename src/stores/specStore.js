@@ -42,8 +42,12 @@ export default {
     },
     setSpec(state, { specID, spec }) {
       state.specs[specID] = spec;
-      //   console.log(spec.keysOfUpgrades);
-      if (spec.upgrades !== undefined && spec.keysOfUpgrades === undefined) {
+
+      // UPGRADES SPAGHETTI
+      if (spec.upgrades === undefined && spec.keysOfUpgrades !== undefined) {
+        spec.keysOfUpgrades = []
+        update(refs.specs, { [specID]: spec })
+      } else if (spec.upgrades !== undefined && spec.keysOfUpgrades === undefined) {
         spec.keysOfUpgrades = [...Object.keys(spec.upgrades)];
         update(refs.specs, { [specID]: spec });
       } else if (
@@ -55,8 +59,6 @@ export default {
           Object.keys(spec.upgrades)[Object.keys(spec.upgrades).length - 1]
         );
         update(refs.specs, { [specID]: spec });
-
-        // console.log(spec.keysOfUpgrades);
       } else if (
         spec.upgrades !== undefined &&
         Object.keys(spec.upgrades).length ===
@@ -68,7 +70,11 @@ export default {
         update(refs.specs, { [specID]: spec });
       }
 
-      if (spec.insights !== undefined && spec.keysOfInsights === undefined) {
+      // INSIGHTS SPAGHETTI
+      if (spec.insights === undefined && spec.keysOfInsights !== undefined) {
+        spec.keysOfInsights = []
+        update(refs.specs, { [specID]: spec })
+      } else if (spec.insights !== undefined && spec.keysOfInsights === undefined) {
         spec.keysOfInsights = [...Object.keys(spec.insights)];
         update(refs.specs, { [specID]: spec });
       } else if (
@@ -80,8 +86,6 @@ export default {
           Object.keys(spec.insights)[Object.keys(spec.insights).length - 1]
         );
         update(refs.specs, { [specID]: spec });
-
-        // console.log(spec.keysOfInsights);
       } else if (
         spec.insights !== undefined &&
         Object.keys(spec.insights).length ===
@@ -112,6 +116,7 @@ export default {
       onChildRemoved(refs.specs, (snapshot) => {
         if (!state.specs[snapshot.key]) return;
         const specID = snapshot.key;
+        if (specID === state.activeSpecID) commit("clearActiveSpecID");
         commit("deleteSpec", specID);
       });
     },

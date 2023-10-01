@@ -63,7 +63,8 @@ export default {
     onClickAdd() {
       this.isEditorOpen = true;
       this.isAddNewUpgrade = true;
-      this.editorUpgrade = { tier: "1", theory: this.activeSpec.focus };
+      const defaultFocus = this.activeSpec.focus === 'custom' ? 'autonomic' : this.activeSpec.focus;
+      this.editorUpgrade = { tier: "1", theory: defaultFocus }
       this.selectFirstUpgrade("1");
     },
     onClickEdit(key) {

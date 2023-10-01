@@ -53,6 +53,13 @@ const computeActionStore = {
         );
       }
       delete state.computeActions[computeActionID];
+      // make sure the separately stored keys are also deleted
+      // they are stored in the root state under keysOfComputeActions
+      // keysOfComputeActions is an array of strings
+      const rootState = this.state
+      rootState.wholeData.keysOfComputeActions = rootState.wholeData.keysOfComputeActions.filter(
+        (key) => key !== computeActionID
+      )
     },
     setComputeActionScrollPos(state, pos) {
       state.scrollPos = pos;

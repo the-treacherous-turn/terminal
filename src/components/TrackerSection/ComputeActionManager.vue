@@ -18,6 +18,7 @@ export default {
     }),
     ...mapState({
         computeActions: (state) => state.computeAction.computeActions,
+        isEditorOpen: (state) => state.computeAction.isEditorOpen,
     }),
     canAssignCompute() {
       return this.$store.getters.computeAvailable > 0 && this.$store.getters.computeToSpend > 0
@@ -204,7 +205,7 @@ export default {
       this.$store.dispatch('deleteComputeAction', actionID)
     },
     onClickModalOutside() {
-      if (this.$store.state.computeAction.isEditorOpen) this.cancel()
+      if (this.isEditorOpen) this.cancel()
     },
     saveScrollPos(e) {
       this.$store.commit('setComputeActionScrollPos', e.target.scrollTop)
@@ -257,7 +258,7 @@ export default {
       </button>
     </div>
     <label
-      v-if="$store.state.computeAction.isEditorOpen"
+      v-if="isEditorOpen"
       class="fixed w-[100%] h-[100vh] top-0 left-0 flex justify-center items-center cursor-pointer uppercase bg-white bg-opacity-10 z-50"
       @mousedown.self="onClickModalOutside"
       >

@@ -68,7 +68,10 @@ export default {
       </div>
     </div>
     <div class="p-4 pt-8 overflow-y-scroll">
-      <h2 class="inline-block px-2 mb-10 text-3xl font-bold capitalize text-primary" :class="`bg-${activeSpec.focus}`">{{ activeSpec.focus }}</h2>
+      <h2
+        class="inline-block px-2 mb-10 text-3xl font-bold capitalize text-primary"
+        :class="activeSpec.focus === 'custom' ? 'bg-grey' : `bg-${activeSpec.focus}`"
+        >{{ activeSpec.focus }}</h2>
       <Upgrades />
       <Insights />
     </div>

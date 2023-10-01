@@ -102,7 +102,7 @@ export default {
 
 <template>
   <div
-    class="relative flex flex-col w-full h-full mx-auto overflow-hidden uppercase border max-w-screen-lg"
+    class="relative flex flex-col w-full h-full max-w-screen-lg mx-auto overflow-hidden uppercase border"
   >
     <div
       class="items-center z-[8] space-x-2 flex absolute bg-base-100 w-full top-0 left-0 p-4 px-8 border-b-2 text-3xl"
@@ -120,34 +120,34 @@ export default {
           class="relative w-fit space-y-[13px] h-fit justify-center items-start left-[-70px] top-3 px-6 py-3 flex flex-col bg-grey"
           :on-focusout="closeFilterModal"
         >
-          <label class="flex w-fit space-x-2">
+          <label class="flex space-x-2 w-fit">
             <div class="flex items-center justify-center">
               <input
                 :checked="filterQuery.includes('Finalized')"
                 type="checkbox"
-                class="filter_checkbox w-6 h-6"
+                class="w-6 h-6 filter_checkbox"
                 @click="updateFilterQuery($event, 'Finalized')"
               />
             </div>
-            <div class="text-black text-3xl">Finalized</div>
+            <div class="text-3xl text-black">Finalized</div>
           </label>
-          <label class="flex w-fit space-x-2">
+          <label class="flex space-x-2 w-fit">
             <div class="flex items-center justify-center">
               <input
                 :checked="filterQuery.includes('Crossed Out')"
                 type="checkbox"
-                class="filter_checkbox w-6 h-6"
+                class="w-6 h-6 filter_checkbox"
                 @click="updateFilterQuery($event, 'Crossed Out')"
               />
             </div>
-            <div class="text-black text-3xl">Crossed out</div>
+            <div class="text-3xl text-black">Crossed out</div>
           </label>
           <div class="flex bg-black h-[1px] w-full"></div>
           <div
-            class="flex space-x-2 justify-center w-full cursor-pointer items-center"
+            class="flex items-center justify-center w-full space-x-2 cursor-pointer"
             @click="clearFilter"
           >
-            <p class="text-black text-3xl">Clear</p>
+            <p class="text-3xl text-black">Clear</p>
             <div class="flex items-center justify-center">
               <font-awesome-icon
                 :icon="['fas', 'trash-can']"
@@ -188,7 +188,7 @@ export default {
       class="absolute bg-base-100 w-full bottom-0 left-0 p-4 pl-8 border-t-2 z-[8]"
     >
       <button class="" type="button" @click="editNewAction">
-        >> New Action
+        >> New Memory
       </button>
     </div>
   </div>

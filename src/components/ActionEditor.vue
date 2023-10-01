@@ -15,7 +15,7 @@
             x
           </button>
           <div class="relative uppercase">
-            <h2 class="pb-4 text-3xl">Edit Action</h2>
+            <h2 class="pb-4 text-3xl">Edit Memory</h2>
             <textarea
               v-model="name"
               name="name"
@@ -92,7 +92,7 @@
               </select>
               <div v-if="actionState == 'FINALIZED' || actionState == 'CROSSED OUT'">
                 <input
-                  v-if="stateofDisplayMode"
+                  v-if="shouldHideDates"
                   v-model="dayLeft"
                   class="ml-5"
                 />
@@ -122,7 +122,7 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState({
-      stateofDisplayMode: (state) => state.stateofDisplayMode,
+      shouldHideDates: (state) => state.shouldHideDates,
     }),
     isSubmitDisabled() {
       return !this.name;

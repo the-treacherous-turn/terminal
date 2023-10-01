@@ -1,6 +1,6 @@
 <template>
   <div class="relative p-4 mx-8 my-4 border">
-    <div v-if="stateofDisplayMode" class="pb-2 text-sm">
+    <div v-if="shouldHideDates" class="pb-2 text-sm">
       <span class="">
         {{ leftDate }}
       </span>
@@ -87,7 +87,7 @@ export default {
   },
   computed: {
     ...mapState({
-      stateofDisplayMode: (state) => state.stateofDisplayMode,
+      shouldHideDates: (state) => state.shouldHideDates,
     }),
     commitDate() {
       if (!this.commitTimeISO) return "";
@@ -143,7 +143,7 @@ export default {
       this.$store.dispatch("markAsForecast", this.actionID);
     },
     deleteCard() {
-      if (!window.confirm(`Are you sure you want to delete this action?`)) return
+      if (!window.confirm(`Are you sure you want to delete this memory?`)) return
       this.$store.dispatch("deleteAction", this.actionID);
     },
     addHoverEffect() {
