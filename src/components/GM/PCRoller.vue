@@ -84,6 +84,19 @@ export default {
       if (!this.ppcClockResult[ppcID]) return false
       return this.ppcClockResult[ppcID][clockID]
     },
+    // get the total tick result for a clock until the current ppc
+    // e.g. if there are 3 ppcs at 3am, 6am, & 9am, each with 1 tick,
+    // and the current ppc is the 6am one, 
+    // then this function should return 2.
+    // NOTE this relies on Object.entries returning the entries in order.
+    getClockTickResultTillPPC(clockID, currentPPC) {
+      let total = 0
+      Object.entries(this.ppcClockResult).some(([ppcID, clocks]) => {
+        if (clocks[clockID]) total += clocks[clockID]
+        return currentPPC === ppcID
+      })
+      return total
+    },
     onClickAgentTick(clockID, ppcID) {
       const currentTick = this.getClockTickResult(clockID, ppcID)
       if (currentTick === 0) return this.recordTick(1, clockID, ppcID)
@@ -148,7 +161,7 @@ export default {
 
 <template>
   <div class="w-full flex h-[600px]">
-    <div class="w-2/3 pt-12 px-[46px] overflow-y-scroll">
+    <div class="w-2/3 py-12 px-[46px] overflow-y-scroll">
       <!-- <pre class="text-green-500">{{ allPCsToRoll }}</pre> -->
       <!-- it should display all PCs to roll, sorted by the PC. -->
       <template v-for="(ppc, ppcID, index) in allPendingPCs" :key="ppcID">
@@ -213,7 +226,7 @@ export default {
         >
           <div class="text-3xl uppercase">{{ clock.name }}</div>
           <div class="text-white uppercase">
-            <span class="text-6xl font-bold">{{ clock.elapsed + getClockTickResult(clockID, ppcID) }}</span>
+            <span class="text-6xl font-bold">{{ clock.elapsed + getClockTickResultTillPPC(clockID, ppcID) }}</span>
             <span class="text-3xl">/{{ clock.size }}</span>
           </div>
           <div class="flex text-white">
